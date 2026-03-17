@@ -76,6 +76,16 @@ function getVerses(book, chapter, verseStart, verseEnd) {
 // Single-chapter books: "Book V1-V2" means chapter 1, verses V1-V2
 const SINGLE_CHAPTER_BOOKS_LOCAL = new Set(['Obadiah','Philemon','2 John','3 John','Jude']);
 
+// ── Get the length of a chapter from KJV data ────────────────────────────────
+function getChapterLen(bookName, chapter) {
+  const abbrev = NAME_MAP[bookName];
+  if (!abbrev) return null;
+  const bookData = abbrevMap[abbrev];
+  if (!bookData) return null;
+  const ch = bookData.chapters[chapter - 1];
+  return ch ? ch.length : null;
+}
+
 // ── Parse a single ref segment ────────────────────────────────────────────────
 function parseRefSegment(seg, prevBook) {
   seg = seg.trim();
@@ -88,6 +98,21 @@ function parseRefSegment(seg, prevBook) {
   const ms = seg.match(/^(.*?)\s+(\d+)-(\d+)$/);
   if (ms && SINGLE_CHAPTER_BOOKS_LOCAL.has(ms[1].trim())) {
     return { book: ms[1].trim(), ch: 1, v1: parseInt(ms[2]), v2: parseInt(ms[3]) };
+  }
+  // Whole-chapter range: "Isaiah 62" or "Revelation 4-5" (consecutive chapters → expand)
+  const mWhole = seg.match(/^((?:\d+\s+)?[A-Za-z][A-Za-z\s]*?)\s+(\d+)(?:-(\d+))?$/);
+  if (mWhole) {
+    const book = mWhole[1].trim();
+    const chStart = parseInt(mWhole[2]);
+    const chEnd = mWhole[3] ? parseInt(mWhole[3]) : chStart;
+    // Return a special multi-chapter indicator (chEnd > chStart)
+    if (chStart === chEnd) {
+      const len = getChapterLen(book, chStart);
+      if (len) return { book, ch: chStart, v1: 1, v2: len };
+    } else {
+      // Multi-chapter range: return first chapter with special flag for caller
+      return { book, ch: chStart, v1: 1, v2: null, chEnd }; // v2=null means whole chapter
+    }
   }
   // Continuation with just "Ch:V1-V2"
   const m3 = seg.match(/^(\d+):(\d+)-(\d+)$/);
@@ -109,7 +134,21 @@ function getPassage(ref) {
     lastBook = parsed.book;
     // Check if Apocrypha
     if (APOCRYPHA.has(parsed.book) || parsed.book === 'Three Children') return null;
-    const verses = getVerses(parsed.book, parsed.ch, parsed.v1, parsed.v2);
+
+    // Handle multi-chapter range (e.g. "Revelation 4-5" → chEnd set)
+    if (parsed.chEnd !== undefined) {
+      for (let ch = parsed.ch; ch <= parsed.chEnd; ch++) {
+        const len = getChapterLen(parsed.book, ch);
+        if (!len) return null;
+        const verses = getVerses(parsed.book, ch, 1, len);
+        if (!verses) return null;
+        allVerses.push(...verses);
+      }
+      continue;
+    }
+
+    const v2 = parsed.v2 !== null ? parsed.v2 : 9999;
+    const verses = getVerses(parsed.book, parsed.ch, parsed.v1, v2);
     if (!verses) return null;
     allVerses.push(...verses);
   }
@@ -160,7 +199,22 @@ function getPassageWithCommas(ref) {
       lastBook = parsed.book;
       lastCh = parsed.ch;
       if (APOCRYPHA.has(parsed.book)) return null;
-      const verses = getVerses(parsed.book, parsed.ch, parsed.v1, parsed.v2);
+
+      // Handle multi-chapter range
+      if (parsed.chEnd !== undefined) {
+        for (let ch = parsed.ch; ch <= parsed.chEnd; ch++) {
+          const len = getChapterLen(parsed.book, ch);
+          if (!len) return null;
+          const verses = getVerses(parsed.book, ch, 1, len);
+          if (!verses) return null;
+          allVerses.push(...verses);
+          lastCh = ch;
+        }
+        continue;
+      }
+
+      const v2 = (parsed.v2 !== null && parsed.v2 !== undefined) ? parsed.v2 : 9999;
+      const verses = getVerses(parsed.book, parsed.ch, parsed.v1, v2);
       if (!verses) return null;
       allVerses.push(...verses);
     }

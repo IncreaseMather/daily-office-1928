@@ -5,7 +5,7 @@
       "second": "Luke 1:5-25"
     },
     "ep": {
-      "first": "Isaiah 62:1-200",
+      "first": "Isaiah 62",
       "second": "Matthew 25:1-13"
     }
   },
@@ -26,7 +26,7 @@
     },
     "ep": {
       "first": "Isaiah 2:1-5",
-      "second": "Revelation 4:1-200"
+      "second": "Revelation 4"
     }
   },
   "advent1Wednesday": {
@@ -36,7 +36,7 @@
     },
     "ep": {
       "first": "Isaiah 3:1-3, 8-15",
-      "second": "Revelation 5:1-200"
+      "second": "Revelation 5"
     }
   },
   "advent1Thursday": {
@@ -66,7 +66,7 @@
     },
     "ep": {
       "first": "Isaiah 7:10-20",
-      "second": "Revelation 10:1-200"
+      "second": "Revelation 10"
     }
   },
   "advent2Sunday": {
@@ -82,7 +82,7 @@
   "advent2Monday": {
     "mp": {
       "first": "Isaiah 8:5-8, 11-20",
-      "second": "Mark 2:23-200; Mark 3:1-6"
+      "second": "Mark 2:23-28; Mark 3:1-6"
     },
     "ep": {
       "first": "Isaiah 9:8-17",
@@ -91,7 +91,7 @@
   },
   "advent2Tuesday": {
     "mp": {
-      "first": "Isaiah 9:18-200; Isaiah 10:1-4",
+      "first": "Isaiah 9:18-21; Isaiah 10:1-4",
       "second": "Mark 3:7-19"
     },
     "ep": {
@@ -105,7 +105,7 @@
       "second": "Mark 3:20-35"
     },
     "ep": {
-      "first": "Isaiah 12:1-200",
+      "first": "Isaiah 12",
       "second": "Revelation 13:1-10"
     }
   },
@@ -126,7 +126,7 @@
     },
     "ep": {
       "first": "Isaiah 26:11-19",
-      "second": "Revelation 15:1-200"
+      "second": "Revelation 15"
     }
   },
   "advent2Saturday": {
@@ -196,17 +196,17 @@
     },
     "ep": {
       "first": "Jeremiah 26:1-7, 10-15",
-      "second": "2 Timothy 3:14-200; 2 Timothy 4:1-8"
+      "second": "2 Timothy 3:14-17; 2 Timothy 4:1-8"
     }
   },
   "advent3Saturday": {
     "mp": {
       "first": "Malachi 2:1-9",
-      "second": "Matthew 9:35-200; Matthew 10:1-15"
+      "second": "Matthew 9:35-38; Matthew 10:1-15"
     },
     "ep": {
       "first": "Malachi 3:1-6",
-      "second": "Hebrews 4:14-200; Hebrews 5:1-10"
+      "second": "Hebrews 4:14-16; Hebrews 5:1-10"
     }
   },
   "advent4Sunday": {
@@ -225,7 +225,7 @@
       "second": "Luke 1:5-25"
     },
     "ep": {
-      "first": "Isaiah 35:1-200",
+      "first": "Isaiah 35",
       "second": "Revelation 20:7-15"
     }
   },
@@ -271,7 +271,7 @@
   },
   "advent4Saturday": {
     "mp": {
-      "first": "Baruch 4:36-200; Baruch 5:1-9",
+      "first": "Baruch 4:36-37; Baruch 5:1-9",
       "second": "Luke 1:67-80"
     },
     "ep": {
@@ -292,11 +292,11 @@
   "christmasDayMonday": {
     "mp": {
       "first": "2 Chronicles 24:17-22",
-      "second": "Acts 6:1-200"
+      "second": "Acts 6"
     },
     "ep": {
       "first": "Wisdom 4:7-15",
-      "second": "Acts 7:59-200; Acts 8:1-8"
+      "second": "Acts 7:59-60; Acts 8:1-8"
     }
   },
   "christmasDayTuesday": {
@@ -306,7 +306,7 @@
     },
     "ep": {
       "first": "Isaiah 6:1-8",
-      "second": "Revelation 1:1-200"
+      "second": "Revelation 1"
     }
   },
   "christmasDayWednesday": {
@@ -322,11 +322,11 @@
   "christmasDayThursday": {
     "mp": {
       "first": "Isaiah 56:1-8",
-      "second": "1 John 1:1-200"
+      "second": "1 John 1"
     },
     "ep": {
       "first": "Isaiah 57:13-21",
-      "second": "Hebrews 1:1-200"
+      "second": "Hebrews 1"
     }
   },
   "christmasDayFriday": {
@@ -336,17 +336,17 @@
     },
     "ep": {
       "first": "Isaiah 60:13-22",
-      "second": "Hebrews 2:1-200"
+      "second": "Hebrews 2"
     }
   },
   "christmasDaySaturday": {
     "mp": {
-      "first": "Isaiah 62:1-200",
+      "first": "Isaiah 62",
       "second": "1 John 2:18-29"
     },
     "ep": {
-      "first": "Deuteronomy 10:12-200; Deuteronomy 11:1-1",
-      "second": "Hebrews 3:1-200"
+      "first": "Deuteronomy 10:12-22; Deuteronomy 11:1-1",
+      "second": "Hebrews 3"
     }
   },
   "circumcisionSunday": {
@@ -365,7 +365,7 @@
       "second": "1 John 3:1-11"
     },
     "ep": {
-      "first": "Isaiah 63:15-200; Isaiah 64:1-1",
+      "first": "Isaiah 63:15-19; Isaiah 64:1-1",
       "second": "Hebrews 4:1-13"
     }
   },
@@ -376,13 +376,13 @@
     },
     "ep": {
       "first": "Isaiah 65:8-16",
-      "second": "Hebrews 4:14-200; Hebrews 5:1-14"
+      "second": "Hebrews 4:14-16; Hebrews 5:1-14"
     }
   },
   "circumcisionWednesday": {
     "mp": {
       "first": "Isaiah 65:17-25",
-      "second": "1 John 4:1-200"
+      "second": "1 John 4"
     },
     "ep": {
       "first": "Isaiah 66:1-2, 5-13",
@@ -392,7 +392,7 @@
   "circumcisionThursday": {
     "mp": {
       "first": "Isaiah 66:18-23",
-      "second": "1 John 5:1-200"
+      "second": "1 John 5"
     },
     "ep": {
       "first": "Isaiah 49:1-7",
@@ -405,7 +405,7 @@
       "second": "2 Corinthians 4:1-6"
     },
     "ep": {
-      "first": "Isaiah 61:1-200",
+      "first": "Isaiah 61",
       "second": "Romans 15:8-21"
     }
   },
@@ -451,7 +451,7 @@
   },
   "epiphanyFriday": {
     "mp": {
-      "first": "Jonah 4:1-200",
+      "first": "Jonah 4",
       "second": "1 Peter 1:1-9"
     },
     "ep": {
@@ -462,11 +462,11 @@
   "epiphanySaturday": {
     "mp": {
       "first": "Malachi 1:11-14",
-      "second": "2 Thessalonians 1:1-200"
+      "second": "2 Thessalonians 1"
     },
     "ep": {
       "first": "Isaiah 9:2-7",
-      "second": "Galatians 3:27-200; Galatians 4:1-7"
+      "second": "Galatians 3:27-29; Galatians 4:1-7"
     }
   },
   "epiphany1Sunday": {
@@ -482,7 +482,7 @@
   "epiphany1Monday": {
     "mp": {
       "first": "Proverbs 1:7-19",
-      "second": "Ephesians 1:1-200"
+      "second": "Ephesians 1"
     },
     "ep": {
       "first": "Ezekiel 1:2-6, 24-28",
@@ -495,7 +495,7 @@
       "second": "Ephesians 2:1-10"
     },
     "ep": {
-      "first": "Ezekiel 2:1-200",
+      "first": "Ezekiel 2",
       "second": "John 1:19-34"
     }
   },
@@ -582,7 +582,7 @@
   "epiphany2Thursday": {
     "mp": {
       "first": "Proverbs 8:12-20",
-      "second": "Ephesians 6:1-200"
+      "second": "Ephesians 6"
     },
     "ep": {
       "first": "Ezekiel 14:12-20",
@@ -622,7 +622,7 @@
   "epiphany3Monday": {
     "mp": {
       "first": "Proverbs 10:12-14, 18-21",
-      "second": "Philippians 1:27-200; Philippians 2:1-11"
+      "second": "Philippians 1:27-30; Philippians 2:1-11"
     },
     "ep": {
       "first": "Ezekiel 27:1-5, 26-36",
@@ -662,7 +662,7 @@
   "epiphany3Friday": {
     "mp": {
       "first": "Proverbs 15:16-23, 27-29",
-      "second": "Philippians 3:17-200; Philippians 4:1-3"
+      "second": "Philippians 3:17-21; Philippians 4:1-3"
     },
     "ep": {
       "first": "Ezekiel 34:1-10",
@@ -681,12 +681,12 @@
   },
   "epiphany4Sunday": {
     "mp": {
-      "first": "Isaiah 61:1-200",
+      "first": "Isaiah 61",
       "second": "Luke 4:16-32"
     },
     "ep": {
       "first": "Isaiah 45:20-25",
-      "second": "Romans 10:1-200"
+      "second": "Romans 10"
     }
   },
   "epiphany4Monday": {
@@ -702,7 +702,7 @@
   "epiphany4Tuesday": {
     "mp": {
       "first": "Proverbs 21:21-31",
-      "second": "Colossians 1:18-200; Colossians 2:1-5"
+      "second": "Colossians 1:18-29; Colossians 2:1-5"
     },
     "ep": {
       "first": "Ezekiel 36:22-28",
@@ -722,7 +722,7 @@
   "epiphany4Thursday": {
     "mp": {
       "first": "Proverbs 23:20-21, 29-35",
-      "second": "Colossians 2:20-200; Colossians 3:1-11"
+      "second": "Colossians 2:20-23; Colossians 3:1-11"
     },
     "ep": {
       "first": "Ezekiel 37:21-28",
@@ -742,7 +742,7 @@
   "epiphany4Saturday": {
     "mp": {
       "first": "Proverbs 25:11-15, 17-22",
-      "second": "Colossians 3:18-200; Colossians 4:1-6"
+      "second": "Colossians 3:18-25; Colossians 4:1-6"
     },
     "ep": {
       "first": "Ezekiel 43:1-9",
@@ -766,7 +766,7 @@
     },
     "ep": {
       "first": "Isaiah 14:3-11",
-      "second": "1 Thessalonians 1:1-200"
+      "second": "1 Thessalonians 1"
     }
   },
   "epiphany5Tuesday": {
@@ -786,7 +786,7 @@
     },
     "ep": {
       "first": "Isaiah 22:1-5, 12-14",
-      "second": "1 Thessalonians 2:17-200; 1 Thessalonians 3:1-13"
+      "second": "1 Thessalonians 2:17-20; 1 Thessalonians 3:1-13"
     }
   },
   "epiphany5Thursday": {
@@ -805,7 +805,7 @@
       "second": "1 Peter 2:18-25"
     },
     "ep": {
-      "first": "Isaiah 31:1-200",
+      "first": "Isaiah 31",
       "second": "1 Thessalonians 4:13-18"
     }
   },
@@ -846,7 +846,7 @@
     },
     "ep": {
       "first": "Wisdom 6:1-11",
-      "second": "2 Thessalonians 1:1-200"
+      "second": "2 Thessalonians 1"
     }
   },
   "epiphany6Wednesday": {
@@ -866,7 +866,7 @@
     },
     "ep": {
       "first": "Wisdom 7:7-14",
-      "second": "2 Thessalonians 2:13-200; 2 Thessalonians 3:1-5"
+      "second": "2 Thessalonians 2:13-17; 2 Thessalonians 3:1-5"
     }
   },
   "epiphany6Friday": {
@@ -881,12 +881,12 @@
   },
   "epiphany6Saturday": {
     "mp": {
-      "first": "Lamentations 5:1-200",
+      "first": "Lamentations 5",
       "second": "1 Peter 5:8-14"
     },
     "ep": {
-      "first": "Wisdom 7:22-200; Wisdom 8:1-1",
-      "second": "Jude 1:1-200"
+      "first": "Wisdom 7:22-30; Wisdom 8:1-1",
+      "second": "Jude 1"
     }
   },
   "septuagesimaSunday": {
@@ -911,11 +911,11 @@
   },
   "septuagesimaTuesday": {
     "mp": {
-      "first": "Genesis 1:20-200; Genesis 2:1-3",
+      "first": "Genesis 1:20-31; Genesis 2:1-3",
       "second": "Mark 6:14-29"
     },
     "ep": {
-      "first": "Amos 1:1-5, 13-200; Amos 2:1-3",
+      "first": "Amos 1:1-5, 13-15; Amos 2:1-3",
       "second": "Galatians 1:11-24"
     }
   },
@@ -931,11 +931,11 @@
   },
   "septuagesimaThursday": {
     "mp": {
-      "first": "Genesis 3:1-200",
+      "first": "Genesis 3",
       "second": "Mark 6:45-56"
     },
     "ep": {
-      "first": "Amos 3:1-200",
+      "first": "Amos 3",
       "second": "Galatians 2:11-21"
     }
   },
@@ -992,7 +992,7 @@
   "sexagesimaWednesday": {
     "mp": {
       "first": "Genesis 9:8-17",
-      "second": "Mark 8:27-200; Mark 9:1-1"
+      "second": "Mark 8:27-37; Mark 9:1-1"
     },
     "ep": {
       "first": "Amos 8:4-12",
@@ -1011,7 +1011,7 @@
   },
   "sexagesimaFriday": {
     "mp": {
-      "first": "Genesis 11:27-200; Genesis 12:1-8",
+      "first": "Genesis 11:27-32; Genesis 12:1-8",
       "second": "Mark 9:14-29"
     },
     "ep": {
@@ -1036,7 +1036,7 @@
     },
     "ep": {
       "first": "Leviticus 19:1-2, 9-18",
-      "second": "1 John 4:1-200"
+      "second": "1 John 4"
     }
   },
   "quinquagesimaMonday": {
@@ -1045,7 +1045,7 @@
       "second": "Mark 9:38-50"
     },
     "ep": {
-      "first": "Hosea 5:10-200; Hosea 6:1-6",
+      "first": "Hosea 5:10-15; Hosea 6:1-6",
       "second": "Galatians 6:1-10"
     }
   },
@@ -1065,7 +1065,7 @@
       "second": "Hebrews 12:1-14"
     },
     "ep": {
-      "first": "Jonah 3:1-200; Jonah 4:1-200",
+      "first": "Jonah 3-4",
       "second": "Luke 15:10-32"
     }
   },
@@ -1092,7 +1092,7 @@
   "quinquagesimaSaturday": {
     "mp": {
       "first": "Genesis 22:1-14",
-      "second": "1 Corinthians 2:1-200"
+      "second": "1 Corinthians 2"
     },
     "ep": {
       "first": "Jeremiah 3:11-18",
@@ -1101,7 +1101,7 @@
   },
   "lent1Sunday": {
     "mp": {
-      "first": "Isaiah 58:1-200",
+      "first": "Isaiah 58",
       "second": "Matthew 6:1-18"
     },
     "ep": {
@@ -1122,7 +1122,7 @@
   "lent1Tuesday": {
     "mp": {
       "first": "Genesis 24:28-38, 49-51, 58-67",
-      "second": "1 Corinthians 3:18-200; 1 Corinthians 4:1-5"
+      "second": "1 Corinthians 3:18-23; 1 Corinthians 4:1-5"
     },
     "ep": {
       "first": "Jeremiah 4:1-9",
@@ -1131,12 +1131,12 @@
   },
   "lent1Wednesday": {
     "mp": {
-      "first": "Ezekiel 2:1-200",
+      "first": "Ezekiel 2",
       "second": "Matthew 9:1-13"
     },
     "ep": {
       "first": "Ezekiel 3:16-27",
-      "second": "2 Corinthians 4:1-200"
+      "second": "2 Corinthians 4"
     }
   },
   "lent1Thursday": {
@@ -1156,7 +1156,7 @@
     },
     "ep": {
       "first": "Ezekiel 37:1-14",
-      "second": "1 Timothy 4:1-200"
+      "second": "1 Timothy 4"
     }
   },
   "lent1Saturday": {
@@ -1182,7 +1182,7 @@
   "lent2Monday": {
     "mp": {
       "first": "Genesis 27:1-29",
-      "second": "1 Corinthians 5:1-200"
+      "second": "1 Corinthians 5"
     },
     "ep": {
       "first": "Jeremiah 4:23-31",
@@ -1201,7 +1201,7 @@
   },
   "lent2Wednesday": {
     "mp": {
-      "first": "Genesis 27:46-200; Genesis 28:1-4, 10-22",
+      "first": "Genesis 27:46-46; Genesis 28:1-4, 10-22",
       "second": "1 Corinthians 6:12-20"
     },
     "ep": {
@@ -1222,7 +1222,7 @@
   "lent2Friday": {
     "mp": {
       "first": "Genesis 32:22-31",
-      "second": "1 Corinthians 8:1-200"
+      "second": "1 Corinthians 8"
     },
     "ep": {
       "first": "Jeremiah 6:1-8",
@@ -1242,7 +1242,7 @@
   "lent3Sunday": {
     "mp": {
       "first": "Deuteronomy 6:1-9, 20-25",
-      "second": "1 Corinthians 3:1-200"
+      "second": "1 Corinthians 3"
     },
     "ep": {
       "first": "Amos 5:4-15",
@@ -1261,7 +1261,7 @@
   },
   "lent3Tuesday": {
     "mp": {
-      "first": "Genesis 40:1-200",
+      "first": "Genesis 40",
       "second": "1 Corinthians 10:1-13"
     },
     "ep": {
@@ -1282,7 +1282,7 @@
   "lent3Thursday": {
     "mp": {
       "first": "Genesis 41:25-40",
-      "second": "1 Corinthians 10:23-200; 1 Corinthians 11:1-1"
+      "second": "1 Corinthians 10:23-33; 1 Corinthians 11:1-1"
     },
     "ep": {
       "first": "Jeremiah 9:2-16",
@@ -1315,13 +1315,13 @@
       "second": "John 6:27-40"
     },
     "ep": {
-      "first": "Isaiah 55:1-200",
+      "first": "Isaiah 55",
       "second": "John 6:41-51"
     }
   },
   "lent4Monday": {
     "mp": {
-      "first": "Genesis 44:1-200",
+      "first": "Genesis 44",
       "second": "1 Corinthians 12:12-31"
     },
     "ep": {
@@ -1331,8 +1331,8 @@
   },
   "lent4Tuesday": {
     "mp": {
-      "first": "Genesis 45:1-200",
-      "second": "1 Corinthians 12:31-200; 1 Corinthians 13:1-13"
+      "first": "Genesis 45",
+      "second": "1 Corinthians 12:31-31; 1 Corinthians 13:1-13"
     },
     "ep": {
       "first": "Jeremiah 14:1-10",
@@ -1351,7 +1351,7 @@
   },
   "lent4Thursday": {
     "mp": {
-      "first": "Genesis 49:33-200; Genesis 50:1-26",
+      "first": "Genesis 49:33-33; Genesis 50:1-26",
       "second": "1 Corinthians 14:13-25"
     },
     "ep": {
@@ -1411,7 +1411,7 @@
   },
   "lent5Wednesday": {
     "mp": {
-      "first": "Exodus 5:1-9, 19-200; Exodus 6:1-1",
+      "first": "Exodus 5:1-9, 19-23; Exodus 6:1-1",
       "second": "1 Corinthians 15:35-49"
     },
     "ep": {
@@ -1455,7 +1455,7 @@
       "second": "Mark 11:1-11"
     },
     "ep": {
-      "first": "Jeremiah 8:9-15, 18-200; Jeremiah 9:1-1",
+      "first": "Jeremiah 8:9-15, 18-22; Jeremiah 9:1-1",
       "second": "1 Corinthians 1:17-31"
     }
   },
@@ -1471,7 +1471,7 @@
   },
   "holyTuesday": {
     "mp": {
-      "first": "Hosea 14:1-200",
+      "first": "Hosea 14",
       "second": "John 15:1-16"
     },
     "ep": {
@@ -1496,16 +1496,16 @@
     },
     "ep": {
       "first": "Lamentations 3:40-58",
-      "second": "John 17:1-200"
+      "second": "John 17"
     }
   },
   "goodFriday": {
     "mp": {
       "first": "Genesis 22:1-18",
-      "second": "John 18:1-200"
+      "second": "John 18"
     },
     "ep": {
-      "first": "Isaiah 52:13-200; Isaiah 53:1-12",
+      "first": "Isaiah 52:13-15; Isaiah 53:1-12",
       "second": "1 Peter 2:11-25"
     }
   },
@@ -1591,7 +1591,7 @@
   },
   "easter1Sunday": {
     "mp": {
-      "first": "Wisdom 2:23-200; Wisdom 3:1-9",
+      "first": "Wisdom 2:23-24; Wisdom 3:1-9",
       "second": "Romans 1:1-12"
     },
     "ep": {
@@ -1602,7 +1602,7 @@
   "easter1Monday": {
     "mp": {
       "first": "Exodus 13:3-16",
-      "second": "Hebrews 1:1-200"
+      "second": "Hebrews 1"
     },
     "ep": {
       "first": "Isaiah 40:1-11",
@@ -1611,7 +1611,7 @@
   },
   "easter1Tuesday": {
     "mp": {
-      "first": "Exodus 13:17-200; Exodus 14:1-4",
+      "first": "Exodus 13:17-22; Exodus 14:1-4",
       "second": "Hebrews 2:1-8"
     },
     "ep": {
@@ -1632,7 +1632,7 @@
   "easter1Thursday": {
     "mp": {
       "first": "Exodus 15:20-27",
-      "second": "Hebrews 3:1-200"
+      "second": "Hebrews 3"
     },
     "ep": {
       "first": "Isaiah 42:1-9",
@@ -1652,7 +1652,7 @@
   "easter1Saturday": {
     "mp": {
       "first": "Exodus 17:1-7",
-      "second": "Hebrews 4:14-200; Hebrews 5:1-14"
+      "second": "Hebrews 4:14-16; Hebrews 5:1-14"
     },
     "ep": {
       "first": "Isaiah 43:1-7",
@@ -1712,10 +1712,10 @@
   "easter2Friday": {
     "mp": {
       "first": "Exodus 20:1-21",
-      "second": "Hebrews 8:1-200"
+      "second": "Hebrews 8"
     },
     "ep": {
-      "first": "Isaiah 44:24-200; Isaiah 45:1-4",
+      "first": "Isaiah 44:24-28; Isaiah 45:1-4",
       "second": "1 Peter 5:1-7"
     }
   },
@@ -1736,7 +1736,7 @@
     },
     "ep": {
       "first": "Isaiah 26:12-16, 19",
-      "second": "2 Corinthians 5:1-200"
+      "second": "2 Corinthians 5"
     }
   },
   "easter3Monday": {
@@ -1831,7 +1831,7 @@
   },
   "easter4Wednesday": {
     "mp": {
-      "first": "Numbers 12:1-200",
+      "first": "Numbers 12",
       "second": "Hebrews 12:18-29"
     },
     "ep": {
@@ -1865,7 +1865,7 @@
       "second": "Hebrews 13:17-25"
     },
     "ep": {
-      "first": "Isaiah 55:1-200",
+      "first": "Isaiah 55",
       "second": "Ephesians 6:10-24"
     }
   },
@@ -1876,7 +1876,7 @@
     },
     "ep": {
       "first": "Isaiah 48:12-21",
-      "second": "Revelation 5:1-200"
+      "second": "Revelation 5"
     }
   },
   "easter5Monday": {
@@ -1916,7 +1916,7 @@
     },
     "ep": {
       "first": "Isaiah 33:5-6, 17, 20-22",
-      "second": "Hebrews 4:14-200; Hebrews 5:1-10"
+      "second": "Hebrews 4:14-16; Hebrews 5:1-10"
     }
   },
   "easter5Friday": {
@@ -1925,7 +1925,7 @@
       "second": "Romans 8:31-39"
     },
     "ep": {
-      "first": "Isaiah 12:1-200",
+      "first": "Isaiah 12",
       "second": "Acts 1:12-26"
     }
   },
@@ -1942,17 +1942,17 @@
   "sundayAfterAscensionSunday": {
     "mp": {
       "first": "Isaiah 33:5-6, 17, 20-22",
-      "second": "John 17:1-200"
+      "second": "John 17"
     },
     "ep": {
-      "first": "Wisdom 9:1-200",
-      "second": "Ephesians 1:1-200"
+      "first": "Wisdom 9",
+      "second": "Ephesians 1"
     }
   },
   "sundayAfterAscensionMonday": {
     "mp": {
       "first": "1 Samuel 2:1-10",
-      "second": "Revelation 5:1-200"
+      "second": "Revelation 5"
     },
     "ep": {
       "first": "Isaiah 66:1-2, 10-13",
@@ -1991,7 +1991,7 @@
   },
   "sundayAfterAscensionFriday": {
     "mp": {
-      "first": "Isaiah 35:1-200",
+      "first": "Isaiah 35",
       "second": "Revelation 21:9-27"
     },
     "ep": {
@@ -2015,8 +2015,8 @@
       "second": "John 4:19-26"
     },
     "ep": {
-      "first": "Wisdom 7:22-200; Wisdom 8:1-1",
-      "second": "1 Corinthians 2:1-200"
+      "first": "Wisdom 7:22-30; Wisdom 8:1-1",
+      "second": "1 Corinthians 2"
     }
   },
   "whitsundayMonday": {
@@ -2042,7 +2042,7 @@
   "whitsundayWednesday": {
     "mp": {
       "first": "Sirach 39:1-8",
-      "second": "1 Corinthians 2:1-200"
+      "second": "1 Corinthians 2"
     },
     "ep": {
       "first": "Wisdom 9:9-11, 17-18",
@@ -2055,18 +2055,18 @@
       "second": "Galatians 5:16-25"
     },
     "ep": {
-      "first": "Wisdom 11:21-200; Wisdom 12:1-2",
+      "first": "Wisdom 11:21-26; Wisdom 12:1-2",
       "second": "Acts 5:29-42"
     }
   },
   "whitsundayFriday": {
     "mp": {
       "first": "Isaiah 61:1-9",
-      "second": "2 Corinthians 3:1-200"
+      "second": "2 Corinthians 3"
     },
     "ep": {
       "first": "Isaiah 52:1-10",
-      "second": "Acts 6:1-200"
+      "second": "Acts 6"
     }
   },
   "whitsundaySaturday": {
@@ -2126,7 +2126,7 @@
     },
     "ep": {
       "first": "Haggai 2:1-9",
-      "second": "Acts 7:54-200; Acts 8:1-4"
+      "second": "Acts 7:54-60; Acts 8:1-4"
     }
   },
   "trinitySundayFriday": {
@@ -2145,7 +2145,7 @@
       "second": "Luke 2:1-20"
     },
     "ep": {
-      "first": "Zechariah 2:1-200",
+      "first": "Zechariah 2",
       "second": "Acts 8:26-40"
     }
   },
@@ -2181,7 +2181,7 @@
   },
   "trinity1Wednesday": {
     "mp": {
-      "first": "Numbers 22:41-200; Numbers 23:1-12",
+      "first": "Numbers 22:41-41; Numbers 23:1-12",
       "second": "Luke 3:1-22"
     },
     "ep": {
@@ -2201,7 +2201,7 @@
   },
   "trinity1Friday": {
     "mp": {
-      "first": "Numbers 23:27-200; Numbers 24:1-13, 25",
+      "first": "Numbers 23:27-30; Numbers 24:1-13, 25",
       "second": "Luke 4:14-30"
     },
     "ep": {
@@ -2211,7 +2211,7 @@
   },
   "trinity1Saturday": {
     "mp": {
-      "first": "Deuteronomy 34:1-200",
+      "first": "Deuteronomy 34",
       "second": "Luke 4:31-41"
     },
     "ep": {
@@ -2222,7 +2222,7 @@
   "trinity2Sunday": {
     "mp": {
       "first": "Job 31:13-28",
-      "second": "1 Corinthians 13:1-200"
+      "second": "1 Corinthians 13"
     },
     "ep": {
       "first": "1 Samuel 20:1-7, 12-42",
@@ -2231,8 +2231,8 @@
   },
   "trinity2Monday": {
     "mp": {
-      "first": "Joshua 1:1-200",
-      "second": "Luke 4:42-200; Luke 5:1-11"
+      "first": "Joshua 1",
+      "second": "Luke 4:42-44; Luke 5:1-11"
     },
     "ep": {
       "first": "Ezra 7:1, 6-16, 25-28",
@@ -2255,7 +2255,7 @@
       "second": "Luke 5:27-39"
     },
     "ep": {
-      "first": "Nehemiah 1:1-200",
+      "first": "Nehemiah 1",
       "second": "Acts 12:1-24"
     }
   },
@@ -2266,7 +2266,7 @@
     },
     "ep": {
       "first": "Nehemiah 2:1-8",
-      "second": "Acts 12:25-200; Acts 13:1-12"
+      "second": "Acts 12:25-25; Acts 13:1-12"
     }
   },
   "trinity2Friday": {
@@ -2306,7 +2306,7 @@
     },
     "ep": {
       "first": "Nehemiah 5:1-13",
-      "second": "Acts 13:44-200; Acts 14:1-7"
+      "second": "Acts 13:44-52; Acts 14:1-7"
     }
   },
   "trinity3Tuesday": {
@@ -2376,7 +2376,7 @@
     },
     "ep": {
       "first": "1 Maccabees 1:41-53",
-      "second": "Acts 15:36-200; Acts 16:1-5"
+      "second": "Acts 15:36-41; Acts 16:1-5"
     }
   },
   "trinity4Tuesday": {
@@ -2466,13 +2466,13 @@
     },
     "ep": {
       "first": "1 Maccabees 4:36-51",
-      "second": "Acts 18:24-200; Acts 19:1-7"
+      "second": "Acts 18:24-28; Acts 19:1-7"
     }
   },
   "trinity5Thursday": {
     "mp": {
       "first": "Ruth 4:1-8",
-      "second": "Luke 10:38-200; Luke 11:1-13"
+      "second": "Luke 10:38-42; Luke 11:1-13"
     },
     "ep": {
       "first": "1 Maccabees 4:52-61",
@@ -2556,7 +2556,7 @@
     },
     "ep": {
       "first": "Daniel 3:8-18",
-      "second": "Acts 21:37-200; Acts 22:1-16"
+      "second": "Acts 21:37-40; Acts 22:1-16"
     }
   },
   "trinity6Saturday": {
@@ -2571,7 +2571,7 @@
   },
   "trinity7Sunday": {
     "mp": {
-      "first": "Hosea 14:1-200",
+      "first": "Hosea 14",
       "second": "Romans 6:12-18"
     },
     "ep": {
@@ -2586,7 +2586,7 @@
     },
     "ep": {
       "first": "Daniel 4:4-5, 10-18",
-      "second": "Acts 22:30-200; Acts 23:1-11"
+      "second": "Acts 22:30-30; Acts 23:1-11"
     }
   },
   "trinity7Tuesday": {
@@ -2606,7 +2606,7 @@
     },
     "ep": {
       "first": "Daniel 4:28-37",
-      "second": "Acts 23:25-200; Acts 24:1-9"
+      "second": "Acts 23:25-35; Acts 24:1-9"
     }
   },
   "trinity7Thursday": {
@@ -2626,7 +2626,7 @@
     },
     "ep": {
       "first": "Daniel 5:10-16",
-      "second": "Acts 24:24-200; Acts 25:1-12"
+      "second": "Acts 24:24-27; Acts 25:1-12"
     }
   },
   "trinity7Saturday": {
@@ -2661,12 +2661,12 @@
   },
   "trinity8Tuesday": {
     "mp": {
-      "first": "1 Samuel 11:14-200; 1 Samuel 12:1-5",
+      "first": "1 Samuel 11:14-15; 1 Samuel 12:1-5",
       "second": "Luke 15:11-32"
     },
     "ep": {
       "first": "Daniel 6:9-15",
-      "second": "Acts 26:24-200; Acts 27:1-8"
+      "second": "Acts 26:24-32; Acts 27:1-8"
     }
   },
   "trinity8Wednesday": {
@@ -2725,7 +2725,7 @@
       "second": "Luke 17:20-37"
     },
     "ep": {
-      "first": "Esther 5:1-200",
+      "first": "Esther 5",
       "second": "Romans 1:1-17"
     }
   },
@@ -2735,7 +2735,7 @@
       "second": "Luke 18:1-14"
     },
     "ep": {
-      "first": "Esther 6:1-200",
+      "first": "Esther 6",
       "second": "Romans 2:1-16"
     }
   },
@@ -2745,7 +2745,7 @@
       "second": "Luke 18:15-30"
     },
     "ep": {
-      "first": "Esther 7:1-200",
+      "first": "Esther 7",
       "second": "Romans 2:17-29"
     }
   },
@@ -2765,7 +2765,7 @@
       "second": "Luke 19:1-10"
     },
     "ep": {
-      "first": "Micah 2:1-200",
+      "first": "Micah 2",
       "second": "Romans 3:21-31"
     }
   },
@@ -2802,11 +2802,11 @@
   "trinity10Tuesday": {
     "mp": {
       "first": "1 Samuel 20:1-7, 12-23",
-      "second": "Luke 19:47-200; Luke 20:1-8"
+      "second": "Luke 19:47-48; Luke 20:1-8"
     },
     "ep": {
-      "first": "Micah 4:9-200; Micah 5:1-1",
-      "second": "Romans 5:1-200"
+      "first": "Micah 4:9-13; Micah 5:1-1",
+      "second": "Romans 5"
     }
   },
   "trinity10Wednesday": {
@@ -2816,7 +2816,7 @@
     },
     "ep": {
       "first": "Micah 6:1-8",
-      "second": "Romans 6:1-200"
+      "second": "Romans 6"
     }
   },
   "trinity10Thursday": {
@@ -2832,7 +2832,7 @@
   "trinity10Friday": {
     "mp": {
       "first": "1 Samuel 23:7-18",
-      "second": "Luke 20:41-200; Luke 21:1-4"
+      "second": "Luke 20:41-47; Luke 21:1-4"
     },
     "ep": {
       "first": "Micah 7:1-9",
@@ -2861,7 +2861,7 @@
   },
   "trinity11Monday": {
     "mp": {
-      "first": "1 Samuel 31:1-200",
+      "first": "1 Samuel 31",
       "second": "Luke 21:20-38"
     },
     "ep": {
@@ -2875,7 +2875,7 @@
       "second": "Luke 22:1-13"
     },
     "ep": {
-      "first": "Nahum 2:1-200",
+      "first": "Nahum 2",
       "second": "Romans 8:28-39"
     }
   },
@@ -2885,7 +2885,7 @@
       "second": "Luke 22:14-30"
     },
     "ep": {
-      "first": "Nahum 3:1-200",
+      "first": "Nahum 3",
       "second": "Romans 9:1-5, 14-24, 30-33"
     }
   },
@@ -2895,8 +2895,8 @@
       "second": "Luke 22:31-46"
     },
     "ep": {
-      "first": "Habakkuk 1:2-4, 12-200; Habakkuk 2:1-4",
-      "second": "Romans 10:1-200"
+      "first": "Habakkuk 1:2-4, 12-17; Habakkuk 2:1-4",
+      "second": "Romans 10"
     }
   },
   "trinity11Friday": {
@@ -2912,7 +2912,7 @@
   "trinity11Saturday": {
     "mp": {
       "first": "2 Samuel 6:1-11",
-      "second": "Luke 22:63-200; Luke 23:1-12"
+      "second": "Luke 22:63-71; Luke 23:1-12"
     },
     "ep": {
       "first": "Habakkuk 3:2-6, 10-13, 18-19",
@@ -2936,7 +2936,7 @@
     },
     "ep": {
       "first": "Zephaniah 1:2-3, 7, 14-18",
-      "second": "Romans 12:1-200"
+      "second": "Romans 12"
     }
   },
   "trinity12Tuesday": {
@@ -2946,7 +2946,7 @@
     },
     "ep": {
       "first": "Zephaniah 3:1-8",
-      "second": "Romans 13:1-200"
+      "second": "Romans 13"
     }
   },
   "trinity12Wednesday": {
@@ -2962,7 +2962,7 @@
   "trinity12Thursday": {
     "mp": {
       "first": "2 Samuel 9:1-9, 13",
-      "second": "Luke 23:50-200; Luke 24:1-12"
+      "second": "Luke 23:50-56; Luke 24:1-12"
     },
     "ep": {
       "first": "Sirach 1:1-10",
@@ -2985,7 +2985,7 @@
       "second": "Luke 24:36-53"
     },
     "ep": {
-      "first": "Sirach 2:1-200",
+      "first": "Sirach 2",
       "second": "Romans 15:17-33"
     }
   },
@@ -3002,7 +3002,7 @@
   "trinity13Monday": {
     "mp": {
       "first": "2 Samuel 12:1-10, 13-15",
-      "second": "2 Corinthians 1:1-200"
+      "second": "2 Corinthians 1"
     },
     "ep": {
       "first": "Sirach 3:17-31",
@@ -3012,7 +3012,7 @@
   "trinity13Tuesday": {
     "mp": {
       "first": "2 Samuel 12:15-23",
-      "second": "2 Corinthians 2:1-200"
+      "second": "2 Corinthians 2"
     },
     "ep": {
       "first": "Sirach 4:1-18",
@@ -3022,26 +3022,26 @@
   "trinity13Wednesday": {
     "mp": {
       "first": "2 Samuel 15:1-12",
-      "second": "2 Corinthians 3:1-200"
+      "second": "2 Corinthians 3"
     },
     "ep": {
-      "first": "Sirach 4:20-200; Sirach 5:1-7",
+      "first": "Sirach 4:20-31; Sirach 5:1-7",
       "second": "Matthew 2:13-23"
     }
   },
   "trinity13Thursday": {
     "mp": {
       "first": "2 Samuel 15:13-29",
-      "second": "2 Corinthians 4:1-200"
+      "second": "2 Corinthians 4"
     },
     "ep": {
       "first": "Sirach 15:11-20",
-      "second": "Matthew 3:1-200"
+      "second": "Matthew 3"
     }
   },
   "trinity13Friday": {
     "mp": {
-      "first": "2 Samuel 15:30-200; 2 Samuel 16:1-4",
+      "first": "2 Samuel 15:30-37; 2 Samuel 16:1-4",
       "second": "2 Corinthians 5:1-10"
     },
     "ep": {
@@ -3071,7 +3071,7 @@
   },
   "trinity14Monday": {
     "mp": {
-      "first": "2 Samuel 16:23-200; 2 Samuel 17:1-14",
+      "first": "2 Samuel 16:23-23; 2 Samuel 17:1-14",
       "second": "2 Corinthians 6:1-10"
     },
     "ep": {
@@ -3082,7 +3082,7 @@
   "trinity14Tuesday": {
     "mp": {
       "first": "2 Samuel 17:15-23",
-      "second": "2 Corinthians 6:11-200; 2 Corinthians 7:1-1"
+      "second": "2 Corinthians 6:11-18; 2 Corinthians 7:1-1"
     },
     "ep": {
       "first": "Sirach 20:9-20",
@@ -3115,14 +3115,14 @@
       "second": "2 Corinthians 8:16-24"
     },
     "ep": {
-      "first": "Sirach 31:12-18, 25-200; Sirach 32:1-2",
+      "first": "Sirach 31:12-18, 25-31; Sirach 32:1-2",
       "second": "Matthew 6:1-18"
     }
   },
   "trinity14Saturday": {
     "mp": {
       "first": "2 Samuel 19:11-23",
-      "second": "2 Corinthians 9:1-200"
+      "second": "2 Corinthians 9"
     },
     "ep": {
       "first": "Sirach 34:1-8",
@@ -3142,10 +3142,10 @@
   "trinity15Monday": {
     "mp": {
       "first": "2 Samuel 19:24-39",
-      "second": "2 Corinthians 10:1-200"
+      "second": "2 Corinthians 10"
     },
     "ep": {
-      "first": "Sirach 34:18-200; Sirach 35:1-3",
+      "first": "Sirach 34:18-26; Sirach 35:1-3",
       "second": "Matthew 7:1-12"
     }
   },
@@ -3186,13 +3186,13 @@
     },
     "ep": {
       "first": "Sirach 42:15-21",
-      "second": "Matthew 8:28-200; Matthew 9:1-8"
+      "second": "Matthew 8:28-34; Matthew 9:1-8"
     }
   },
   "trinity15Saturday": {
     "mp": {
       "first": "1 Kings 3:16-28",
-      "second": "2 Corinthians 13:1-200"
+      "second": "2 Corinthians 13"
     },
     "ep": {
       "first": "Sirach 43:1-12",
@@ -3201,7 +3201,7 @@
   },
   "trinity16Sunday": {
     "mp": {
-      "first": "Isaiah 12:1-200",
+      "first": "Isaiah 12",
       "second": "John 11:21-44"
     },
     "ep": {
@@ -3212,7 +3212,7 @@
   "trinity16Monday": {
     "mp": {
       "first": "1 Kings 8:1-11",
-      "second": "1 Thessalonians 1:1-200"
+      "second": "1 Thessalonians 1"
     },
     "ep": {
       "first": "Sirach 43:13-19",
@@ -3226,13 +3226,13 @@
     },
     "ep": {
       "first": "Sirach 43:20-33",
-      "second": "Matthew 9:36-200; Matthew 10:1-15"
+      "second": "Matthew 9:36-38; Matthew 10:1-15"
     }
   },
   "trinity16Wednesday": {
     "mp": {
       "first": "1 Kings 8:22-30",
-      "second": "1 Thessalonians 2:17-200; 1 Thessalonians 3:1-13"
+      "second": "1 Thessalonians 2:17-20; 1 Thessalonians 3:1-13"
     },
     "ep": {
       "first": "Sirach 44:1-15",
@@ -3246,7 +3246,7 @@
     },
     "ep": {
       "first": "Job 1:1-12",
-      "second": "Matthew 10:32-200; Matthew 11:1-1"
+      "second": "Matthew 10:32-42; Matthew 11:1-1"
     }
   },
   "trinity16Friday": {
@@ -3265,7 +3265,7 @@
       "second": "1 Thessalonians 5:1-11"
     },
     "ep": {
-      "first": "Job 2:1-200",
+      "first": "Job 2",
       "second": "Matthew 11:20-30"
     }
   },
@@ -3292,7 +3292,7 @@
   "trinity17Tuesday": {
     "mp": {
       "first": "1 Kings 12:12-20",
-      "second": "2 Thessalonians 1:1-200"
+      "second": "2 Thessalonians 1"
     },
     "ep": {
       "first": "Job 4:12-21",
@@ -3312,7 +3312,7 @@
   "trinity17Thursday": {
     "mp": {
       "first": "1 Kings 16:29-34",
-      "second": "2 Thessalonians 2:13-200; 2 Thessalonians 3:1-5"
+      "second": "2 Thessalonians 2:13-17; 2 Thessalonians 3:1-5"
     },
     "ep": {
       "first": "Job 10:1-9, 12-18",
@@ -3342,7 +3342,7 @@
   "trinity18Sunday": {
     "mp": {
       "first": "Proverbs 2:1-9",
-      "second": "1 Timothy 3:14-200; 1 Timothy 4:1-16"
+      "second": "1 Timothy 3:14-16; 1 Timothy 4:1-16"
     },
     "ep": {
       "first": "Deuteronomy 11:18-21, 26-28, 32",
@@ -3356,7 +3356,7 @@
     },
     "ep": {
       "first": "Job 12:13-22",
-      "second": "Matthew 13:53-200; Matthew 14:1-12"
+      "second": "Matthew 13:53-58; Matthew 14:1-12"
     }
   },
   "trinity18Tuesday": {
@@ -3392,7 +3392,7 @@
   "trinity18Friday": {
     "mp": {
       "first": "1 Kings 19:9-21",
-      "second": "James 3:1-200"
+      "second": "James 3"
     },
     "ep": {
       "first": "Job 24:1-4, 12-20",
@@ -3412,17 +3412,17 @@
   "trinity19Sunday": {
     "mp": {
       "first": "Job 24:1-17",
-      "second": "Titus 2:1-200"
+      "second": "Titus 2"
     },
     "ep": {
       "first": "Jeremiah 5:7-19",
-      "second": "2 Corinthians 13:1-200"
+      "second": "2 Corinthians 13"
     }
   },
   "trinity19Monday": {
     "mp": {
       "first": "1 Kings 21:11-22",
-      "second": "James 4:13-200; James 5:1-11"
+      "second": "James 4:13-17; James 5:1-11"
     },
     "ep": {
       "first": "Job 28:12-28",
@@ -3492,7 +3492,7 @@
   "trinity20Monday": {
     "mp": {
       "first": "2 Kings 4:8-17",
-      "second": "1 Timothy 3:14-200; 1 Timothy 4:1-5"
+      "second": "1 Timothy 3:14-16; 1 Timothy 4:1-5"
     },
     "ep": {
       "first": "Ecclesiastes 1:2-11",
@@ -3572,7 +3572,7 @@
   "trinity21Tuesday": {
     "mp": {
       "first": "2 Kings 6:15-23",
-      "second": "2 Timothy 1:15-200; 2 Timothy 2:1-13"
+      "second": "2 Timothy 1:15-18; 2 Timothy 2:1-13"
     },
     "ep": {
       "first": "Ecclesiastes 6:1-2, 7-12",
@@ -3585,14 +3585,14 @@
       "second": "2 Timothy 2:14-26"
     },
     "ep": {
-      "first": "Ecclesiastes 8:12-200; Ecclesiastes 9:1-1",
+      "first": "Ecclesiastes 8:12-17; Ecclesiastes 9:1-1",
       "second": "Matthew 23:1-12"
     }
   },
   "trinity21Thursday": {
     "mp": {
       "first": "2 Kings 9:17-28",
-      "second": "2 Timothy 3:1-200"
+      "second": "2 Timothy 3"
     },
     "ep": {
       "first": "Ecclesiastes 9:11-18",
@@ -3605,7 +3605,7 @@
       "second": "2 Timothy 4:1-8"
     },
     "ep": {
-      "first": "Ecclesiastes 11:1-200",
+      "first": "Ecclesiastes 11",
       "second": "Matthew 23:25-39"
     }
   },
@@ -3615,13 +3615,13 @@
       "second": "2 Timothy 4:9-22"
     },
     "ep": {
-      "first": "Ecclesiastes 12:1-200",
+      "first": "Ecclesiastes 12",
       "second": "Matthew 24:1-14"
     }
   },
   "trinity22Sunday": {
     "mp": {
-      "first": "Sirach 27:30-200; Sirach 28:1-7",
+      "first": "Sirach 28:1-7",
       "second": "Matthew 18:7-20"
     },
     "ep": {
@@ -3632,7 +3632,7 @@
   "trinity22Monday": {
     "mp": {
       "first": "2 Kings 17:6-8, 12-18",
-      "second": "Titus 1:1-200"
+      "second": "Titus 1"
     },
     "ep": {
       "first": "Deuteronomy 4:1-9",
@@ -3642,7 +3642,7 @@
   "trinity22Tuesday": {
     "mp": {
       "first": "2 Kings 21:1-3, 10-18",
-      "second": "Titus 2:1-200"
+      "second": "Titus 2"
     },
     "ep": {
       "first": "Deuteronomy 4:15-24",
@@ -3652,7 +3652,7 @@
   "trinity22Wednesday": {
     "mp": {
       "first": "2 Kings 22:3-13",
-      "second": "Titus 3:1-200"
+      "second": "Titus 3"
     },
     "ep": {
       "first": "Deuteronomy 4:25-31",
@@ -3662,7 +3662,7 @@
   "trinity22Thursday": {
     "mp": {
       "first": "2 Kings 22:14-20",
-      "second": "Philemon 1:1-200"
+      "second": "Philemon 1"
     },
     "ep": {
       "first": "Deuteronomy 4:32-40",
@@ -3672,7 +3672,7 @@
   "trinity22Friday": {
     "mp": {
       "first": "2 Kings 23:1-4, 11-14, 21-23",
-      "second": "2 John 1:1-200"
+      "second": "2 John 1"
     },
     "ep": {
       "first": "Deuteronomy 5:1-21",
@@ -3682,7 +3682,7 @@
   "trinity22Saturday": {
     "mp": {
       "first": "2 Kings 23:24-30",
-      "second": "3 John 1:1-200"
+      "second": "3 John 1"
     },
     "ep": {
       "first": "Deuteronomy 5:22-33",
@@ -3706,7 +3706,7 @@
     },
     "ep": {
       "first": "Deuteronomy 24:10-18",
-      "second": "1 Thessalonians 1:1-200"
+      "second": "1 Thessalonians 1"
     }
   },
   "trinity23Tuesday": {
@@ -3726,7 +3726,7 @@
     },
     "ep": {
       "first": "Deuteronomy 26:1-11",
-      "second": "1 Thessalonians 2:17-200; 1 Thessalonians 3:1-13"
+      "second": "1 Thessalonians 2:17-20; 1 Thessalonians 3:1-13"
     }
   },
   "trinity23Thursday": {
@@ -3751,7 +3751,7 @@
   },
   "trinity23Saturday": {
     "mp": {
-      "first": "Malachi 3:16-200; Malachi 4:1-6",
+      "first": "Malachi 3:16-18; Malachi 4:1-6",
       "second": "1 Peter 3:1-12"
     },
     "ep": {
@@ -3786,7 +3786,7 @@
     },
     "ep": {
       "first": "Wisdom 6:1-11",
-      "second": "2 Thessalonians 1:1-200"
+      "second": "2 Thessalonians 1"
     }
   },
   "trinity24Wednesday": {
@@ -3806,7 +3806,7 @@
     },
     "ep": {
       "first": "Wisdom 7:7-14",
-      "second": "2 Thessalonians 2:13-200; 2 Thessalonians 3:1-5"
+      "second": "2 Thessalonians 2:13-17; 2 Thessalonians 3:1-5"
     }
   },
   "trinity24Friday": {
@@ -3821,12 +3821,12 @@
   },
   "trinity24Saturday": {
     "mp": {
-      "first": "Lamentations 5:1-200",
+      "first": "Lamentations 5",
       "second": "1 Peter 5:8-14"
     },
     "ep": {
-      "first": "Wisdom 7:22-200; Wisdom 8:1-1",
-      "second": "Jude 1:1-200"
+      "first": "Wisdom 7:22-30; Wisdom 8:1-1",
+      "second": "Jude 1"
     }
   },
   "trinity25Sunday": {
@@ -3835,7 +3835,7 @@
       "second": "Matthew 25:31-46"
     },
     "ep": {
-      "first": "Ecclesiastes 11:9-200; Ecclesiastes 12:1-8, 13-14",
+      "first": "Ecclesiastes 11:9-10; Ecclesiastes 12:1-8, 13-14",
       "second": "Hebrews 13:1-21"
     }
   },
@@ -3875,7 +3875,7 @@
       "second": "2 Peter 2:10-22"
     },
     "ep": {
-      "first": "Wisdom 11:21-200; Wisdom 12:1-2",
+      "first": "Wisdom 11:21-26; Wisdom 12:1-2",
       "second": "Revelation 2:12-17"
     }
   },

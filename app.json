@@ -8,5 +8,13 @@
     "eas": {
       "projectId": "9e768fee-eb59-47a7-a90e-75874248d570"
     }
+  },
+  "expo": {
+    "name": "1928 Daily Office",
+    "slug": "daily-office-1928",
+    "description": "The 1928 American Book of Common Prayer Daily Office for Morning and Evening Prayer",
+    "android": {
+      "package": "com.increasemather.dailyoffice1928"
+    }
   }
 }

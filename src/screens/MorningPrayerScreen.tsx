@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { ScrollView, View, Text, TouchableOpacity, Modal, Pressable, StyleSheet, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Typography } from '../theme';
-import { formatLiturgicalDate } from '../utils/dateHelpers';
+import { formatLiturgicalDate, useToday } from '../utils/dateHelpers';
 import {
   getLiturgicalSeason, showGloriaPatri,
   useEasterAnthems, omitVenite, getVeniteInvitatory,
@@ -90,6 +90,15 @@ const GLORIA_IN_EXCELSIS =
   'For thou only art holy; thou only art the Lord; thou only, O Christ, with the Holy Ghost, ' +
   'art most high in the glory of God the Father. Amen.';
 
+// Map lectionary book names → traditional 1928 BCP display names
+const BCP_BOOK_NAMES: Record<string, string> = {
+  'Sirach':          'Ecclesiasticus',
+  'Three Children':  'Song of Three Children',
+};
+function bcpDisplayRef(ref: string): string {
+  return ref.replace(/Sirach|Three Children/g, (m) => BCP_BOOK_NAMES[m] ?? m);
+}
+
 const NAV_SECTIONS = [
   { key: 'opening',  label: 'Opening Sentence' },
   { key: 'psalms',   label: 'Psalms' },
@@ -101,7 +110,7 @@ const NAV_SECTIONS = [
 
 export function MorningPrayerScreen() {
   const { colors, sizes, lineHeights, isDark } = useTheme();
-  const today = new Date();
+  const today = useToday();
   const season = getLiturgicalSeason(today);
   const gloriaInSeason = showGloriaPatri(season);
   const feastDay = getFeastDay(today);
@@ -320,11 +329,11 @@ export function MorningPrayerScreen() {
             <RubricText text="Here shall be read the First Lesson, taken out of the Old Testament as is appointed." />
             {mpFirstRef ? (
               <>
-                <RubricText text={'Here beginneth ' + mpFirstRef + '.'} />
+                <RubricText text={'Here beginneth ' + bcpDisplayRef(mpFirstRef) + '.'} />
                 {mpFirstVerses ? (
                   mpFirstVerses.map((v) => <BodyText key={`mp1-${v.verse}`} text={`${v.verse} ${v.text}`} />)
                 ) : (
-                  <RubricText noMark text={`[${mpFirstRef}]`} />
+                  <RubricText noMark text={`[${bcpDisplayRef(mpFirstRef)}]`} />
                 )}
                 <RubricText text="Here endeth the First Lesson." />
               </>
@@ -346,11 +355,11 @@ export function MorningPrayerScreen() {
             <RubricText text="Here shall be read the Second Lesson, taken out of the New Testament as is appointed." />
             {mpSecondRef ? (
               <>
-                <RubricText text={'Here beginneth ' + mpSecondRef + '.'} />
+                <RubricText text={'Here beginneth ' + bcpDisplayRef(mpSecondRef) + '.'} />
                 {mpSecondVerses ? (
                   mpSecondVerses.map((v) => <BodyText key={`mp2-${v.verse}`} text={`${v.verse} ${v.text}`} />)
                 ) : (
-                  <RubricText noMark text={`[${mpSecondRef}]`} />
+                  <RubricText noMark text={`[${bcpDisplayRef(mpSecondRef)}]`} />
                 )}
                 <RubricText text="Here endeth the Second Lesson." />
               </>

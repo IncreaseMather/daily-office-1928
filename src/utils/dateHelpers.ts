@@ -1,3 +1,31 @@
+import { useEffect, useRef, useState } from 'react';
+import { AppState } from 'react-native';
+
+/**
+ * Returns a reactive Date that re-evaluates whenever the app comes to the
+ * foreground. Screens that use this instead of `new Date()` will automatically
+ * show the correct liturgical day after an overnight or cross-noon interruption.
+ */
+export function useToday(): Date {
+  const [today, setToday] = useState(() => new Date());
+  const appStateRef = useRef(AppState.currentState);
+
+  useEffect(() => {
+    const sub = AppState.addEventListener('change', (nextState) => {
+      if (
+        appStateRef.current.match(/inactive|background/) &&
+        nextState === 'active'
+      ) {
+        setToday(new Date());
+      }
+      appStateRef.current = nextState;
+    });
+    return () => sub.remove();
+  }, []);
+
+  return today;
+}
+
 /** Day of month (1–30) for psalm rotation. Day 31 uses day 30. */
 export function getPsalterDay(date: Date = new Date()): number {
   const d = date.getDate();

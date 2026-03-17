@@ -1,6 +1,6 @@
-import React from 'react';
-import { ActivityIndicator, View, Text, Platform } from 'react-native';
-import { NavigationContainer, DefaultTheme, DarkTheme, type Theme } from '@react-navigation/native';
+import React, { useEffect, useRef } from 'react';
+import { ActivityIndicator, View, Text, Platform, AppState } from 'react-native';
+import { NavigationContainer, DefaultTheme, DarkTheme, useNavigation, type Theme } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
@@ -55,6 +55,32 @@ const darkNavTheme: Theme = {
 
 const Tab = createBottomTabNavigator();
 
+/**
+ * Watches AppState and navigates to the correct office tab whenever the app
+ * returns to the foreground. Switches to Morning Prayer before noon and
+ * Evening Prayer from noon onward. Also handles overnight date changes.
+ */
+function OfficeSwitcher() {
+  const navigation = useNavigation<any>();
+  const appStateRef = useRef(AppState.currentState);
+
+  useEffect(() => {
+    const sub = AppState.addEventListener('change', (nextState) => {
+      if (
+        appStateRef.current.match(/inactive|background/) &&
+        nextState === 'active'
+      ) {
+        const office = new Date().getHours() < 12 ? 'Morning Prayer' : 'Evening Prayer';
+        navigation.navigate(office);
+      }
+      appStateRef.current = nextState;
+    });
+    return () => sub.remove();
+  }, [navigation]);
+
+  return null;
+}
+
 function TabNavigator() {
   const insets = useSafeAreaInsets();
   const { colors, isDark } = useTheme();
@@ -62,6 +88,8 @@ function TabNavigator() {
   const tabBarHeight = 56 + insets.bottom + extraBottom;
 
   return (
+    <>
+    <OfficeSwitcher />
     <Tab.Navigator
       id={undefined}
       initialRouteName={getInitialOffice()}
@@ -113,6 +141,7 @@ function TabNavigator() {
         }}
       />
     </Tab.Navigator>
+    </>
   );
 }
 
