@@ -1,0 +1,273 @@
+{
+  "_note": "Canticles for Morning and Evening Prayer, 1928 American BCP. Asterisk (*) marks the mid-point of each verse for chanting.",
+
+  "morning": {
+    "venite": {
+      "id": "venite",
+      "title": "Venite, exultemus Domino",
+      "reference": "Psalm 95:1\u20137; 96:9, 13",
+      "rubric": "Then shall be sung or said the following Anthem; except on Easter Day. It may be omitted on Ash Wednesday and Good Friday.",
+      "verses": [
+        "O come, let us sing unto the Lord: * let us heartily rejoice in the strength of our salvation.",
+        "Let us come before his presence with thanksgiving: * and shew ourselves glad in him with psalms.",
+        "For the Lord is a great God: * and a great King above all gods.",
+        "In his hand are all the corners of the earth: * and the strength of the hills is his also.",
+        "The sea is his, and he made it: * and his hands prepared the dry land.",
+        "O come, let us worship and fall down: * and kneel before the Lord our Maker.",
+        "For he is the Lord our God: * and we are the people of his pasture, and the sheep of his hand.",
+        "O worship the Lord in the beauty of holiness: * let the whole earth stand in awe of him.",
+        "For he cometh, for he cometh to judge the earth: * and with righteousness to judge the world, and the peoples with his truth."
+      ],
+      "gloria": true
+    },
+
+    "easterAnthems": {
+      "id": "easter-anthems",
+      "title": "Easter Anthems",
+      "reference": "1 Cor. 5:7\u20138; Rom. 6:9\u201311; 1 Cor. 15:20\u201322",
+      "rubric": "In place of the Venite, on Easter Day shall be sung or said the following Anthem.",
+      "verses": [
+        "Christ our Passover is sacrificed for us: * therefore let us keep the feast;\nNot with the old leaven, nor with the leaven of malice and wickedness: * but with the unleavened bread of sincerity and truth.   I Cor. v. 7, 8.",
+        "Christ being raised from the dead dieth no more: * death hath no more dominion over him.\nFor in that he died, he died unto sin once: * but in that he liveth, he liveth unto God.\nLikewise reckon ye also yourselves to be dead indeed unto sin: * but alive unto God through Jesus Christ our Lord.   Rom. vi. 9, 10, 11.",
+        "Christ is risen from the dead: * and become the first-fruits of them that slept.\nFor since by man came death: * by man came also the resurrection of the dead.\nFor as in Adam all die: * even so in Christ shall all be made alive.   I Cor. xv. 20, 21, 22."
+      ],
+      "gloria": true
+    },
+
+    "teDeum": {
+      "id": "te-deum",
+      "title": "Te Deum laudamus",
+      "rubric": "Then shall be sung or said the following Hymn; except on Sundays in Lent and the Twenty-fifth Day of December, when the Benedictus es shall be used.",
+      "verses": [
+        "We praise thee, O God: * we acknowledge thee to be the Lord.",
+        "All the earth doth worship thee: * the Father everlasting.",
+        "To thee all Angels cry aloud: * the Heavens, and all the Powers therein.",
+        "To thee Cherubim and Seraphim: * continually do cry,",
+        "Holy, Holy, Holy: * Lord God of Sabaoth;",
+        "Heaven and earth are full of the Majesty: * of thy Glory.",
+        "The glorious company of the Apostles: * praise thee.",
+        "The goodly fellowship of the Prophets: * praise thee.",
+        "The noble army of Martyrs: * praise thee.",
+        "The holy Church throughout all the world: * doth acknowledge thee;",
+        "The Father: * of an infinite Majesty;",
+        "Thine adorable, true: * and only Son;",
+        "Also the Holy Ghost: * the Comforter.",
+        "Thou art the King of Glory: * O Christ.",
+        "Thou art the everlasting Son: * of the Father.",
+        "When thou tookest upon thee to deliver man: * thou didst humble thyself to be born of a Virgin.",
+        "When thou hadst overcome the sharpness of death: * thou didst open the Kingdom of Heaven to all believers.",
+        "Thou sittest at the right hand of God: * in the Glory of the Father.",
+        "We believe that thou shalt come: * to be our Judge.",
+        "We therefore pray thee, help thy servants: * whom thou hast redeemed with thy precious blood.",
+        "Make them to be numbered with thy Saints: * in glory everlasting.",
+        "O Lord, save thy people: * and bless thine heritage.",
+        "Govern them: * and lift them up for ever.",
+        "Day by day: * we magnify thee;",
+        "And we worship thy Name: * ever world without end.",
+        "Vouchsafe, O Lord: * to keep us this day without sin.",
+        "O Lord, have mercy upon us: * have mercy upon us.",
+        "O Lord, let thy mercy be upon us: * as our trust is in thee.",
+        "O Lord, in thee have I trusted: * let me never be confounded."
+      ]
+    },
+
+    "benedictusEs": {
+      "id": "benedictus-es",
+      "title": "Benedictus es, Domine",
+      "reference": "Song of the Three Young Men, 29\u201334",
+      "rubric": "To be used on Sundays in Lent, and on the Twenty-fifth Day of December, instead of the Te Deum.",
+      "verses": [
+        "Blessed art thou, O Lord God of our fathers: * praised and exalted above all for ever.",
+        "And blessed is thy glorious and holy Name: * praised and exalted above all for ever.",
+        "Blessed art thou in the temple of thine holy glory: * praised and exalted above all for ever.",
+        "Blessed art thou on the glorious throne of thy kingdom: * praised and exalted above all for ever.",
+        "Blessed art thou who beholdest the depths, and dwellest between the Cherubim: * praised and exalted above all for ever.",
+        "Blessed art thou in the firmament of heaven: * praised and exalted above all for ever.",
+        "O praise him, and magnify him above all for ever."
+      ],
+      "gloria": true
+    },
+
+    "benedictus": {
+      "id": "benedictus",
+      "title": "Benedictus",
+      "reference": "St. Luke 1:68",
+      "rubric": "Then shall be sung or said the following Canticle.",
+      "verses": [
+        "Blessed be the Lord God of Israel: * for he hath visited and redeemed his people;",
+        "And hath raised up a mighty salvation for us: * in the house of his servant David;",
+        "As he spake by the mouth of his holy Prophets: * which have been since the world began;",
+        "That we should be saved from our enemies: * and from the hand of all that hate us;",
+        "To perform the mercy promised to our forefathers: * and to remember his holy Covenant;",
+        "To perform the oath which he sware to our forefather Abraham: * that he would give us,",
+        "That we being delivered out of the hand of our enemies: * might serve him without fear;",
+        "In holiness and righteousness before him: * all the days of our life.",
+        "And thou, Child, shalt be called the Prophet of the Highest: * for thou shalt go before the face of the Lord to prepare his ways;",
+        "To give knowledge of salvation unto his people: * for the remission of their sins;",
+        "Through the tender mercy of our God: * whereby the day-spring from on high hath visited us;",
+        "To give light to them that sit in darkness, and in the shadow of death: * and to guide our feet into the way of peace."
+      ],
+      "gloria": true
+    },
+
+    "jubilate": {
+      "id": "jubilate",
+      "title": "Jubilate Deo",
+      "reference": "Psalm 100",
+      "rubric": "Or this Psalm, instead of the Benedictus.",
+      "verses": [
+        "O be joyful in the Lord, all ye lands: * serve the Lord with gladness, and come before his presence with a song.",
+        "Be ye sure that the Lord he is God; it is he that hath made us, and not we ourselves: * we are his people, and the sheep of his pasture.",
+        "O go your way into his gates with thanksgiving, and into his courts with praise: * be thankful unto him, and speak good of his Name.",
+        "For the Lord is gracious, his mercy is everlasting: * and his truth endureth from generation to generation."
+      ],
+      "gloria": true
+    },
+    "benedicite": {
+  "id": "benedicite",
+  "title": "Benedicite, omnia opera Domini",
+  "reference": "Song of the Three Children",
+  "rubric": "To be used especially in Advent and Lent instead of the Te Deum.",
+  "verses": [
+    "O all ye Works of the Lord, bless ye the Lord: * praise him, and magnify him for ever.",
+    "O ye Angels of the Lord, bless ye the Lord: * praise him, and magnify him for ever.",
+    "O ye Heavens, bless ye the Lord: * praise him, and magnify him for ever.",
+    "O ye Waters that be above the Firmament, bless ye the Lord: * praise him, and magnify him for ever.",
+    "O all ye Powers of the Lord, bless ye the Lord: * praise him, and magnify him for ever.",
+    "O ye Sun and Moon, bless ye the Lord: * praise him, and magnify him for ever.",
+    "O ye Stars of Heaven, bless ye the Lord: * praise him, and magnify him for ever.",
+    "O ye Showers and Dew, bless ye the Lord: * praise him, and magnify him for ever.",
+    "O ye Winds of God, bless ye the Lord: * praise him, and magnify him for ever.",
+    "O ye Fire and Heat, bless ye the Lord: * praise him, and magnify him for ever.",
+    "O ye Winter and Summer, bless ye the Lord: * praise him, and magnify him for ever.",
+    "O ye Dews and Frosts, bless ye the Lord: * praise him, and magnify him for ever.",
+    "O ye Frost and Cold, bless ye the Lord: * praise him, and magnify him for ever."
+  ],
+  "gloria": true
+  },
+
+  "benedictusDominus": {
+    "id": "benedictus-dominus",
+    "title": "Benedictus es, Domine",
+    "reference": "Song of the Three Young Men, 29\u201334",
+    "rubric": "To be used on Sundays in Lent, and on the Twenty-fifth Day of December, instead of the Te Deum.",
+    "verses": [
+      "Blessed art thou, O Lord God of our fathers: * praised and exalted above all for ever.",
+      "And blessed is thy glorious and holy Name: * praised and exalted above all for ever.",
+      "Blessed art thou in the temple of thine holy glory: * praised and exalted above all for ever.",
+      "Blessed art thou on the glorious throne of thy kingdom: * praised and exalted above all for ever.",
+      "Blessed art thou who beholdest the depths, and dwellest between the Cherubim: * praised and exalted above all for ever.",
+      "Blessed art thou in the firmament of heaven: * praised and exalted above all for ever.",
+      "O praise him, and magnify him above all for ever."
+    ],
+    "gloria": true
+  }
+},
+
+  "evening": {
+    "magnificat": {
+      "id": "magnificat",
+      "title": "Magnificat",
+      "reference": "St. Luke 1:46",
+      "rubric": "Then shall be said or sung the following Hymn; the People standing.",
+      "verses": [
+        "My soul doth magnify the Lord: * and my spirit hath rejoiced in God my Saviour.",
+        "For he hath regarded: * the lowliness of his hand-maiden.",
+        "For behold, from henceforth: * all generations shall call me blessed.",
+        "For he that is mighty hath magnified me: * and holy is his Name.",
+        "And his mercy is on them that fear him: * throughout all generations.",
+        "He hath shewed strength with his arm: * he hath scattered the proud in the imagination of their hearts.",
+        "He hath put down the mighty from their seat: * and hath exalted the humble and meek.",
+        "He hath filled the hungry with good things: * and the rich he hath sent empty away.",
+        "He remembering his mercy hath holpen his servant Israel: * as he promised to our forefathers, Abraham and his seed, for ever."
+      ],
+      "gloria": true
+    },
+
+    "nuncDimittis": {
+      "id": "nunc-dimittis",
+      "title": "Nunc Dimittis",
+      "reference": "St. Luke 2:29",
+      "rubric": "Then shall be said or sung the following Hymn; the People standing.",
+      "verses": [
+        "Lord, now lettest thou thy servant depart in peace: * according to thy word.",
+        "For mine eyes have seen: * thy salvation;",
+        "Which thou hast prepared: * before the face of all people;",
+        "To be a light to lighten the Gentiles: * and to be the glory of thy people Israel."
+      ],
+      "gloria": true
+    },
+
+    "cantateDomini": {
+      "id": "cantate-domini",
+      "title": "Cantate Domino",
+      "reference": "Psalm 98",
+      "rubric": "Or this Psalm, instead of the Magnificat.",
+      "verses": [
+        "O sing unto the Lord a new song: * for he hath done marvellous things.",
+        "With his own right hand, and with his holy arm: * hath he gotten himself the victory.",
+        "The Lord declared his salvation: * his righteousness hath he openly shewed in the sight of the heathen.",
+        "He hath remembered his mercy and truth toward the house of Israel: * and all the ends of the world have seen the salvation of our God.",
+        "Shew yourselves joyful unto the Lord, all ye lands: * sing, rejoice, and give thanks.",
+        "Praise the Lord upon the harp: * sing to the harp with a psalm of thanksgiving.",
+        "With trumpets also and shawms: * O shew yourselves joyful before the Lord the King.",
+        "Let the sea make a noise, and all that therein is: * the round world, and they that dwell therein.",
+        "Let the floods clap their hands, and let the hills be joyful together before the Lord: * for he is come to judge the earth.",
+        "With righteousness shall he judge the world: * and the people with equity."
+      ],
+      "gloria": true
+    },
+
+    "deusMisereatur": {
+      "id": "deus-misereatur",
+      "title": "Deus misereatur",
+      "reference": "Psalm 67",
+      "rubric": "Or this Psalm, instead of the Nunc Dimittis.",
+      "verses": [
+        "God be merciful unto us, and bless us: * and shew us the light of his countenance, and be merciful unto us;",
+        "That thy way may be known upon earth: * thy saving health among all nations.",
+        "Let the people praise thee, O God: * yea, let all the people praise thee.",
+        "O let the nations rejoice and be glad: * for thou shalt judge the folk righteously, and govern the nations upon earth.",
+        "Let the people praise thee, O God: * yea, let all the people praise thee.",
+        "Then shall the earth bring forth her increase: * and God, even our own God, shall give us his blessing.",
+        "God shall bless us: * and all the ends of the world shall fear him."
+      ],
+      "gloria": true
+    },
+
+    "bonumEstConfiteri": {
+      "id": "bonum-est-confiteri",
+      "title": "Bonum est confiteri",
+      "reference": "Psalm 92:1\u20134",
+      "rubric": "Or this Psalm.",
+      "verses": [
+        "It is a good thing to give thanks unto the Lord: * and to sing praises unto thy Name, O Most High;",
+        "To shew forth thy lovingkindness in the morning: * and thy faithfulness every night,",
+        "Upon an instrument of ten strings, and upon the psaltery: * upon the harp with a solemn sound.",
+        "For thou, Lord, hast made me glad through thy work: * I will triumph in the works of thy hands."
+      ],
+      "gloria": true
+    },
+
+    "benedicAnimaMea": {
+      "id": "benedic-anima-mea",
+      "title": "Benedic, anima mea",
+      "reference": "Psalm 103:1\u20134, 20\u201322",
+      "rubric": "Or this Psalm.",
+      "verses": [
+        "Bless the Lord, O my soul: * and all that is within me, bless his holy Name.",
+        "Bless the Lord, O my soul: * and forget not all his benefits;",
+        "Who forgiveth all thine iniquities: * and healeth all thine infirmities;",
+        "Who redeemeth thy life from destruction: * and crowneth thee with mercy and loving-kindness.",
+        "O praise the Lord, ye angels of his, ye that excel in strength: * ye that fulfil his commandment, and hearken unto the voice of his words.",
+        "O praise the Lord, all ye his hosts: * ye servants of his that do his pleasure.",
+        "O speak good of the Lord, all ye works of his, in all places of his dominion: * praise thou the Lord, O my soul."
+      ],
+      "gloria": true
+    }
+  },
+
+  "gloria": "Glory be to the Father, and to the Son: * and to the Holy Ghost;\nAs it was in the beginning, is now, and ever shall be: * world without end. Amen.",
+
+  "gloriaInExcelsis": "Glory be to God on high, and on earth peace, good will towards men.\nWe praise thee, we bless thee, we worship thee, we glorify thee, we give thanks to thee for thy great glory, O Lord God, heavenly King, God the Father Almighty.\nO Lord, the only-begotten Son Jesu Christ; O Lord God, Lamb of God, Son of the Father, that takest away the sins of the world, have mercy upon us. Thou that takest away the sins of the world, receive our prayer. Thou that sittest at the right hand of God the Father, have mercy upon us.\nFor thou only art holy; thou only art the Lord; thou only, O Christ, with the Holy Ghost, art most high in the glory of God the Father. Amen."
+}

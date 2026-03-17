@@ -1,0 +1,12 @@
+{
+  "plugins": [
+    "expo-asset",
+    "expo-font",
+    "expo-notifications"
+  ],
+  "extra": {
+    "eas": {
+      "projectId": "9e768fee-eb59-47a7-a90e-75874248d570"
+    }
+  }
+}

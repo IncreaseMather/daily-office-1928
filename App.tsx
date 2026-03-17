@@ -1,0 +1,157 @@
+import React from 'react';
+import { ActivityIndicator, View, Text, Platform } from 'react-native';
+import { NavigationContainer, DefaultTheme, DarkTheme, type Theme } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
+import { useFonts } from 'expo-font';
+import {
+  EBGaramond_400Regular,
+  EBGaramond_400Regular_Italic,
+  EBGaramond_700Bold,
+} from '@expo-google-fonts/eb-garamond';
+
+import { MorningPrayerScreen } from './src/screens/MorningPrayerScreen';
+import { EveningPrayerScreen } from './src/screens/EveningPrayerScreen';
+import { SettingsScreen } from './src/screens/SettingsScreen';
+import { Colors, DarkColors, Typography } from './src/theme';
+import { getInitialOffice } from './src/utils/dateHelpers';
+import { SettingsProvider, useTheme } from './src/context/SettingsContext';
+
+// ── Navigation themes ─────────────────────────────────────────────────────────
+// Passing a `theme` to NavigationContainer propagates colors to all navigation
+// chrome (tab bar background, header, borders) in a single synchronous update,
+// eliminating the one-frame lag that occurs when relying on screenOptions props.
+
+const lightNavTheme: Theme = {
+  ...DefaultTheme,
+  dark: false,
+  colors: {
+    ...DefaultTheme.colors,
+    primary:      Colors.tabActive,
+    background:   Colors.parchment,
+    card:         Colors.tabBar,      // tab bar + header background
+    text:         Colors.ink,
+    border:       Colors.rule,        // tab bar top border + header bottom border
+    notification: Colors.rubric,
+  },
+};
+
+const darkNavTheme: Theme = {
+  ...DarkTheme,
+  dark: true,
+  colors: {
+    ...DarkTheme.colors,
+    primary:      DarkColors.tabActive,
+    background:   DarkColors.parchment,
+    card:         DarkColors.tabBar,
+    text:         DarkColors.ink,
+    border:       DarkColors.rule,
+    notification: DarkColors.rubric,
+  },
+};
+
+// ── Navigator ─────────────────────────────────────────────────────────────────
+
+const Tab = createBottomTabNavigator();
+
+function TabNavigator() {
+  const insets = useSafeAreaInsets();
+  const { colors, isDark } = useTheme();
+  const extraBottom = Platform.OS === 'android' ? 16 : 0;
+  const tabBarHeight = 56 + insets.bottom + extraBottom;
+
+  return (
+    <Tab.Navigator
+      id={undefined}
+      initialRouteName={getInitialOffice()}
+      screenOptions={{
+        // backgroundColor and borderColor intentionally omitted here —
+        // they come from the NavigationContainer theme (card / border) above
+        // and are applied synchronously to all chrome in one pass.
+        headerTitleStyle: {
+          fontFamily: Typography.serifBold,
+          fontSize: Typography.sizes.subheading,
+          color: colors.ink,
+        },
+        headerStyle: {
+          elevation: 0,
+          shadowOpacity: 0,
+        },
+        tabBarStyle: {
+          borderTopWidth: 1.5,
+          height: tabBarHeight,
+          paddingBottom: insets.bottom + extraBottom,
+          elevation: 12,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: -2 },
+          shadowOpacity: 0.08,
+          shadowRadius: 6,
+        },
+        tabBarItemStyle: { justifyContent: 'center', alignItems: 'center' },
+        tabBarLabelStyle: {
+          fontFamily: Typography.serifBold,
+          fontSize: Typography.sizes.label,
+          textAlign: 'center',
+        },
+        tabBarActiveTintColor:   colors.tabActive,
+        tabBarInactiveTintColor: colors.tabInactive,
+        tabBarIcon: () => null,
+      }}
+    >
+      <Tab.Screen name="Morning Prayer" component={MorningPrayerScreen} />
+      <Tab.Screen name="Evening Prayer" component={EveningPrayerScreen} />
+      <Tab.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <Text style={{ fontSize: 16, color: focused ? colors.tabActive : colors.tabInactive, marginBottom: -2 }}>
+              {'⚙'}
+            </Text>
+          ),
+        }}
+      />
+    </Tab.Navigator>
+  );
+}
+
+// ── Root ──────────────────────────────────────────────────────────────────────
+
+export default function App() {
+  const [fontsLoaded] = useFonts({
+    EBGaramond_400Regular,
+    EBGaramond_400Regular_Italic,
+    EBGaramond_700Bold,
+  });
+
+  if (!fontsLoaded) {
+    return (
+      <SafeAreaProvider>
+        <View style={{ flex: 1, backgroundColor: Colors.parchment, alignItems: 'center', justifyContent: 'center' }}>
+          <ActivityIndicator color={Colors.inkLight} />
+        </View>
+      </SafeAreaProvider>
+    );
+  }
+
+  return (
+    <SafeAreaProvider>
+      <SettingsProvider>
+        <AppInner />
+      </SettingsProvider>
+    </SafeAreaProvider>
+  );
+}
+
+/** Separated so TabNavigator and NavigationContainer can both call useTheme()
+ *  (requires SettingsProvider to be mounted above in the tree). */
+function AppInner() {
+  const { isDark, colors } = useTheme();
+  return (
+    <NavigationContainer theme={isDark ? darkNavTheme : lightNavTheme}>
+      <StatusBar style={isDark ? 'light' : 'dark'} backgroundColor={colors.parchment} />
+      <TabNavigator />
+    </NavigationContainer>
+  );
+}

@@ -1,0 +1,14 @@
+const ls = require('../src/data/lessons.json');
+const k = Object.keys(ls);
+const sirach = k.filter(r => r.indexOf('Sirach') !== -1);
+const wisdom = k.filter(r => r.indexOf('Wisdom') !== -1);
+const tobit  = k.filter(r => r.indexOf('Tobit') !== -1);
+const macc   = k.filter(r => r.indexOf('Maccabees') !== -1);
+const baruch = k.filter(r => r.indexOf('Baruch') !== -1);
+console.log('Sirach keys:', sirach.length);
+sirach.forEach(r => console.log(' ', r));
+console.log('Wisdom keys:', wisdom.length);
+wisdom.forEach(r => console.log(' ', r));
+console.log('Tobit:', tobit.length, tobit.slice(0,3).join(', '));
+console.log('1/2 Macc:', macc.length, macc.slice(0,3).join(', '));
+console.log('Baruch:', baruch.length, baruch.slice(0,3).join(', '));
