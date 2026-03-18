@@ -5,7 +5,7 @@ import { Colors, DarkColors, Typography, FontScales } from '../theme';
 export type LeadType = 'priest' | 'lay';
 export type PriestAbsolutionForm = 'declaratory' | 'precatory';
 export type LayAbsolution = 'kyrie' | 'trinity21';
-export type CreedChoice = 'apostles' | 'nicene';
+export type CreedChoice = 'apostles' | 'nicene' | 'athanasian';
 export type FontSize = 'small' | 'medium' | 'large';
 
 const K = {
@@ -20,6 +20,7 @@ const K = {
   MP_TIME:           '@s/mpTime',
   EP_ENABLED:        '@s/epEnabled',
   EP_TIME:           '@s/epTime',
+  LITANY_ENABLED:    '@s/litanyEnabled',
 };
 
 interface SettingsContextValue {
@@ -45,6 +46,8 @@ interface SettingsContextValue {
   setEpReminderEnabled: (v: boolean) => void;
   epReminderTime: string;
   setEpReminderTime: (v: string) => void;
+  litanyEnabled: boolean;
+  setLitanyEnabled: (v: boolean) => void;
 }
 
 const SettingsContext = createContext<SettingsContextValue | null>(null);
@@ -65,21 +68,27 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const [mpReminderTime, setMpTimeS]           = useState('07:00');
   const [epReminderEnabled, setEpEnabledS]     = useState(false);
   const [epReminderTime, setEpTimeS]           = useState('18:00');
+  const [litanyEnabled, setLitanyS]            = useState(false);
 
   useEffect(() => {
     AsyncStorage.multiGet(Object.values(K)).then((pairs) => {
-      const m = Object.fromEntries(pairs) as Record<string, string | null>;
-      if (m[K.LEAD_TYPE])    setLeadTypeS(m[K.LEAD_TYPE] as LeadType);
-      if (m[K.PRIEST_ABS])   setPriestAbsS(m[K.PRIEST_ABS] as PriestAbsolutionForm);
-      if (m[K.LAY_ABS])      setLayAbsS(m[K.LAY_ABS] as LayAbsolution);
-      if (m[K.CREED])        setCreedS(m[K.CREED] as CreedChoice);
-      if (m[K.SHORTER_FORM]) setShorterS(m[K.SHORTER_FORM] === 'true');
-      if (m[K.DARK_MODE])    setDarkS(m[K.DARK_MODE] === 'true');
-      if (m[K.FONT_SIZE])    setFontS(m[K.FONT_SIZE] as FontSize);
-      if (m[K.MP_ENABLED])   setMpEnabledS(m[K.MP_ENABLED] === 'true');
-      if (m[K.MP_TIME])      setMpTimeS(m[K.MP_TIME]);
-      if (m[K.EP_ENABLED])   setEpEnabledS(m[K.EP_ENABLED] === 'true');
-      if (m[K.EP_TIME])      setEpTimeS(m[K.EP_TIME]);
+      try {
+        const m = Object.fromEntries(pairs) as Record<string, string | null>;
+        if (m[K.LEAD_TYPE])    setLeadTypeS(m[K.LEAD_TYPE] as LeadType);
+        if (m[K.PRIEST_ABS])   setPriestAbsS(m[K.PRIEST_ABS] as PriestAbsolutionForm);
+        if (m[K.LAY_ABS])      setLayAbsS(m[K.LAY_ABS] as LayAbsolution);
+        if (m[K.CREED])        setCreedS(m[K.CREED] as CreedChoice);
+        if (m[K.SHORTER_FORM]) setShorterS(m[K.SHORTER_FORM] === 'true');
+        if (m[K.DARK_MODE])    setDarkS(m[K.DARK_MODE] === 'true');
+        if (m[K.FONT_SIZE])    setFontS(m[K.FONT_SIZE] as FontSize);
+        if (m[K.MP_ENABLED])   setMpEnabledS(m[K.MP_ENABLED] === 'true');
+        if (m[K.MP_TIME])      setMpTimeS(m[K.MP_TIME]);
+        if (m[K.EP_ENABLED])      setEpEnabledS(m[K.EP_ENABLED] === 'true');
+        if (m[K.EP_TIME])         setEpTimeS(m[K.EP_TIME]);
+        if (m[K.LITANY_ENABLED])  setLitanyS(m[K.LITANY_ENABLED] === 'true');
+      } catch {
+        // Corrupt or unexpected storage values — silently fall back to defaults
+      }
     }).catch(() => {});
   }, []);
 
@@ -94,6 +103,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const setMpReminderTime        = (v: string)                => { setMpTimeS(v);    persist(K.MP_TIME, v); };
   const setEpReminderEnabled     = (v: boolean)               => { setEpEnabledS(v); persist(K.EP_ENABLED, String(v)); };
   const setEpReminderTime        = (v: string)                => { setEpTimeS(v);    persist(K.EP_TIME, v); };
+  const setLitanyEnabled         = (v: boolean)               => { setLitanyS(v);   persist(K.LITANY_ENABLED, String(v)); };
 
   return (
     <SettingsContext.Provider value={{
@@ -108,6 +118,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       mpReminderTime, setMpReminderTime,
       epReminderEnabled, setEpReminderEnabled,
       epReminderTime, setEpReminderTime,
+      litanyEnabled, setLitanyEnabled,
     }}>
       {children}
     </SettingsContext.Provider>

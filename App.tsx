@@ -14,9 +14,11 @@ import {
 import { MorningPrayerScreen } from './src/screens/MorningPrayerScreen';
 import { EveningPrayerScreen } from './src/screens/EveningPrayerScreen';
 import { SettingsScreen } from './src/screens/SettingsScreen';
+import { ErrorBoundary } from './src/components/ErrorBoundary';
 import { Colors, DarkColors, Typography } from './src/theme';
 import { getInitialOffice } from './src/utils/dateHelpers';
 import { SettingsProvider, useTheme } from './src/context/SettingsContext';
+import { SelectedDateProvider } from './src/context/SelectedDateContext';
 
 // ── Navigation themes ─────────────────────────────────────────────────────────
 // Passing a `theme` to NavigationContainer propagates colors to all navigation
@@ -127,8 +129,8 @@ function TabNavigator() {
         tabBarIcon: () => null,
       }}
     >
-      <Tab.Screen name="Morning Prayer" component={MorningPrayerScreen} />
-      <Tab.Screen name="Evening Prayer" component={EveningPrayerScreen} />
+      <Tab.Screen name="Morning Prayer" children={() => <ErrorBoundary><MorningPrayerScreen /></ErrorBoundary>} />
+      <Tab.Screen name="Evening Prayer" children={() => <ErrorBoundary><EveningPrayerScreen /></ErrorBoundary>} />
       <Tab.Screen
         name="Settings"
         component={SettingsScreen}
@@ -167,7 +169,9 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <SettingsProvider>
-        <AppInner />
+        <SelectedDateProvider>
+          <AppInner />
+        </SelectedDateProvider>
       </SettingsProvider>
     </SafeAreaProvider>
   );

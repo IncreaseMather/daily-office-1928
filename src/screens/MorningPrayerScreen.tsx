@@ -2,7 +2,9 @@ import React, { useRef, useState } from 'react';
 import { ScrollView, View, Text, TouchableOpacity, Modal, Pressable, StyleSheet, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Typography } from '../theme';
-import { formatLiturgicalDate, useToday } from '../utils/dateHelpers';
+import { formatLiturgicalDate, formatShortDate } from '../utils/dateHelpers';
+import { useSelectedDate } from '../context/SelectedDateContext';
+import { CalendarPicker } from '../components/CalendarPicker';
 import {
   getLiturgicalSeason, showGloriaPatri,
   useEasterAnthems, omitVenite, getVeniteInvitatory,
@@ -24,6 +26,7 @@ import psalmsData from '../data/psalms.json';
 import appointedPsalmsData from '../data/appointedPsalms.json';
 import lectionaryData from '../data/lectionary.json';
 import lessonsData from '../data/lessons.json';
+import litanyData from '../data/litany.json';
 
 const _psalmTextMap: Record<string, any> = (() => {
   const map: Record<string, any> = {};
@@ -90,6 +93,30 @@ const GLORIA_IN_EXCELSIS =
   'For thou only art holy; thou only art the Lord; thou only, O Christ, with the Holy Ghost, ' +
   'art most high in the glory of God the Father. Amen.';
 
+function isLitanyDay(date: Date): boolean {
+  const dow = date.getDay(); // 0=Sun, 3=Wed, 5=Fri
+  return dow === 0 || dow === 3 || dow === 5;
+}
+
+type LitanyEntry = { type: string; text: string };
+
+function LitanySection() {
+  const entries = litanyData as LitanyEntry[];
+  return (
+    <>
+      {entries.map((entry, i) => {
+        switch (entry.type) {
+          case 'minister': return <MinisterText key={i} text={entry.text} />;
+          case 'people':   return <PeopleText   key={i} text={entry.text} />;
+          case 'both':     return <BodyText      key={i} text={entry.text} />;
+          case 'rubric':   return <RubricText    key={i} text={entry.text} />;
+          default:         return null;
+        }
+      })}
+    </>
+  );
+}
+
 // Map lectionary book names → traditional 1928 BCP display names
 const BCP_BOOK_NAMES: Record<string, string> = {
   'Sirach':          'Ecclesiasticus',
@@ -110,13 +137,20 @@ const NAV_SECTIONS = [
 
 export function MorningPrayerScreen() {
   const { colors, sizes, lineHeights, isDark } = useTheme();
-  const today = useToday();
+  const { selectedDate: today, isViewingToday, setSelectedDate, resetToToday } = useSelectedDate();
+  const [calOpen, setCalOpen] = useState(false);
   const season = getLiturgicalSeason(today);
   const gloriaInSeason = showGloriaPatri(season);
   const feastDay = getFeastDay(today);
   const insets = useSafeAreaInsets();
 
-  const { leadType, priestAbsolutionForm, layAbsolution, creedChoice, shorterForm } = useSettings();
+  const { leadType, priestAbsolutionForm, layAbsolution, creedChoice, shorterForm, litanyEnabled } = useSettings();
+  const showLitany = litanyEnabled && isLitanyDay(today);
+
+  // ── Section navigation hooks — must come before any early return ────────────
+  const scrollRef = useRef<ScrollView>(null);
+  const sectionOffsets = useRef<Record<string, number>>({});
+  const [navOpen, setNavOpen] = useState(false);
 
   if (shorterForm) return <ShorterFormScreen type="morning" />;
 
@@ -165,22 +199,23 @@ export function MorningPrayerScreen() {
   const openingSentences: string[] = allSentences[sentenceKey] ?? allSentences['default'];
 
   const {
-    apostlesCreed, niceneCreed, kyrieText, collectForTrinity21,
+    apostlesCreed, niceneCreed, athanasianCreed, kyrieText, collectForTrinity21,
     prayerForPresident, prayerForClergyAndPeople, prayerForAllConditions,
     generalThanksgiving, prayerOfChrysostom, theGrace,
   } = collectsData.common as any;
 
   const absolution = (collectsData.common as any).absolution[priestAbsolutionForm];
-  const creedText = creedChoice === 'nicene' ? niceneCreed : apostlesCreed;
-  const creedTitle = creedChoice === 'nicene' ? 'The Nicene Creed' : "The Apostles' Creed";
+  const creedText  = creedChoice === 'nicene' ? niceneCreed
+                   : creedChoice === 'athanasian' ? athanasianCreed
+                   : apostlesCreed;
+  const creedTitle = creedChoice === 'nicene' ? 'The Nicene Creed'
+                   : creedChoice === 'athanasian' ? 'The Athanasian Creed'
+                   : "The Apostles' Creed";
   const creedRubric = creedChoice === 'nicene'
     ? 'Then shall be said the Nicene Creed by the Minister and People, standing.'
+    : creedChoice === 'athanasian'
+    ? 'The Creed commonly called the Athanasian.'
     : "Then shall be said the Apostles' Creed by the Minister and People, standing.";
-
-  // ── Section navigation ──────────────────────────────────────────────────────
-  const scrollRef = useRef<ScrollView>(null);
-  const sectionOffsets = useRef<Record<string, number>>({});
-  const [navOpen, setNavOpen] = useState(false);
 
   function scrollToSection(key: string) {
     const y = sectionOffsets.current[key];
@@ -206,6 +241,7 @@ export function MorningPrayerScreen() {
     gloriaText: { fontFamily: Typography.serifItalic, fontSize: sizes.body, lineHeight: lineHeights.body, color: colors.ink, marginBottom: 4 },
     closing:    { alignItems: 'center' as const, paddingVertical: 16 },
     closingText:{ fontFamily: Typography.serifItalic, fontSize: sizes.rubric, color: colors.rubric },
+    bannerText: { fontFamily: Typography.serifItalic, fontSize: sizes.rubric, color: colors.rubric, textAlign: 'center' as const, marginTop: 8, marginBottom: 4 },
   };
 
   // Tab bar height approximation for FAB placement
@@ -215,11 +251,28 @@ export function MorningPrayerScreen() {
     <View style={{ flex: 1, backgroundColor: colors.parchment }}>
       <ScrollView ref={scrollRef} style={s.scroll} contentContainerStyle={s.content}>
 
-        <Text style={s.dateLabel}>{formatLiturgicalDate(today)}</Text>
+        <TouchableOpacity onPress={() => setCalOpen(true)} activeOpacity={0.65}>
+          <Text style={[s.dateLabel, { textDecorationLine: 'underline' }]}>
+            {formatLiturgicalDate(today)} ▾
+          </Text>
+        </TouchableOpacity>
         <Text style={s.officeTitle}>Morning Prayer</Text>
         <Text style={s.seasonLabel}>{season}</Text>
         {feastDay && <Text style={s.holyDayLabel}>{feastDay.name}</Text>}
+        {!isViewingToday && (
+          <TouchableOpacity onPress={resetToToday} activeOpacity={0.7}>
+            <Text style={s.bannerText}>
+              Viewing {formatShortDate(today)} — Tap to return to today
+            </Text>
+          </TouchableOpacity>
+        )}
         <Divider />
+        <CalendarPicker
+          visible={calOpen}
+          selectedDate={today}
+          onSelectDate={setSelectedDate}
+          onClose={() => setCalOpen(false)}
+        />
 
         <View onLayout={markSection('opening')}>
           <Section title="Opening Sentence">
@@ -377,6 +430,11 @@ export function MorningPrayerScreen() {
           <Section title={creedTitle}>
             <RubricText text={creedRubric} />
             <BodyText text={creedText} />
+            {creedChoice === 'athanasian' && (
+              <Text style={{ fontFamily: Typography.serifItalic, fontSize: sizes.rubric, color: colors.inkLight, lineHeight: lineHeights.rubric, marginTop: 12 }}>
+                * The Athanasian Creed (Quicunque Vult) does not appear in the 1928 American Book of Common Prayer. It is included here as a historical Anglican creed for optional use.
+              </Text>
+            )}
           </Section>
         </View>
         <Divider />
@@ -429,26 +487,43 @@ export function MorningPrayerScreen() {
         <Section title="A Collect for Grace">
           <BodyText text={collectForGrace} />
         </Section>
-        <Divider />
 
-        <Section title="A Prayer for the President of the United States and all in Civil Authority">
-          <BodyText text={prayerForPresident} />
-        </Section>
-        <Section title="A Prayer for the Clergy and People">
-          <BodyText text={prayerForClergyAndPeople} />
-        </Section>
-        <Section title="A Prayer for all Conditions of Men">
-          <BodyText text={prayerForAllConditions} />
-        </Section>
-        <Divider />
+        {showLitany ? (
+          <>
+            <Divider />
+            <LitanySection />
+            <Divider />
+          </>
+        ) : (
+          <>
+            <View style={s.spacer} />
+            <RubricText text={
+              litanyEnabled
+                ? 'The Litany is appointed for Sundays, Wednesdays, and Fridays.'
+                : 'The Litany (appointed for Sundays, Wednesdays, and Fridays) may be enabled in Settings.'
+            } />
+            <Divider />
+            <Section title="A Prayer for the President of the United States and all in Civil Authority">
+              <BodyText text={prayerForPresident} />
+            </Section>
+            <Section title="A Prayer for the Clergy and People">
+              <BodyText text={prayerForClergyAndPeople} />
+            </Section>
+            <Section title="A Prayer for all Conditions of Men">
+              <BodyText text={prayerForAllConditions} />
+            </Section>
+            <Divider />
+            <Section title="A General Thanksgiving">
+              <RubricText text="To be said by the whole Congregation, after the Minister, all kneeling." />
+              <PeopleText noIndent text={generalThanksgiving} />
+            </Section>
+            <Section title="A Prayer of St. Chrysostom">
+              <BodyText text={prayerOfChrysostom} />
+            </Section>
+            <Divider />
+          </>
+        )}
 
-        <Section title="A General Thanksgiving">
-          <RubricText text="To be said by the whole Congregation, after the Minister, all kneeling." />
-          <PeopleText noIndent text={generalThanksgiving} />
-        </Section>
-        <Section title="A Prayer of St. Chrysostom">
-          <BodyText text={prayerOfChrysostom} />
-        </Section>
         <Section title="The Grace">
           <RubricText noMark text="2 Corinthians 13:14" />
           <BodyText text={theGrace} />

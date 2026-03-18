@@ -298,7 +298,20 @@
       "Bash(cd \"C:/Users/aliss/DailyOffice\" && node -e \"\nconst lect = require\\('./src/data/lectionary.json'\\);\n// Check for saints days - they may use a different key scheme\nconst keys = Object.keys\\(lect\\);\nconst saints = keys.filter\\(k => /saint|peter|andrew|allSaint|stPeter|stAndrew|st[A-Z]/i.test\\(k\\)\\);\nconsole.log\\('Saint keys:', saints.length\\);\nsaints.slice\\(0,20\\).forEach\\(k => console.log\\(k\\)\\);\n\")",
       "Bash(cd \"C:/Users/aliss/DailyOffice\" && node -e \"\nconst lect = require\\('./src/data/lectionary.json'\\);\nconst keys = Object.keys\\(lect\\);\n// Look for June 29 St Peter, Nov 1 All Saints, Nov 30 St Andrew\nconst feasts = keys.filter\\(k => k.match\\(/peter|andrew|allSaint|stJohn|nativity|baptis|conversion/i\\)\\);\nfeasts.forEach\\(k => console.log\\(k\\)\\);\n// Also check what format they use - are they like 'stPeter' or '06-29'?\nconsole.log\\('---'\\);\n// Show all keys that are not seasonal\nconst seasonal = /^\\(advent|christmas|circumcision|epiphany|septuagesima|sexagesima|quinquagesima|ashWed|lent|palm|holy|maundy|goodFriday|holySat|easter|ascension|whitsun|trinity|sundayAfter\\)/;\nconst nonSeasonal = keys.filter\\(k => !seasonal.test\\(k\\)\\);\nconsole.log\\('Non-seasonal keys:', nonSeasonal.length\\);\nnonSeasonal.slice\\(0,30\\).forEach\\(k => console.log\\(k\\)\\);\n\")",
       "Bash(cd \"C:/Users/aliss/DailyOffice\" && node scripts/_tmp_keys.js && rm scripts/_tmp_keys.js)",
-      "Bash(cd \"C:/Users/aliss/DailyOffice\" && node scripts/test-lectionary.js 2>&1)"
+      "Bash(cd \"C:/Users/aliss/DailyOffice\" && node scripts/test-lectionary.js 2>&1)",
+      "WebFetch(domain:www.ntslibrary.com)",
+      "Bash(where python:*)",
+      "Bash(C:/Python314/python.exe -c \"import pdfminer; print\\('ok'\\)\" 2>&1)",
+      "Bash(C:/Python314/python.exe -c \"\nimport pdfminer.high_level\npdf_path = 'C:/Users/aliss/.claude/projects/C--Users-aliss-DailyOffice/8b017007-58e6-4862-bc8b-760f0e816c67/tool-results/webfetch-1773803497086-i2t8mw.pdf'\ntext = pdfminer.high_level.extract_text\\(pdf_path\\)\nprint\\(repr\\(text[:200]\\)\\)\nprint\\('---'\\)\nprint\\(text\\)\n\" 2>&1)",
+      "Bash(C:/Python314/python.exe C:/Users/aliss/DailyOffice/scripts/buildLitany.py)",
+      "WebFetch(domain:anglicansonline.org)",
+      "WebFetch(domain:www.satucket.com)",
+      "WebFetch(domain:bcp1928.net)",
+      "WebFetch(domain:www.missionstclare.com)",
+      "Bash(find \"C:/Users/aliss/.claude/projects/C--Users-aliss-DailyOffice\" -name \"*.pdf\" 2>/dev/null | head -5)",
+      "Bash(find \"C:/Users/aliss/.claude/projects/C--Users-aliss-DailyOffice\" -name \"*.pdf\" 2>/dev/null | tail -5)",
+      "Bash(python3 -c \"\nimport sys\ntry:\n    import pdfminer\n    print\\('pdfminer available'\\)\nexcept: pass\ntry:\n    import fitz\n    print\\('pymupdf available'\\)\nexcept: pass\n\" 2>&1; node -e \"console.log\\('node ok'\\)\" 2>&1)",
+      "Bash(cd \"C:/Users/aliss/DailyOffice\" && node -e \"\nconst fs = require\\('fs'\\);\nconst data = fs.readFileSync\\('C:/Users/aliss/.claude/projects/C--Users-aliss-DailyOffice/8b017007-58e6-4862-bc8b-760f0e816c67/tool-results/webfetch-1773803487940-ydsbuv.pdf'\\);\n// Search for Litany text - PDF text streams are compressed but some may be readable\nconst str = data.toString\\('latin1'\\);\nconst idx = str.indexOf\\('Litany'\\);\nif \\(idx >= 0\\) console.log\\('Found Litany at offset', idx\\);\n// Try to find readable text around it\nconst snippet = str.slice\\(Math.max\\(0, idx-200\\), idx+500\\).replace\\(/[^\\\\x20-\\\\x7E\\\\n]/g, ' '\\);\nconsole.log\\(snippet\\);\n\" 2>&1 | head -30)"
     ]
   }
 }

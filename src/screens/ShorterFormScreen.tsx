@@ -1,8 +1,10 @@
-import React from 'react';
-import { ScrollView, View, Text } from 'react-native';
+import React, { useState } from 'react';
+import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
 import { Typography } from '../theme';
 import { useTheme } from '../context/SettingsContext';
-import { formatLiturgicalDate } from '../utils/dateHelpers';
+import { formatLiturgicalDate, formatShortDate } from '../utils/dateHelpers';
+import { useSelectedDate } from '../context/SelectedDateContext';
+import { CalendarPicker } from '../components/CalendarPicker';
 import { getLiturgicalSeason, getProperCollectKey, showLentDailyCollect, getFeastDay } from '../utils/liturgicalCalendar';
 import { Section, BodyText, RubricText, Divider } from '../components/OfficeSection';
 import collectsData from '../data/collects.json';
@@ -36,7 +38,8 @@ const OPENING_RUBRIC =
 
 export function ShorterFormScreen({ type }: { type: 'morning' | 'evening' }) {
   const { colors, sizes } = useTheme();
-  const today = new Date();
+  const { selectedDate: today, isViewingToday, setSelectedDate, resetToToday } = useSelectedDate();
+  const [calOpen, setCalOpen] = useState(false);
   const season = getLiturgicalSeason(today);
   const feastDay = getFeastDay(today);
 
@@ -51,9 +54,11 @@ export function ShorterFormScreen({ type }: { type: 'morning' | 'evening' }) {
       style={{ flex: 1, backgroundColor: colors.parchment }}
       contentContainerStyle={{ paddingHorizontal: 24, paddingTop: 28, paddingBottom: 80 }}
     >
-      <Text style={{ fontFamily: Typography.serifItalic, fontSize: sizes.rubric, color: colors.inkLight, textAlign: 'center', marginBottom: 4 }}>
-        {formatLiturgicalDate(today)}
-      </Text>
+      <TouchableOpacity onPress={() => setCalOpen(true)} activeOpacity={0.65}>
+        <Text style={{ fontFamily: Typography.serifItalic, fontSize: sizes.rubric, color: colors.inkLight, textAlign: 'center', marginBottom: 4, textDecorationLine: 'underline' }}>
+          {formatLiturgicalDate(today)} ▾
+        </Text>
+      </TouchableOpacity>
       <Text style={{ fontFamily: Typography.serifBold, fontSize: Math.round(28 * (sizes.body / 18)), lineHeight: Math.round(36 * (sizes.body / 18)), color: colors.ink, textAlign: 'center', marginBottom: 4, letterSpacing: 0.5 }}>
         {officeName}
       </Text>
@@ -65,7 +70,20 @@ export function ShorterFormScreen({ type }: { type: 'morning' | 'evening' }) {
           {feastDay.name}
         </Text>
       )}
+      {!isViewingToday && (
+        <TouchableOpacity onPress={resetToToday} activeOpacity={0.7}>
+          <Text style={{ fontFamily: Typography.serifItalic, fontSize: sizes.rubric, color: colors.rubric, textAlign: 'center', marginTop: 8, marginBottom: 4 }}>
+            Viewing {formatShortDate(today)} — Tap to return to today
+          </Text>
+        </TouchableOpacity>
+      )}
       <Divider />
+      <CalendarPicker
+        visible={calOpen}
+        selectedDate={today}
+        onSelectDate={setSelectedDate}
+        onClose={() => setCalOpen(false)}
+      />
 
       <Section title="Family Prayer">
         <RubricText text={OPENING_RUBRIC} />

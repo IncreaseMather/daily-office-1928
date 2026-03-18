@@ -50,6 +50,13 @@ export function formatLiturgicalDate(date: Date = new Date()): string {
   return `${days[date.getDay()]}, the ${n}${sfx} of ${months[date.getMonth()]}, ${date.getFullYear()}`;
 }
 
+/** "March 25, 2026" — compact form used in banners. */
+export function formatShortDate(date: Date): string {
+  const months = ['January','February','March','April','May','June',
+                  'July','August','September','October','November','December'];
+  return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+}
+
 /** Morning before noon, Evening from noon onward. */
 export function getInitialOffice(): 'Morning Prayer' | 'Evening Prayer' {
   return new Date().getHours() < 12 ? 'Morning Prayer' : 'Evening Prayer';

@@ -2,7 +2,9 @@ import React, { useRef, useState } from 'react';
 import { ScrollView, View, Text, TouchableOpacity, Modal, Pressable, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Typography } from '../theme';
-import { formatLiturgicalDate, useToday } from '../utils/dateHelpers';
+import { formatLiturgicalDate, formatShortDate } from '../utils/dateHelpers';
+import { useSelectedDate } from '../context/SelectedDateContext';
+import { CalendarPicker } from '../components/CalendarPicker';
 import {
   getLiturgicalSeason, showGloriaPatri,
   isGoodFriday, isAscensiontide, isWhitsuntide, isTrinitySunday,
@@ -95,13 +97,19 @@ const NAV_SECTIONS = [
 
 export function EveningPrayerScreen() {
   const { colors, sizes, lineHeights, isDark } = useTheme();
-  const today = useToday();
+  const { selectedDate: today, isViewingToday, setSelectedDate, resetToToday } = useSelectedDate();
+  const [calOpen, setCalOpen] = useState(false);
   const season = getLiturgicalSeason(today);
   const gloriaInSeason = showGloriaPatri(season);
   const feastDay = getFeastDay(today);
   const insets = useSafeAreaInsets();
 
   const { leadType, priestAbsolutionForm, layAbsolution, creedChoice, shorterForm } = useSettings();
+
+  // ── Section navigation hooks — must come before any early return ────────────
+  const scrollRef = useRef<ScrollView>(null);
+  const sectionOffsets = useRef<Record<string, number>>({});
+  const [navOpen, setNavOpen] = useState(false);
 
   if (shorterForm) return <ShorterFormScreen type="evening" />;
 
@@ -146,19 +154,21 @@ export function EveningPrayerScreen() {
   const { collectForPeace, collectForAid } = collectsData.evening;
   const { prayerForPresident, prayerForClergyAndPeople, prayerForAllConditions,
     generalThanksgiving, prayerOfChrysostom, theGrace } = collectsData.common as any;
-  const { apostlesCreed, niceneCreed, collectForTrinity21 } = collectsData.common;
+  const { apostlesCreed, niceneCreed, athanasianCreed, collectForTrinity21 } = collectsData.common as any;
 
-  const creedText = creedChoice === 'nicene' ? niceneCreed : apostlesCreed;
-  const creedTitle = creedChoice === 'nicene' ? 'The Nicene Creed' : "The Apostles' Creed";
+  const creedText  = creedChoice === 'nicene' ? niceneCreed
+                   : creedChoice === 'athanasian' ? athanasianCreed
+                   : apostlesCreed;
+  const creedTitle = creedChoice === 'nicene' ? 'The Nicene Creed'
+                   : creedChoice === 'athanasian' ? 'The Athanasian Creed'
+                   : "The Apostles' Creed";
   const creedRubric = creedChoice === 'nicene'
     ? 'Then shall be said the Nicene Creed by the Minister and People, standing.'
+    : creedChoice === 'athanasian'
+    ? 'The Creed commonly called the Athanasian.'
     : "Then shall be said the Apostles' Creed by the Minister and People, standing.";
 
   // ── Section navigation ──────────────────────────────────────────────────────
-  const scrollRef = useRef<ScrollView>(null);
-  const sectionOffsets = useRef<Record<string, number>>({});
-  const [navOpen, setNavOpen] = useState(false);
-
   function scrollToSection(key: string) {
     const y = sectionOffsets.current[key];
     if (y !== undefined) scrollRef.current?.scrollTo({ y: Math.max(0, y - 16), animated: true });
@@ -180,6 +190,7 @@ export function EveningPrayerScreen() {
     spacer:     { height: 10 } as const,
     closing:    { alignItems: 'center' as const, paddingVertical: 16 },
     closingText:{ fontFamily: Typography.serifItalic, fontSize: sizes.rubric, color: colors.rubric },
+    bannerText: { fontFamily: Typography.serifItalic, fontSize: sizes.rubric, color: colors.rubric, textAlign: 'center' as const, marginTop: 8, marginBottom: 4 },
   };
 
   const fabBottom = insets.bottom + 72;
@@ -188,11 +199,28 @@ export function EveningPrayerScreen() {
     <View style={{ flex: 1, backgroundColor: colors.parchment }}>
       <ScrollView ref={scrollRef} style={s.scroll} contentContainerStyle={s.content}>
 
-        <Text style={s.dateLabel}>{formatLiturgicalDate(today)}</Text>
+        <TouchableOpacity onPress={() => setCalOpen(true)} activeOpacity={0.65}>
+          <Text style={[s.dateLabel, { textDecorationLine: 'underline' }]}>
+            {formatLiturgicalDate(today)} ▾
+          </Text>
+        </TouchableOpacity>
         <Text style={s.officeTitle}>Evening Prayer</Text>
         <Text style={s.seasonLabel}>{season}</Text>
         {feastDay && <Text style={s.holyDayLabel}>{feastDay.name}</Text>}
+        {!isViewingToday && (
+          <TouchableOpacity onPress={resetToToday} activeOpacity={0.7}>
+            <Text style={s.bannerText}>
+              Viewing {formatShortDate(today)} — Tap to return to today
+            </Text>
+          </TouchableOpacity>
+        )}
         <Divider />
+        <CalendarPicker
+          visible={calOpen}
+          selectedDate={today}
+          onSelectDate={setSelectedDate}
+          onClose={() => setCalOpen(false)}
+        />
 
         <View onLayout={markSection('opening')}>
           <Section title="Opening Sentence">
@@ -324,6 +352,11 @@ export function EveningPrayerScreen() {
           <Section title={creedTitle}>
             <RubricText text={creedRubric} />
             <BodyText text={creedText} />
+            {creedChoice === 'athanasian' && (
+              <Text style={{ fontFamily: Typography.serifItalic, fontSize: sizes.rubric, color: colors.inkLight, lineHeight: Math.round(sizes.rubric * 1.55), marginTop: 12 }}>
+                * The Athanasian Creed (Quicunque Vult) does not appear in the 1928 American Book of Common Prayer. It is included here as a historical Anglican creed for optional use.
+              </Text>
+            )}
           </Section>
         </View>
         <Divider />

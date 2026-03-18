@@ -76,6 +76,7 @@ export function SettingsScreen() {
     shorterForm, setShorterForm,
     darkMode, setDarkMode,
     fontSize, setFontSize,
+    litanyEnabled, setLitanyEnabled,
   } = useSettings();
 
   const sectionStyle = {
@@ -146,6 +147,20 @@ export function SettingsScreen() {
         </Text>
       </View>
 
+      {/* ── Litany ────────────────────────────────────────────────────────── */}
+      <View style={sectionStyle}>
+        <SettingRow
+          label="Litany"
+          value={litanyEnabled}
+          onToggle={() => setLitanyEnabled(!litanyEnabled)}
+        />
+        <Text style={{ fontFamily: Typography.serifItalic, fontSize: sizes.rubric, color: colors.inkLight, lineHeight: Math.round(sizes.rubric * 1.55) }}>
+          {litanyEnabled
+            ? 'The Litany will be said at Morning Prayer on Sundays, Wednesdays, and Fridays.'
+            : 'The Litany is not currently enabled. When enabled, it is said on Sundays, Wednesdays, and Fridays.'}
+        </Text>
+      </View>
+
       {/* ── Office Leadership ─────────────────────────────────────────────── */}
       <View style={sectionStyle}>
         <SettingRow
@@ -196,12 +211,18 @@ export function SettingsScreen() {
         <OptionPicker<CreedChoice>
           label="Creed"
           options={[
-            { value: 'apostles', label: "Apostles' Creed" },
-            { value: 'nicene',   label: 'Nicene Creed' },
+            { value: 'apostles',   label: "Apostles' Creed" },
+            { value: 'nicene',     label: 'Nicene Creed' },
+            { value: 'athanasian', label: 'Athanasian Creed *' },
           ]}
           value={creedChoice}
           onSelect={setCreedChoice}
         />
+        {creedChoice === 'athanasian' && (
+          <Text style={{ fontFamily: Typography.serifItalic, fontSize: sizes.rubric, color: colors.inkLight, lineHeight: Math.round(sizes.rubric * 1.55), marginTop: 8 }}>
+            * The Athanasian Creed (Quicunque Vult) does not appear in the 1928 American Book of Common Prayer. It is included here as a historical Anglican creed for optional use.
+          </Text>
+        )}
       </View>
 
       {/* ── Support ───────────────────────────────────────────────────────── */}
