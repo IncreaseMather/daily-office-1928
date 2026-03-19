@@ -2,7 +2,7 @@ import React from 'react';
 import { ScrollView, View, Text, Switch, TouchableOpacity, Linking } from 'react-native';
 import { Typography } from '../theme';
 import { useSettings, useTheme } from '../context/SettingsContext';
-import type { LayAbsolution, PriestAbsolutionForm, CreedChoice, FontSize } from '../context/SettingsContext';
+import type { LayAbsolution, PriestAbsolutionForm, CreedChoice, FontSize, BibleTranslation } from '../context/SettingsContext';
 
 // ── Reusable sub-components ──────────────────────────────────────────────────
 
@@ -77,6 +77,7 @@ export function SettingsScreen() {
     darkMode, setDarkMode,
     fontSize, setFontSize,
     litanyEnabled, setLitanyEnabled,
+    bibleTranslation, setBibleTranslation,
   } = useSettings();
 
   const sectionStyle = {
@@ -120,6 +121,22 @@ export function SettingsScreen() {
           ]}
           value={fontSize}
           onSelect={setFontSize}
+        />
+      </View>
+
+      {/* ── Bible Translation ─────────────────────────────────────────────── */}
+      <View style={sectionStyle}>
+        <OptionPicker<BibleTranslation>
+          label="Bible Translation"
+          hint="Apocrypha readings always use the King James Version."
+          options={[
+            { value: 'kjv',  label: 'King James Version',        description: 'KJV — the traditional 1611 translation used in the 1928 BCP.' },
+            { value: 'esv',  label: 'English Standard Version',  description: 'ESV — a modern literal translation.' },
+            { value: 'nasb', label: 'New American Standard',     description: 'NASB — known for its accuracy to the original languages.' },
+            { value: 'nkjv', label: 'New King James Version',    description: 'NKJV — updates KJV language while retaining its style.' },
+          ]}
+          value={bibleTranslation}
+          onSelect={setBibleTranslation}
         />
       </View>
 

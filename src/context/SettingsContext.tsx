@@ -7,6 +7,7 @@ export type PriestAbsolutionForm = 'declaratory' | 'precatory';
 export type LayAbsolution = 'kyrie' | 'trinity21';
 export type CreedChoice = 'apostles' | 'nicene' | 'athanasian';
 export type FontSize = 'small' | 'medium' | 'large';
+export type BibleTranslation = 'kjv' | 'esv' | 'nasb' | 'nkjv';
 
 const K = {
   LEAD_TYPE:         '@s/leadType',
@@ -21,6 +22,7 @@ const K = {
   EP_ENABLED:        '@s/epEnabled',
   EP_TIME:           '@s/epTime',
   LITANY_ENABLED:    '@s/litanyEnabled',
+  BIBLE_TRANSLATION: '@s/bibleTranslation',
 };
 
 interface SettingsContextValue {
@@ -48,6 +50,8 @@ interface SettingsContextValue {
   setEpReminderTime: (v: string) => void;
   litanyEnabled: boolean;
   setLitanyEnabled: (v: boolean) => void;
+  bibleTranslation: BibleTranslation;
+  setBibleTranslation: (v: BibleTranslation) => void;
 }
 
 const SettingsContext = createContext<SettingsContextValue | null>(null);
@@ -69,6 +73,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const [epReminderEnabled, setEpEnabledS]     = useState(false);
   const [epReminderTime, setEpTimeS]           = useState('18:00');
   const [litanyEnabled, setLitanyS]            = useState(false);
+  const [bibleTranslation, setBibleTransS]     = useState<BibleTranslation>('kjv');
 
   useEffect(() => {
     AsyncStorage.multiGet(Object.values(K)).then((pairs) => {
@@ -85,7 +90,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         if (m[K.MP_TIME])      setMpTimeS(m[K.MP_TIME]);
         if (m[K.EP_ENABLED])      setEpEnabledS(m[K.EP_ENABLED] === 'true');
         if (m[K.EP_TIME])         setEpTimeS(m[K.EP_TIME]);
-        if (m[K.LITANY_ENABLED])  setLitanyS(m[K.LITANY_ENABLED] === 'true');
+        if (m[K.LITANY_ENABLED])      setLitanyS(m[K.LITANY_ENABLED] === 'true');
+        if (m[K.BIBLE_TRANSLATION])   setBibleTransS(m[K.BIBLE_TRANSLATION] as BibleTranslation);
       } catch {
         // Corrupt or unexpected storage values — silently fall back to defaults
       }
@@ -103,7 +109,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const setMpReminderTime        = (v: string)                => { setMpTimeS(v);    persist(K.MP_TIME, v); };
   const setEpReminderEnabled     = (v: boolean)               => { setEpEnabledS(v); persist(K.EP_ENABLED, String(v)); };
   const setEpReminderTime        = (v: string)                => { setEpTimeS(v);    persist(K.EP_TIME, v); };
-  const setLitanyEnabled         = (v: boolean)               => { setLitanyS(v);   persist(K.LITANY_ENABLED, String(v)); };
+  const setLitanyEnabled         = (v: boolean)               => { setLitanyS(v);          persist(K.LITANY_ENABLED, String(v)); };
+  const setBibleTranslation      = (v: BibleTranslation)      => { setBibleTransS(v);      persist(K.BIBLE_TRANSLATION, v); };
 
   return (
     <SettingsContext.Provider value={{
@@ -119,6 +126,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       epReminderEnabled, setEpReminderEnabled,
       epReminderTime, setEpReminderTime,
       litanyEnabled, setLitanyEnabled,
+      bibleTranslation, setBibleTranslation,
     }}>
       {children}
     </SettingsContext.Provider>

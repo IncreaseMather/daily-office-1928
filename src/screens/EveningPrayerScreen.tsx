@@ -24,7 +24,10 @@ import canticlesData from '../data/canticles.json';
 import psalmsData from '../data/psalms.json';
 import appointedPsalmsData from '../data/appointedPsalms.json';
 import lectionaryData from '../data/lectionary.json';
-import lessonsData from '../data/lessons.json';
+import lessonsData    from '../data/lessons.json';
+import lessonsEsv     from '../data/lessons-esv.json';
+import lessonsNasb    from '../data/lessons-nasb.json';
+import lessonsNkjv    from '../data/lessons-nkjv.json';
 
 const _psalmTextMapEP: Record<string, any> = (() => {
   const map: Record<string, any> = {};
@@ -104,7 +107,7 @@ export function EveningPrayerScreen() {
   const feastDay = getFeastDay(today);
   const insets = useSafeAreaInsets();
 
-  const { leadType, priestAbsolutionForm, layAbsolution, creedChoice, shorterForm } = useSettings();
+  const { leadType, priestAbsolutionForm, layAbsolution, creedChoice, shorterForm, bibleTranslation } = useSettings();
 
   // ── Section navigation hooks — must come before any early return ────────────
   const scrollRef = useRef<ScrollView>(null);
@@ -133,10 +136,14 @@ export function EveningPrayerScreen() {
   const epLessons = (lectionaryData as any)[appointedKey]?.ep as { first: string; second: string } | undefined;
   const epFirstRef: string | null = epLessons?.first ?? null;
   const epSecondRef: string | null = epLessons?.second ?? null;
-  const epFirstVerses: Array<{ verse: number; text: string }> | null =
-    epFirstRef ? ((lessonsData as any)[epFirstRef] ?? null) : null;
-  const epSecondVerses: Array<{ verse: number; text: string }> | null =
-    epSecondRef ? ((lessonsData as any)[epSecondRef] ?? null) : null;
+  const _translationMap: Record<string, any> = { kjv: lessonsData, esv: lessonsEsv, nasb: lessonsNasb, nkjv: lessonsNkjv };
+  const _transData = _translationMap[bibleTranslation] ?? lessonsData;
+  function _lookupLesson(ref: string | null): Array<{ verse: number; text: string }> | null {
+    if (!ref) return null;
+    return (_transData as any)[ref] ?? (lessonsData as any)[ref] ?? null;
+  }
+  const epFirstVerses  = _lookupLesson(epFirstRef);
+  const epSecondVerses = _lookupLesson(epSecondRef);
 
   const { magnificat, nuncDimittis, cantateDomini, deusMisereatur, bonumEstConfiteri, benedicAnimaMea } =
     canticlesData.evening as any;

@@ -25,7 +25,10 @@ import canticlesData from '../data/canticles.json';
 import psalmsData from '../data/psalms.json';
 import appointedPsalmsData from '../data/appointedPsalms.json';
 import lectionaryData from '../data/lectionary.json';
-import lessonsData from '../data/lessons.json';
+import lessonsData    from '../data/lessons.json';
+import lessonsEsv     from '../data/lessons-esv.json';
+import lessonsNasb    from '../data/lessons-nasb.json';
+import lessonsNkjv    from '../data/lessons-nkjv.json';
 import litanyData from '../data/litany.json';
 
 const _psalmTextMap: Record<string, any> = (() => {
@@ -144,7 +147,7 @@ export function MorningPrayerScreen() {
   const feastDay = getFeastDay(today);
   const insets = useSafeAreaInsets();
 
-  const { leadType, priestAbsolutionForm, layAbsolution, creedChoice, shorterForm, litanyEnabled } = useSettings();
+  const { leadType, priestAbsolutionForm, layAbsolution, creedChoice, shorterForm, litanyEnabled, bibleTranslation } = useSettings();
   const showLitany = litanyEnabled && isLitanyDay(today);
 
   // ── Section navigation hooks — must come before any early return ────────────
@@ -178,10 +181,14 @@ export function MorningPrayerScreen() {
   const mpLessons = (lectionaryData as any)[appointedKey]?.mp as { first: string; second: string } | undefined;
   const mpFirstRef: string | null = mpLessons?.first ?? null;
   const mpSecondRef: string | null = mpLessons?.second ?? null;
-  const mpFirstVerses: Array<{ verse: number; text: string }> | null =
-    mpFirstRef ? ((lessonsData as any)[mpFirstRef] ?? null) : null;
-  const mpSecondVerses: Array<{ verse: number; text: string }> | null =
-    mpSecondRef ? ((lessonsData as any)[mpSecondRef] ?? null) : null;
+  const _translationMap: Record<string, any> = { kjv: lessonsData, esv: lessonsEsv, nasb: lessonsNasb, nkjv: lessonsNkjv };
+  const _transData = _translationMap[bibleTranslation] ?? lessonsData;
+  function _lookupLesson(ref: string | null): Array<{ verse: number; text: string }> | null {
+    if (!ref) return null;
+    return (_transData as any)[ref] ?? (lessonsData as any)[ref] ?? null;
+  }
+  const mpFirstVerses  = _lookupLesson(mpFirstRef);
+  const mpSecondVerses = _lookupLesson(mpSecondRef);
 
   const { venite, easterAnthems: easterAnthem, teDeum, benedicite, benedictusDominus, benedictus, jubilate } =
     canticlesData.morning as any;
