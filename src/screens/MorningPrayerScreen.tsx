@@ -13,7 +13,7 @@ import {
   getFeastDay, getAppointedPsalmsKey,
 } from '../utils/liturgicalCalendar';
 import {
-  Section, BodyText, RubricText, Divider, OrDivider, MinisterText, PeopleText,
+  Section, SectionHeading, BodyText, RubricText, Divider, OrDivider, MinisterText, PeopleText,
 } from '../components/OfficeSection';
 import { CanticleView } from '../components/CanticleView';
 import { PsalmView } from '../components/PsalmView';
@@ -25,10 +25,12 @@ import canticlesData from '../data/canticles.json';
 import psalmsData from '../data/psalms.json';
 import appointedPsalmsData from '../data/appointedPsalms.json';
 import lectionaryData from '../data/lectionary.json';
-import lessonsData    from '../data/lessons.json';
-import lessonsEsv     from '../data/lessons-esv.json';
-import lessonsNasb    from '../data/lessons-nasb.json';
-import lessonsNkjv    from '../data/lessons-nkjv.json';
+import lessonsData             from '../data/lessons.json';
+import lessonsRsv              from '../data/lessons-rsv.json';
+import lessonsEsv              from '../data/lessons-esv.json';
+import lessonsNasb             from '../data/lessons-nasb.json';
+import lessonsNkjv             from '../data/lessons-nkjv.json';
+import lessonsRsvDeuterocanon  from '../data/lessons-rsv-deuterocanon.json';
 import litanyData from '../data/litany.json';
 
 const _psalmTextMap: Record<string, any> = (() => {
@@ -49,12 +51,70 @@ const _psalmTextMap: Record<string, any> = (() => {
   return map;
 })();
 
+// Extracts only verses in [startV, endV] from a psalm text string.
+// Psalm text format: "1. verse text\n2. verse text\n..."
+function _filterPsalmText(text: string, startV: number, endV: number): string {
+  const blocks: Array<{ v: number; lines: string[] }> = [];
+  let curV = -1;
+  let curLines: string[] = [];
+  for (const line of text.split('\n')) {
+    const m = line.match(/^(\d+)\. /);
+    if (m) {
+      if (curV >= 0) blocks.push({ v: curV, lines: curLines });
+      curV = parseInt(m[1], 10);
+      curLines = [line];
+    } else if (curV >= 0) {
+      curLines.push(line);
+    }
+  }
+  if (curV >= 0) blocks.push({ v: curV, lines: curLines });
+  return blocks
+    .filter(b => b.v >= startV && b.v <= endV)
+    .map(b => b.lines.join('\n'))
+    .join('\n');
+}
+
 function _lookupPsalm(ref: string): any | null {
   if (_psalmTextMap[ref]) return _psalmTextMap[ref];
-  const base = ref.includes(':') ? ref.split(':')[0] : ref.replace(/[a-e]$/, '');
-  if (_psalmTextMap[base]) return _psalmTextMap[base];
-  if (base === '119') return _psalmTextMap['119a'] ?? null;
-  return null;
+
+  // No colon → whole psalm or lettered section (e.g. "107", "119a")
+  if (ref.indexOf(':') < 0) {
+    const base = ref.replace(/[a-e]$/, '');
+    if (_psalmTextMap[base]) return _psalmTextMap[base];
+    if (base === '119') return _psalmTextMap['119a'] ?? null;
+    return null;
+  }
+
+  // Verse-range ref like "107:1-16" or "119:89-104"
+  const colonIdx = ref.indexOf(':');
+  const baseNum  = ref.slice(0, colonIdx);
+  const rangeStr = ref.slice(colonIdx + 1);
+  const dashIdx  = rangeStr.indexOf('-');
+  const startV   = parseInt(dashIdx >= 0 ? rangeStr.slice(0, dashIdx) : rangeStr, 10);
+  const endV     = dashIdx >= 0 ? parseInt(rangeStr.slice(dashIdx + 1), 10) : startV;
+
+  if (baseNum === '119') {
+    // Psalm 119 is stored in sections; may span more than one
+    let combinedText = '';
+    let firstEntry: any = null;
+    for (const sec of ['119a', '119b', '119c', '119d', '119e']) {
+      const secEntry = _psalmTextMap[sec];
+      if (!secEntry) continue;
+      const filtered = _filterPsalmText(secEntry.text, startV, endV);
+      if (filtered) {
+        combinedText += (combinedText ? '\n' : '') + filtered;
+        if (!firstEntry) firstEntry = secEntry;
+      }
+    }
+    if (!combinedText) return null;
+    return { ...firstEntry, psalm: 119, text: combinedText };
+  }
+
+  const baseEntry = _psalmTextMap[baseNum];
+  if (!baseEntry) return null;
+  const filteredText = _filterPsalmText(baseEntry.text, startV, endV);
+  if (!filteredText) return null;
+  return { ...baseEntry, text: filteredText };
 }
 
 const CONFESSION =
@@ -86,15 +146,6 @@ const GLORIA_PATRI =
   'Glory be to the Father, and to the Son: and to the Holy Ghost;\n' +
   'As it was in the beginning, is now, and ever shall be: world without end. Amen.';
 
-const GLORIA_IN_EXCELSIS =
-  'Glory be to God on high, and on earth peace, good will towards men.\n' +
-  'We praise thee, we bless thee, we worship thee, we glorify thee, we give thanks to thee for thy great glory, ' +
-  'O Lord God, heavenly King, God the Father Almighty.\n' +
-  'O Lord, the only-begotten Son Jesu Christ; O Lord God, Lamb of God, Son of the Father, ' +
-  'that takest away the sins of the world, have mercy upon us. Thou that takest away the sins of the world, ' +
-  'receive our prayer. Thou that sittest at the right hand of God the Father, have mercy upon us.\n' +
-  'For thou only art holy; thou only art the Lord; thou only, O Christ, with the Holy Ghost, ' +
-  'art most high in the glory of God the Father. Amen.';
 
 function isLitanyDay(date: Date): boolean {
   const dow = date.getDay(); // 0=Sun, 3=Wed, 5=Fri
@@ -147,7 +198,7 @@ export function MorningPrayerScreen() {
   const feastDay = getFeastDay(today);
   const insets = useSafeAreaInsets();
 
-  const { leadType, priestAbsolutionForm, layAbsolution, creedChoice, shorterForm, litanyEnabled, bibleTranslation } = useSettings();
+  const { leadType, priestAbsolutionForm, layAbsolution, creedChoice, shorterForm, litanyEnabled, bibleTranslation, deuterocanonTranslation } = useSettings();
   const showLitany = litanyEnabled && isLitanyDay(today);
 
   // ── Section navigation hooks — must come before any early return ────────────
@@ -181,11 +232,20 @@ export function MorningPrayerScreen() {
   const mpLessons = (lectionaryData as any)[appointedKey]?.mp as { first: string; second: string } | undefined;
   const mpFirstRef: string | null = mpLessons?.first ?? null;
   const mpSecondRef: string | null = mpLessons?.second ?? null;
-  const _translationMap: Record<string, any> = { kjv: lessonsData, esv: lessonsEsv, nasb: lessonsNasb, nkjv: lessonsNkjv };
-  const _transData = _translationMap[bibleTranslation] ?? lessonsData;
+  const _translationMap: Record<string, any> = { kjv: lessonsData, rsv: lessonsRsv, esv: lessonsEsv, nasb: lessonsNasb, nkjv: lessonsNkjv };
+  const _canonData   = _translationMap[bibleTranslation] ?? lessonsData;
+  const _deuteroData = deuterocanonTranslation === 'rsv' ? lessonsRsvDeuterocanon : lessonsData;
+  const _deuteroBookNames = [
+    'Wisdom','Sirach','Ecclesiasticus','Tobit','Judith','Baruch',
+    'Three Children','Song of Three Children','Letter of Jeremiah',
+    'Susanna','Bel','Prayer of Manasseh',
+    '1 Maccabees','2 Maccabees','1 Esdras','2 Esdras','Additions to Esther',
+  ];
   function _lookupLesson(ref: string | null): Array<{ verse: number; text: string }> | null {
     if (!ref) return null;
-    return (_transData as any)[ref] ?? (lessonsData as any)[ref] ?? null;
+    const isDeut = _deuteroBookNames.some(b => ref.startsWith(b));
+    const primary = isDeut ? _deuteroData : _canonData;
+    return (primary as any)[ref] ?? (lessonsData as any)[ref] ?? null;
   }
   const mpFirstVerses  = _lookupLesson(mpFirstRef);
   const mpSecondVerses = _lookupLesson(mpSecondRef);
@@ -331,7 +391,7 @@ export function MorningPrayerScreen() {
           <RubricText text="Then shall be said," />
           <MinisterText text="O Lord, open thou our lips." />
           <PeopleText text="And our mouth shall shew forth thy praise." />
-          <BodyText text="Glory be to the Father, and to the Son: and to the Holy Ghost;" />
+          <MinisterText text="Glory be to the Father, and to the Son: and to the Holy Ghost;" />
           <PeopleText text="As it was in the beginning, is now, and ever shall be: world without end. Amen." />
           <MinisterText text="Praise ye the Lord." />
           <PeopleText text="The Lord's Name be praised." />
@@ -370,15 +430,13 @@ export function MorningPrayerScreen() {
               <RubricText noMark text="[Psalms for this day — to be added]" />
             )}
             {!gloriaInSeason && (
-              <RubricText noMark text="The Gloria Patri is omitted after each Psalm in Lent and Pre-Lent." />
+              <RubricText noMark text="The Gloria Patri is omitted in Advent, Pre-Lent, and Lent." />
             )}
             {gloriaInSeason && psalmVerses.length > 0 && (
               <View style={s.psalmClose}>
-                <RubricText text="At the end of the Psalms may be said or sung," />
+                <RubricText text="At the end of the Psalms shall be said or sung," />
+                <SectionHeading text="Gloria Patri" />
                 <Text style={s.gloriaText}>{GLORIA_PATRI}</Text>
-                <OrDivider />
-                <RubricText text="Or the Gloria in Excelsis:" />
-                <Text style={s.gloriaText}>{GLORIA_IN_EXCELSIS}</Text>
               </View>
             )}
           </Section>
@@ -464,7 +522,7 @@ export function MorningPrayerScreen() {
           <MinisterText text="O Lord, save thy people." />
           <PeopleText text="And bless thine inheritance." />
           <MinisterText text="Give peace in our time, O Lord." />
-          <PeopleText text="Because there is none other that fighteth for us, but only thou, O God." />
+          <PeopleText text="For it is thou, Lord, only, that makest us dwell in safety." />
           <MinisterText text="O God, make clean our hearts within us." />
           <PeopleText text="And take not thy Holy Spirit from us." />
         </Section>

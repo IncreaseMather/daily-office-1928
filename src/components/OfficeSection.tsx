@@ -3,6 +3,20 @@ import { View, Text } from 'react-native';
 import { Typography } from '../theme';
 import { useTheme } from '../context/SettingsContext';
 
+/** Split text on [bracketed] segments and render them in italic. */
+function renderWithBrackets(
+  text: string,
+  bracketStyle: object,
+): React.ReactNode {
+  const parts = text.split(/(\[[^\]]+\])/);
+  if (parts.length === 1) return text;
+  return parts.map((part, i) =>
+    part.startsWith('[') ? (
+      <Text key={i} style={bracketStyle}>{part}</Text>
+    ) : part
+  );
+}
+
 export function SectionHeading({ text }: { text: string }) {
   const { colors, sizes, lineHeights } = useTheme();
   return (
@@ -18,6 +32,7 @@ export function SectionHeading({ text }: { text: string }) {
 
 export function BodyText({ text, indent }: { text: string; indent?: boolean }) {
   const { colors, sizes, lineHeights } = useTheme();
+  const bracketStyle = { fontFamily: Typography.serifItalic, color: colors.inkLight };
   return (
     <Text style={{
       fontFamily: Typography.serif,
@@ -26,7 +41,7 @@ export function BodyText({ text, indent }: { text: string; indent?: boolean }) {
       color: colors.ink,
       marginBottom: 4,
       paddingLeft: indent ? 22 : 0,
-    }}>{text}</Text>
+    }}>{renderWithBrackets(text, bracketStyle)}</Text>
   );
 }
 
@@ -46,6 +61,7 @@ export function MinisterText({ text, indent }: { text: string; indent?: boolean 
 
 export function PeopleText({ text, noIndent }: { text: string; noIndent?: boolean }) {
   const { colors, sizes, lineHeights } = useTheme();
+  const bracketStyle = { fontFamily: Typography.serifItalic, color: colors.inkLight };
   return (
     <Text style={{
       fontFamily: Typography.serif,
@@ -54,7 +70,7 @@ export function PeopleText({ text, noIndent }: { text: string; noIndent?: boolea
       color: colors.ink,
       marginBottom: 4,
       paddingLeft: noIndent ? 0 : 22,
-    }}>{text}</Text>
+    }}>{renderWithBrackets(text, bracketStyle)}</Text>
   );
 }
 

@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ScrollView, View, Text, Switch, TouchableOpacity, Linking } from 'react-native';
 import { Typography } from '../theme';
 import { useSettings, useTheme } from '../context/SettingsContext';
-import type { LayAbsolution, PriestAbsolutionForm, CreedChoice, FontSize, BibleTranslation } from '../context/SettingsContext';
+import type { LayAbsolution, PriestAbsolutionForm, CreedChoice, FontSize, BibleTranslation, DeuterocanonTranslation } from '../context/SettingsContext';
 
 // ── Reusable sub-components ──────────────────────────────────────────────────
 
@@ -64,6 +64,69 @@ function OptionPicker<T extends string>({
   );
 }
 
+function CompactDropdown<T extends string>({
+  label, options, value, onSelect,
+}: {
+  label: string;
+  options: { value: T; label: string }[];
+  value: T;
+  onSelect: (v: T) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const { colors, sizes, isDark } = useTheme();
+  const selected = options.find(o => o.value === value);
+  const selectedBg = isDark ? '#2C2C2E' : '#E3DDD1';
+
+  return (
+    <View style={{ marginBottom: 4 }}>
+      <Text style={{ fontFamily: Typography.serifBold, fontSize: sizes.subheading, color: colors.ink, marginBottom: 8 }}>
+        {label}
+      </Text>
+      {/* Selected value row (tap to expand) */}
+      <TouchableOpacity
+        style={{
+          paddingVertical: 10, paddingHorizontal: 14,
+          borderRadius: 6, borderWidth: 1,
+          borderColor: colors.ink,
+          backgroundColor: selectedBg,
+          flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+        }}
+        onPress={() => setOpen(o => !o)}
+        activeOpacity={0.7}
+      >
+        <Text style={{ fontFamily: Typography.serifBold, fontSize: sizes.body, color: colors.ink }}>
+          {selected?.label ?? value}
+        </Text>
+        <Text style={{ fontFamily: Typography.serif, fontSize: sizes.rubric, color: colors.inkLight }}>
+          {open ? '▲' : '▼'}
+        </Text>
+      </TouchableOpacity>
+      {/* Expanded options */}
+      {open && options.map((opt) => (
+        <TouchableOpacity
+          key={opt.value}
+          style={{
+            paddingVertical: 10, paddingHorizontal: 14,
+            borderRadius: 6, borderWidth: 1, marginTop: 4,
+            borderColor: value === opt.value ? colors.ink : colors.rule,
+            backgroundColor: value === opt.value ? selectedBg : colors.parchment,
+          }}
+          onPress={() => { onSelect(opt.value); setOpen(false); }}
+          activeOpacity={0.7}
+        >
+          <Text style={{
+            fontFamily: value === opt.value ? Typography.serifBold : Typography.serif,
+            fontSize: sizes.body,
+            color: value === opt.value ? colors.ink : colors.inkLight,
+          }}>
+            {opt.label}
+          </Text>
+        </TouchableOpacity>
+      ))}
+    </View>
+  );
+}
+
 // ── Main screen ───────────────────────────────────────────────────────────────
 
 export function SettingsScreen() {
@@ -78,6 +141,7 @@ export function SettingsScreen() {
     fontSize, setFontSize,
     litanyEnabled, setLitanyEnabled,
     bibleTranslation, setBibleTranslation,
+    deuterocanonTranslation, setDeuterocanonTranslation,
   } = useSettings();
 
   const sectionStyle = {
@@ -126,18 +190,37 @@ export function SettingsScreen() {
 
       {/* ── Bible Translation ─────────────────────────────────────────────── */}
       <View style={sectionStyle}>
-        <OptionPicker<BibleTranslation>
+        <CompactDropdown<BibleTranslation>
           label="Bible Translation"
-          hint="Apocrypha readings always use the King James Version."
           options={[
-            { value: 'kjv',  label: 'King James Version',        description: 'KJV — the traditional 1611 translation used in the 1928 BCP.' },
-            { value: 'esv',  label: 'English Standard Version',  description: 'ESV — a modern literal translation.' },
-            { value: 'nasb', label: 'New American Standard',     description: 'NASB — known for its accuracy to the original languages.' },
-            { value: 'nkjv', label: 'New King James Version',    description: 'NKJV — updates KJV language while retaining its style.' },
+            { value: 'kjv',  label: 'King James Version (KJV)' },
+            { value: 'rsv',  label: 'Revised Standard Version (RSV)' },
+            { value: 'esv',  label: 'English Standard Version (ESV)' },
+            { value: 'nasb', label: 'New American Standard Bible (NASB)' },
+            { value: 'nkjv', label: 'New King James Version (NKJV)' },
           ]}
           value={bibleTranslation}
           onSelect={setBibleTranslation}
         />
+      </View>
+
+      {/* ── Deuterocanon Translation ──────────────────────────────────────── */}
+      <View style={sectionStyle}>
+        <CompactDropdown<DeuterocanonTranslation>
+          label="Deuterocanon Translation"
+          options={[
+            { value: 'kjv', label: 'King James Version (KJV)' },
+            { value: 'rsv', label: 'Revised Standard Version (RSV)' },
+          ]}
+          value={deuterocanonTranslation}
+          onSelect={setDeuterocanonTranslation}
+        />
+        <Text style={{
+          fontFamily: Typography.serifItalic, fontSize: sizes.rubric,
+          color: colors.inkLight, lineHeight: Math.round(sizes.rubric * 1.55), marginTop: 10,
+        }}>
+          Deuterocanonical lessons use this translation regardless of the Bible Translation setting above.
+        </Text>
       </View>
 
       {/* ── Daily Reminders (placeholder) ─────────────────────────────────── */}

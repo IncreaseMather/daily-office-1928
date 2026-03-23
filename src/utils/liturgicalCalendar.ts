@@ -222,9 +222,9 @@ export function getLiturgicalSeason(date: Date = new Date()): LiturgicalSeason {
   return 'Trinity';
 }
 
-/** Returns true when the Gloria Patri should be sung (omitted in Lent and Pre-Lent). */
+/** Returns true when the Gloria Patri should be sung (omitted in Advent, Pre-Lent, and Lent). */
 export function showGloriaPatri(season: LiturgicalSeason): boolean {
-  return season !== 'Lent' && season !== 'Pre-Lent';
+  return season !== 'Advent' && season !== 'Lent' && season !== 'Pre-Lent';
 }
 
 // ─── Proper collect helpers ────────────────────────────────────────────────

@@ -7,7 +7,8 @@ export type PriestAbsolutionForm = 'declaratory' | 'precatory';
 export type LayAbsolution = 'kyrie' | 'trinity21';
 export type CreedChoice = 'apostles' | 'nicene' | 'athanasian';
 export type FontSize = 'small' | 'medium' | 'large';
-export type BibleTranslation = 'kjv' | 'esv' | 'nasb' | 'nkjv';
+export type BibleTranslation = 'kjv' | 'rsv' | 'esv' | 'nasb' | 'nkjv';
+export type DeuterocanonTranslation = 'kjv' | 'rsv';
 
 const K = {
   LEAD_TYPE:         '@s/leadType',
@@ -22,7 +23,8 @@ const K = {
   EP_ENABLED:        '@s/epEnabled',
   EP_TIME:           '@s/epTime',
   LITANY_ENABLED:    '@s/litanyEnabled',
-  BIBLE_TRANSLATION: '@s/bibleTranslation',
+  BIBLE_TRANSLATION:        '@s/bibleTranslation',
+  DEUTEROCANON_TRANSLATION: '@s/deuterocanonTranslation',
 };
 
 interface SettingsContextValue {
@@ -52,6 +54,8 @@ interface SettingsContextValue {
   setLitanyEnabled: (v: boolean) => void;
   bibleTranslation: BibleTranslation;
   setBibleTranslation: (v: BibleTranslation) => void;
+  deuterocanonTranslation: DeuterocanonTranslation;
+  setDeuterocanonTranslation: (v: DeuterocanonTranslation) => void;
 }
 
 const SettingsContext = createContext<SettingsContextValue | null>(null);
@@ -73,7 +77,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const [epReminderEnabled, setEpEnabledS]     = useState(false);
   const [epReminderTime, setEpTimeS]           = useState('18:00');
   const [litanyEnabled, setLitanyS]            = useState(false);
-  const [bibleTranslation, setBibleTransS]     = useState<BibleTranslation>('kjv');
+  const [bibleTranslation, setBibleTransS]          = useState<BibleTranslation>('kjv');
+  const [deuterocanonTranslation, setDeuterocanonS] = useState<DeuterocanonTranslation>('kjv');
 
   useEffect(() => {
     AsyncStorage.multiGet(Object.values(K)).then((pairs) => {
@@ -91,7 +96,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         if (m[K.EP_ENABLED])      setEpEnabledS(m[K.EP_ENABLED] === 'true');
         if (m[K.EP_TIME])         setEpTimeS(m[K.EP_TIME]);
         if (m[K.LITANY_ENABLED])      setLitanyS(m[K.LITANY_ENABLED] === 'true');
-        if (m[K.BIBLE_TRANSLATION])   setBibleTransS(m[K.BIBLE_TRANSLATION] as BibleTranslation);
+        if (m[K.BIBLE_TRANSLATION])        setBibleTransS(m[K.BIBLE_TRANSLATION] as BibleTranslation);
+        if (m[K.DEUTEROCANON_TRANSLATION]) setDeuterocanonS(m[K.DEUTEROCANON_TRANSLATION] as DeuterocanonTranslation);
       } catch {
         // Corrupt or unexpected storage values — silently fall back to defaults
       }
@@ -110,7 +116,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const setEpReminderEnabled     = (v: boolean)               => { setEpEnabledS(v); persist(K.EP_ENABLED, String(v)); };
   const setEpReminderTime        = (v: string)                => { setEpTimeS(v);    persist(K.EP_TIME, v); };
   const setLitanyEnabled         = (v: boolean)               => { setLitanyS(v);          persist(K.LITANY_ENABLED, String(v)); };
-  const setBibleTranslation      = (v: BibleTranslation)      => { setBibleTransS(v);      persist(K.BIBLE_TRANSLATION, v); };
+  const setBibleTranslation         = (v: BibleTranslation)         => { setBibleTransS(v);      persist(K.BIBLE_TRANSLATION, v); };
+  const setDeuterocanonTranslation  = (v: DeuterocanonTranslation)  => { setDeuterocanonS(v);   persist(K.DEUTEROCANON_TRANSLATION, v); };
 
   return (
     <SettingsContext.Provider value={{
@@ -127,6 +134,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       epReminderTime, setEpReminderTime,
       litanyEnabled, setLitanyEnabled,
       bibleTranslation, setBibleTranslation,
+      deuterocanonTranslation, setDeuterocanonTranslation,
     }}>
       {children}
     </SettingsContext.Provider>
