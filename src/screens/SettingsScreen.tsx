@@ -140,6 +140,7 @@ export function SettingsScreen() {
   const {
     isConnected: spotifyConnected,
     isConnecting,
+    isMapBuilding,
     connectError: spotifyError,
     displayName: spotifyName,
     spotifyEnabled,
@@ -363,7 +364,11 @@ export function SettingsScreen() {
               marginBottom: 4,
             }}>
               Connected as {spotifyName}
-              {mappedPsalmCount > 0 ? ` · ${mappedPsalmCount} psalms mapped` : ''}
+              {isMapBuilding
+                ? ' · Building psalm map…'
+                : mappedPsalmCount > 0
+                  ? ` · ${mappedPsalmCount} psalms mapped`
+                  : ''}
             </Text>
             <TouchableOpacity
               style={{
