@@ -12,14 +12,30 @@
   "expo": {
     "name": "1928 Daily Office",
     "slug": "daily-office-1928",
+    "scheme": "dailyoffice1928",
     "description": "The 1928 American Book of Common Prayer Daily Office for Morning and Evening Prayer",
     "android": {
-      "package": "com.increasemather.dailyoffice1928"
+      "package": "com.increasemather.dailyoffice1928",
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [{ "scheme": "dailyoffice1928" }],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ]
+    },
+    "ios": {
+      "bundleIdentifier": "com.increasemather.dailyoffice1928"
     },
     "extra": {
       "eas": {
         "projectId": "3f951bc2-0fac-4172-9442-a629041790ec"
       }
-    }
+    },
+    "plugins": [
+      "expo-secure-store",
+      "expo-web-browser"
+    ]
   }
 }

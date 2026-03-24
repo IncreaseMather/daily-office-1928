@@ -3,6 +3,7 @@ import { View, Text } from 'react-native';
 import { Typography } from '../theme';
 import { useTheme } from '../context/SettingsContext';
 import { Divider } from './OfficeSection';
+import { PsalmPlayButton } from './PsalmPlayButton';
 
 interface PsalmEntry {
   psalm: number;
@@ -17,13 +18,15 @@ export function PsalmView({ entry, showGloria = true }: { entry: PsalmEntry; sho
   const { colors, sizes, lineHeights } = useTheme();
   return (
     <View style={{ marginBottom: 4 }}>
-      <Text style={{
-        fontFamily: Typography.serifBold,
-        fontSize: sizes.subheading,
-        lineHeight: lineHeights.heading,
-        color: colors.ink,
-        marginBottom: 2,
-      }}>{entry.title}</Text>
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 2 }}>
+        <Text style={{
+          fontFamily: Typography.serifBold,
+          fontSize: sizes.subheading,
+          lineHeight: lineHeights.heading,
+          color: colors.ink,
+        }}>{entry.title}</Text>
+        <PsalmPlayButton psalmNumber={entry.psalm} />
+      </View>
       {entry.subtitle ? (
         <Text style={{
           fontFamily: Typography.serifItalic,

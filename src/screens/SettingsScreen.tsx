@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { ScrollView, View, Text, Switch, TouchableOpacity, Linking } from 'react-native';
+import { ScrollView, View, Text, Switch, TouchableOpacity, Linking, ActivityIndicator } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
+import QRCode from 'react-native-qrcode-svg';
 import { Typography } from '../theme';
 import { useSettings, useTheme } from '../context/SettingsContext';
+import { useSpotify } from '../context/SpotifyContext';
 import type { LayAbsolution, PriestAbsolutionForm, CreedChoice, FontSize, BibleTranslation, DeuterocanonTranslation } from '../context/SettingsContext';
 
 // ── Reusable sub-components ──────────────────────────────────────────────────
@@ -135,6 +137,18 @@ const BTC_ADDRESS = 'bc1q6d7vqadw6n6cm6wpjpt0ae9dglyfuqeutrqh8n';
 export function SettingsScreen() {
   const { colors, sizes } = useTheme();
   const [btcCopied, setBtcCopied] = useState(false);
+  const {
+    isConnected: spotifyConnected,
+    isConnecting,
+    connectError: spotifyError,
+    displayName: spotifyName,
+    spotifyEnabled,
+    psalmMap,
+    setSpotifyEnabled,
+    connect: connectSpotify,
+    disconnect: disconnectSpotify,
+  } = useSpotify();
+  const mappedPsalmCount = Object.keys(psalmMap).length;
   const {
     leadType, setLeadType,
     priestAbsolutionForm, setPriestAbsolutionForm,
@@ -329,6 +343,135 @@ export function SettingsScreen() {
         )}
       </View>
 
+      {/* ── Spotify ───────────────────────────────────────────────────────── */}
+      <View style={sectionStyle}>
+        <Text style={{
+          fontFamily: Typography.serifBold,
+          fontSize: sizes.subheading,
+          color: colors.ink,
+          marginBottom: 8,
+        }}>
+          Spotify
+        </Text>
+
+        {spotifyConnected ? (
+          <>
+            <Text style={{
+              fontFamily: Typography.serifItalic,
+              fontSize: sizes.rubric,
+              color: colors.inkLight,
+              marginBottom: 4,
+            }}>
+              Connected as {spotifyName}
+              {mappedPsalmCount > 0 ? ` · ${mappedPsalmCount} psalms mapped` : ''}
+            </Text>
+            <TouchableOpacity
+              style={{
+                alignSelf: 'center',
+                paddingVertical: 8,
+                paddingHorizontal: 20,
+                borderRadius: 4,
+                borderWidth: 1,
+                borderColor: colors.rule,
+                marginBottom: 16,
+              }}
+              onPress={disconnectSpotify}
+              activeOpacity={0.65}
+            >
+              <Text style={{
+                fontFamily: Typography.serifItalic,
+                fontSize: sizes.rubric,
+                color: colors.inkLight,
+              }}>
+                Disconnect
+              </Text>
+            </TouchableOpacity>
+
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+              <Text style={{ fontFamily: Typography.serif, fontSize: sizes.body, color: colors.ink, flex: 1 }}>
+                Play Psalm chants via Spotify
+              </Text>
+              <Switch
+                value={spotifyEnabled}
+                onValueChange={setSpotifyEnabled}
+                trackColor={{ false: colors.rule, true: colors.inkLight }}
+                thumbColor={colors.parchment}
+              />
+            </View>
+            <Text style={{
+              fontFamily: Typography.serifItalic,
+              fontSize: sizes.rubric,
+              color: colors.inkLight,
+              lineHeight: Math.round(sizes.rubric * 1.55),
+            }}>
+              Requires Spotify Premium for full playback.
+            </Text>
+          </>
+        ) : (
+          <>
+            <Text style={{
+              fontFamily: Typography.serifItalic,
+              fontSize: sizes.rubric,
+              color: colors.inkLight,
+              lineHeight: Math.round(sizes.rubric * 1.55),
+              marginBottom: 14,
+            }}>
+              Connect to play Anglican chant recordings of the appointed Psalms.
+            </Text>
+            <TouchableOpacity
+              style={{
+                alignSelf: 'center',
+                paddingVertical: 10,
+                paddingHorizontal: 24,
+                borderRadius: 4,
+                borderWidth: 1,
+                borderColor: colors.rubric,
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}
+              onPress={connectSpotify}
+              disabled={isConnecting}
+              activeOpacity={0.65}
+            >
+              {isConnecting ? (
+                <ActivityIndicator
+                  size="small"
+                  color={colors.rubric}
+                  style={{ marginRight: 8 }}
+                />
+              ) : null}
+              <Text style={{
+                fontFamily: Typography.serifItalic,
+                fontSize: sizes.body,
+                color: colors.rubric,
+                letterSpacing: 0.3,
+              }}>
+                {isConnecting ? 'Connecting…' : 'Connect Spotify'}
+              </Text>
+            </TouchableOpacity>
+            <Text style={{
+              fontFamily: Typography.serifItalic,
+              fontSize: sizes.rubric,
+              color: colors.inkLight,
+              marginTop: 10,
+            }}>
+              Requires Spotify Premium for full playback.
+            </Text>
+            {spotifyError ? (
+              <Text style={{
+                fontFamily: Typography.serifItalic,
+                fontSize: sizes.rubric,
+                color: colors.rubric,
+                marginTop: 10,
+                textAlign: 'center',
+              }}>
+                {spotifyError}
+              </Text>
+            ) : null}
+          </>
+        )}
+      </View>
+
       {/* ── Support ───────────────────────────────────────────────────────── */}
       <View style={{ ...sectionStyle, alignItems: 'center', paddingBottom: 8 }}>
         <Text style={{
@@ -396,6 +539,19 @@ export function SettingsScreen() {
           >
             {BTC_ADDRESS}
           </Text>
+          <View style={{
+            padding: 10,
+            backgroundColor: '#FFFFFF',
+            borderRadius: 6,
+            marginBottom: 14,
+          }}>
+            <QRCode
+              value={`bitcoin:${BTC_ADDRESS}`}
+              size={160}
+              color="#000000"
+              backgroundColor="#FFFFFF"
+            />
+          </View>
           <TouchableOpacity
             style={{
               paddingVertical: 9,

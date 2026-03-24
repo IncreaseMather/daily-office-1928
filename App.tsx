@@ -19,6 +19,7 @@ import { Colors, DarkColors, Typography } from './src/theme';
 import { getInitialOffice } from './src/utils/dateHelpers';
 import { SettingsProvider, useTheme } from './src/context/SettingsContext';
 import { SelectedDateProvider } from './src/context/SelectedDateContext';
+import { SpotifyProvider } from './src/context/SpotifyContext';
 
 // ── Navigation themes ─────────────────────────────────────────────────────────
 // Passing a `theme` to NavigationContainer propagates colors to all navigation
@@ -169,9 +170,11 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <SettingsProvider>
-        <SelectedDateProvider>
-          <AppInner />
-        </SelectedDateProvider>
+        <SpotifyProvider>
+          <SelectedDateProvider>
+            <AppInner />
+          </SelectedDateProvider>
+        </SpotifyProvider>
       </SettingsProvider>
     </SafeAreaProvider>
   );
