@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ScrollView, View, Text, Switch, TouchableOpacity, Linking } from 'react-native';
+import * as Clipboard from 'expo-clipboard';
 import { Typography } from '../theme';
 import { useSettings, useTheme } from '../context/SettingsContext';
 import type { LayAbsolution, PriestAbsolutionForm, CreedChoice, FontSize, BibleTranslation, DeuterocanonTranslation } from '../context/SettingsContext';
@@ -129,8 +130,11 @@ function CompactDropdown<T extends string>({
 
 // ── Main screen ───────────────────────────────────────────────────────────────
 
+const BTC_ADDRESS = 'bc1q6d7vqadw6n6cm6wpjpt0ae9dglyfuqeutrqh8n';
+
 export function SettingsScreen() {
   const { colors, sizes } = useTheme();
+  const [btcCopied, setBtcCopied] = useState(false);
   const {
     leadType, setLeadType,
     priestAbsolutionForm, setPriestAbsolutionForm,
@@ -367,6 +371,65 @@ export function SettingsScreen() {
             Make a Donation
           </Text>
         </TouchableOpacity>
+
+        {/* Bitcoin */}
+        <View style={{ marginTop: 24, alignItems: 'center', width: '100%' }}>
+          <Text style={{
+            fontFamily: Typography.serifBold,
+            fontSize: sizes.rubric,
+            color: colors.inkLight,
+            marginBottom: 8,
+            letterSpacing: 0.5,
+          }}>
+            Bitcoin
+          </Text>
+          <Text style={{
+            fontFamily: Typography.serif,
+            fontSize: Math.round(sizes.rubric * 0.88),
+            color: colors.ink,
+            textAlign: 'center',
+            letterSpacing: 0.4,
+            paddingHorizontal: 4,
+            marginBottom: 12,
+          }}
+            selectable
+          >
+            {BTC_ADDRESS}
+          </Text>
+          <TouchableOpacity
+            style={{
+              paddingVertical: 9,
+              paddingHorizontal: 24,
+              borderRadius: 4,
+              borderWidth: 1,
+              borderColor: colors.rule,
+            }}
+            onPress={async () => {
+              await Clipboard.setStringAsync(BTC_ADDRESS);
+              setBtcCopied(true);
+              setTimeout(() => setBtcCopied(false), 2500);
+            }}
+            activeOpacity={0.65}
+          >
+            <Text style={{
+              fontFamily: Typography.serifItalic,
+              fontSize: sizes.rubric,
+              color: btcCopied ? colors.rubric : colors.inkLight,
+              letterSpacing: 0.3,
+            }}>
+              {btcCopied ? 'Address copied!' : 'Copy Address'}
+            </Text>
+          </TouchableOpacity>
+          <Text style={{
+            fontFamily: Typography.serifItalic,
+            fontSize: Math.round(sizes.rubric * 0.88),
+            color: colors.inkLight,
+            marginTop: 8,
+            opacity: 0.7,
+          }}>
+            Tap to copy Bitcoin address
+          </Text>
+        </View>
       </View>
     </ScrollView>
   );

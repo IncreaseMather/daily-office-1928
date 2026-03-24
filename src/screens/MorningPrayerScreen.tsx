@@ -199,6 +199,7 @@ export function MorningPrayerScreen() {
   const insets = useSafeAreaInsets();
 
   const { leadType, priestAbsolutionForm, layAbsolution, creedChoice, shorterForm, litanyEnabled, bibleTranslation, deuterocanonTranslation } = useSettings();
+  const ministerTerm = leadType === 'priest' ? 'Clergy' : 'Officiant';
   const showLitany = litanyEnabled && isLitanyDay(today);
 
   // ── Section navigation hooks — must come before any early return ────────────
@@ -279,10 +280,10 @@ export function MorningPrayerScreen() {
                    : creedChoice === 'athanasian' ? 'The Athanasian Creed'
                    : "The Apostles' Creed";
   const creedRubric = creedChoice === 'nicene'
-    ? 'Then shall be said the Nicene Creed by the Minister and People, standing.'
+    ? `Then shall be said the Nicene Creed by the ${ministerTerm} and People, standing.`
     : creedChoice === 'athanasian'
     ? 'The Creed commonly called the Athanasian.'
-    : "Then shall be said the Apostles' Creed by the Minister and People, standing.";
+    : `Then shall be said the Apostles' Creed by the ${ministerTerm} and People, standing.`;
 
   function scrollToSection(key: string) {
     const y = sectionOffsets.current[key];
@@ -343,46 +344,46 @@ export function MorningPrayerScreen() {
 
         <View onLayout={markSection('opening')}>
           <Section title="Opening Sentence">
-            <RubricText text="The Minister shall begin the Morning Prayer by reading with a loud voice one or more of the following Sentences of Scripture." />
+            <RubricText text={`The ${ministerTerm} shall begin the Morning Prayer by reading with a loud voice one or more of the following Sentences of Scripture.`} />
             {openingSentences.map((s2, i) => <BodyText key={`os-${i}`} text={s2} />)}
           </Section>
         </View>
 
         <View style={s.block}>
-          <RubricText text="Then the Minister shall read the Exhortation, or a part thereof, or shall say," />
-          <MinisterText text="LET us humbly confess our sins unto Almighty God." />
+          <RubricText text={`Then the ${ministerTerm} shall read the Exhortation, or a part thereof, or shall say,`} />
+          <BodyText text="LET us humbly confess our sins unto Almighty God." />
           <OrDivider />
-          <MinisterText text={EXHORTATION} />
+          <BodyText text={EXHORTATION} />
         </View>
         <Divider />
 
         <Section title="A General Confession">
-          <RubricText text="Then shall the Minister and People, all kneeling, say the General Confession." />
-          <PeopleText noIndent text={CONFESSION} />
+          <RubricText text={`Then shall the ${ministerTerm} and People, all kneeling, say the General Confession.`} />
+          <BodyText text={CONFESSION} />
         </Section>
 
         {leadType === 'priest' ? (
           <Section title="The Absolution">
             <RubricText text="Then shall the Priest (or Bishop, if he be present) stand and pronounce the Absolution." />
-            <MinisterText text={absolution} />
+            <BodyText text={absolution} />
           </Section>
         ) : layAbsolution === 'kyrie' ? (
           <Section title="Kyrie Eleison">
-            <RubricText text="Then shall be said by the Minister and People, all kneeling," />
+            <RubricText text={`Then shall be said by the ${ministerTerm} and People, all kneeling,`} />
             <MinisterText text="Lord, have mercy upon us." />
             <PeopleText text="Christ, have mercy upon us." />
             <MinisterText text="Lord, have mercy upon us." />
           </Section>
         ) : (
           <Section title="A Collect for Pardon">
-            <RubricText text="Then the Minister shall say the Collect for the Twenty-first Sunday after Trinity." />
-            <MinisterText text={collectForTrinity21} />
+            <RubricText text={`Then the ${ministerTerm} shall say the Collect for the Twenty-first Sunday after Trinity.`} />
+            <BodyText text={collectForTrinity21} />
           </Section>
         )}
         <Divider />
 
         <Section title="The Lord's Prayer">
-          <RubricText text="Then the Minister shall say the Lord's Prayer; the People repeating after him every Petition." />
+          <RubricText text={`Then the ${ministerTerm} shall say the Lord's Prayer; the People repeating after him every Petition.`} />
           <BodyText text={LORDS_PRAYER} />
         </Section>
         <Divider />
@@ -505,9 +506,18 @@ export function MorningPrayerScreen() {
         <Divider />
 
         <Section title="The Prayers">
-          <RubricText text="Then the Minister, turning to the People, shall say," />
-          <MinisterText text="The Lord be with you." />
-          <PeopleText text="And with thy spirit." />
+          <RubricText text={`Then the ${ministerTerm}, turning to the People, shall say,`} />
+          {leadType === 'priest' ? (
+            <>
+              <MinisterText text="The Lord be with you." />
+              <PeopleText text="And with thy spirit." />
+            </>
+          ) : (
+            <>
+              <MinisterText text="Lord, hear our prayer." />
+              <PeopleText text="And let our cry come unto thee." />
+            </>
+          )}
           <MinisterText text="Let us pray." />
           <View style={s.spacer} />
           <RubricText text="Here, if it hath not already been said, shall follow the Lord's Prayer." />
@@ -579,8 +589,8 @@ export function MorningPrayerScreen() {
             </Section>
             <Divider />
             <Section title="A General Thanksgiving">
-              <RubricText text="To be said by the whole Congregation, after the Minister, all kneeling." />
-              <PeopleText noIndent text={generalThanksgiving} />
+              <RubricText text={`To be said by the whole Congregation, after the ${ministerTerm}, all kneeling.`} />
+              <BodyText text={generalThanksgiving} />
             </Section>
             <Section title="A Prayer of St. Chrysostom">
               <BodyText text={prayerOfChrysostom} />

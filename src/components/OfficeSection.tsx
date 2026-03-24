@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import { Typography } from '../theme';
-import { useTheme } from '../context/SettingsContext';
+import { useTheme, useSettings } from '../context/SettingsContext';
 
 /** Split text on [bracketed] segments and render them in italic. */
 function renderWithBrackets(
@@ -45,17 +45,30 @@ export function BodyText({ text, indent }: { text: string; indent?: boolean }) {
   );
 }
 
+const LABEL_WIDTH = 76;
+
 export function MinisterText({ text, indent }: { text: string; indent?: boolean }) {
   const { colors, sizes, lineHeights } = useTheme();
+  const { leadType } = useSettings();
+  const label = leadType === 'priest' ? 'Clergy' : 'Officiant';
+  const bracketStyle = { fontFamily: Typography.serifItalic, color: colors.inkLight };
   return (
-    <Text style={{
-      fontFamily: Typography.serifBold,
-      fontSize: sizes.body,
-      lineHeight: lineHeights.body,
-      color: colors.ink,
-      marginBottom: 4,
-      paddingLeft: indent ? 22 : 0,
-    }}>{text}</Text>
+    <View style={{ flexDirection: 'row', marginBottom: 4, paddingLeft: indent ? 22 : 0 }}>
+      <Text style={{
+        fontFamily: Typography.serifItalic,
+        fontSize: sizes.rubric,
+        color: colors.rubric,
+        width: LABEL_WIDTH,
+        paddingTop: Math.round((lineHeights.body - sizes.rubric) / 2),
+      }}>{label}</Text>
+      <Text style={{
+        fontFamily: Typography.serif,
+        fontSize: sizes.body,
+        lineHeight: lineHeights.body,
+        color: colors.ink,
+        flex: 1,
+      }}>{renderWithBrackets(text, bracketStyle)}</Text>
+    </View>
   );
 }
 
@@ -63,14 +76,22 @@ export function PeopleText({ text, noIndent }: { text: string; noIndent?: boolea
   const { colors, sizes, lineHeights } = useTheme();
   const bracketStyle = { fontFamily: Typography.serifItalic, color: colors.inkLight };
   return (
-    <Text style={{
-      fontFamily: Typography.serif,
-      fontSize: sizes.body,
-      lineHeight: lineHeights.body,
-      color: colors.ink,
-      marginBottom: 4,
-      paddingLeft: noIndent ? 0 : 22,
-    }}>{renderWithBrackets(text, bracketStyle)}</Text>
+    <View style={{ flexDirection: 'row', marginBottom: 4 }}>
+      <Text style={{
+        fontFamily: Typography.serifItalic,
+        fontSize: sizes.rubric,
+        color: colors.rubric,
+        width: LABEL_WIDTH,
+        paddingTop: Math.round((lineHeights.body - sizes.rubric) / 2),
+      }}>People</Text>
+      <Text style={{
+        fontFamily: Typography.serif,
+        fontSize: sizes.body,
+        lineHeight: lineHeights.body,
+        color: colors.ink,
+        flex: 1,
+      }}>{renderWithBrackets(text, bracketStyle)}</Text>
+    </View>
   );
 }
 
