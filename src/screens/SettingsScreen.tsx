@@ -584,6 +584,20 @@ export function SettingsScreen() {
           </Text>
         </View>
       </View>
+
+      {/* ── Legal ─────────────────────────────────────────────────────────── */}
+      <View style={{ paddingHorizontal: 8, paddingTop: 24, paddingBottom: 48 }}>
+        <Text style={{
+          fontFamily: Typography.serifItalic,
+          fontSize: Math.round(sizes.rubric * 0.85),
+          color: colors.inkLight,
+          lineHeight: Math.round(sizes.rubric * 1.5),
+          textAlign: 'center',
+          opacity: 0.75,
+        }}>
+          The lessons and readings in this app may be drawn from the following translations: the King James Version (public domain); the Revised Standard Version, copyright © National Council of Churches; the English Standard Version, copyright © Crossway; the New American Standard Bible, copyright © The Lockman Foundation; and the New King James Version, copyright © Thomas Nelson. These translations are used in small quantities for personal, devotional, and non-commercial purposes only. This app is free and will always remain free. No copyright infringement is intended. If you are a rights holder and have concerns, please contact us.
+        </Text>
+      </View>
     </ScrollView>
   );
 }
