@@ -442,7 +442,7 @@ const FIXED_FEASTS: Record<string, FeastDay> = {
   '2-2':   { name: 'The Purification of Saint Mary the Virgin',    type: 'holyDay' },
   '2-24':  { name: 'Saint Matthias the Apostle',                   type: 'holyDay' },
   '3-19':  { name: 'Saint Joseph',                                 type: 'holyDay' },
-  '3-25':  { name: 'The Annunciation of the Blessed Virgin Mary',  type: 'holyDay' },
+  '3-25':  { name: 'The Annunciation of the Blessèd Virgin Mary',  type: 'holyDay' },
   '4-25':  { name: 'Saint Mark the Evangelist',                    type: 'holyDay' },
   '5-1':   { name: 'Saint Philip and Saint James',                 type: 'holyDay' },
   '6-24':  { name: 'The Nativity of Saint John the Baptist',       type: 'principalFeast' },

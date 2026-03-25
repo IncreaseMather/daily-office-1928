@@ -4,6 +4,7 @@ import { Typography } from '../theme';
 import { useTheme } from '../context/SettingsContext';
 import { Divider } from './OfficeSection';
 import { PsalmPlayButton } from './PsalmPlayButton';
+import { decodeHtml } from '../utils/decodeHtml';
 
 interface PsalmEntry {
   psalm: number;
@@ -33,7 +34,7 @@ export function PsalmView({ entry, showGloria = true }: { entry: PsalmEntry; sho
           fontSize: sizes.rubric,
           color: colors.rubric,
           marginBottom: 10,
-        }}>{entry.subtitle}</Text>
+        }}>{decodeHtml(entry.subtitle)}</Text>
       ) : null}
       <Text style={{
         fontFamily: Typography.serif,

@@ -140,16 +140,13 @@ export function SettingsScreen() {
   const {
     isConnected: spotifyConnected,
     isConnecting,
-    isMapBuilding,
     connectError: spotifyError,
     displayName: spotifyName,
     spotifyEnabled,
-    psalmMap,
     setSpotifyEnabled,
     connect: connectSpotify,
     disconnect: disconnectSpotify,
   } = useSpotify();
-  const mappedPsalmCount = Object.keys(psalmMap).length;
   const {
     leadType, setLeadType,
     priestAbsolutionForm, setPriestAbsolutionForm,
@@ -364,11 +361,6 @@ export function SettingsScreen() {
               marginBottom: 4,
             }}>
               Connected as {spotifyName}
-              {isMapBuilding
-                ? ' · Building psalm map…'
-                : mappedPsalmCount > 0
-                  ? ` · ${mappedPsalmCount} psalms mapped`
-                  : ''}
             </Text>
             <TouchableOpacity
               style={{

@@ -4,7 +4,8 @@ import React, {
 import * as AuthSession from 'expo-auth-session';
 import * as WebBrowser from 'expo-web-browser';
 import * as SecureStore from 'expo-secure-store';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import staticPsalmMap from '../data/psalm-spotify-map.json';
 
 import {
   SPOTIFY_CLIENT_ID,
@@ -16,25 +17,18 @@ import {
   saveDisplayName,
   loadDisplayName,
   refreshAccessToken,
-  getValidToken,
   fetchUserProfile,
-  buildAndCachePsalmMap,
-  loadCachedPsalmMap,
 } from '../services/spotify';
 
-// Must be called unconditionally at module load so it runs whenever the app
-// opens from a redirect URL (including after remount on Android).
 WebBrowser.maybeCompleteAuthSession();
 
-const ASYNC_KEY_SPOTIFY_ENABLED = 'spotify_enabled';
-const SECURE_KEY_CODE_VERIFIER  = 'spotify_pkce_verifier';
+const SECURE_KEY_CODE_VERIFIER = 'spotify_pkce_verifier';
 
 // ── Context type ──────────────────────────────────────────────────────────────
 
 interface SpotifyContextValue {
   isConnected: boolean;
   isConnecting: boolean;
-  isMapBuilding: boolean;
   connectError: string | null;
   displayName: string | null;
   spotifyEnabled: boolean;
@@ -47,11 +41,10 @@ interface SpotifyContextValue {
 const SpotifyContext = createContext<SpotifyContextValue>({
   isConnected: false,
   isConnecting: false,
-  isMapBuilding: false,
   connectError: null,
   displayName: null,
   spotifyEnabled: false,
-  psalmMap: {},
+  psalmMap: staticPsalmMap as Record<string, string>,
   setSpotifyEnabled: () => {},
   connect: async () => {},
   disconnect: async () => {},
@@ -63,20 +56,21 @@ export function useSpotify(): SpotifyContextValue {
 
 // ── Provider ──────────────────────────────────────────────────────────────────
 
-export function SpotifyProvider({ children }: { children: React.ReactNode }) {
-  const [isConnected, setIsConnected]     = useState(false);
-  const [isConnecting, setIsConnecting]   = useState(false);
-  const [isMapBuilding, setIsMapBuilding] = useState(false);
-  const [connectError, setConnectError]   = useState<string | null>(null);
-  const [displayName, setDisplayName]     = useState<string | null>(null);
-  const [spotifyEnabled, _setEnabled]     = useState(false);
-  const [psalmMap, setPsalmMap]           = useState<Record<string, string>>({});
+const ASYNC_KEY_SPOTIFY_ENABLED = 'spotify_enabled';
 
-  // Memoised so both useAuthRequest and exchangeCodeAsync always see the
-  // identical string — recomputation on every render would rebuild the request.
+export function SpotifyProvider({ children }: { children: React.ReactNode }) {
+  const [isConnected, setIsConnected]   = useState(false);
+  const [isConnecting, setIsConnecting] = useState(false);
+  const [connectError, setConnectError] = useState<string | null>(null);
+  const [displayName, setDisplayName]   = useState<string | null>(null);
+  const [spotifyEnabled, _setEnabled]   = useState(false);
+
+  // Psalm map is always the static file — no runtime fetching needed
+  const psalmMap = staticPsalmMap as Record<string, string>;
+
   const redirectUri = useMemo(() => AuthSession.makeRedirectUri({
-    native: 'dailyoffice1928://auth',  // production standalone
-    preferLocalhost: true,             // Expo Go: replaces local IP → localhost
+    native: 'dailyoffice1928://auth',
+    preferLocalhost: true,
   }), []);
 
   const [request, response, promptAsync] = AuthSession.useAuthRequest(
@@ -84,30 +78,15 @@ export function SpotifyProvider({ children }: { children: React.ReactNode }) {
     SPOTIFY_DISCOVERY,
   );
 
-  // ── Helper: build map from a valid token, with full state management ─────────
-
-  const triggerMapBuild = useCallback(async (token: string) => {
-    setIsMapBuilding(true);
-    try {
-      const map = await buildAndCachePsalmMap(token);
-      setPsalmMap(map);
-      console.log(`[Spotify] Psalm map built: ${Object.keys(map).length} psalms mapped`);
-    } catch (err) {
-      console.warn('[Spotify] Failed to build psalm map:', err);
-    } finally {
-      setIsMapBuilding(false);
-    }
-  }, []);
-
   // ── Load persisted state on mount ─────────────────────────────────────────
 
   useEffect(() => {
     (async () => {
-      const [name, enabled, tokens, cachedMap] = await Promise.all([
+      const [name, enabled, tokens] = await Promise.all([
         loadDisplayName(),
-        AsyncStorage.getItem(ASYNC_KEY_SPOTIFY_ENABLED),
+        import('@react-native-async-storage/async-storage').then(m =>
+          m.default.getItem(ASYNC_KEY_SPOTIFY_ENABLED)),
         loadTokens(),
-        loadCachedPsalmMap(),
       ]);
 
       if (tokens.accessToken) {
@@ -119,13 +98,6 @@ export function SpotifyProvider({ children }: { children: React.ReactNode }) {
         if (validToken) {
           setIsConnected(true);
           setDisplayName(name);
-          if (Object.keys(cachedMap).length > 0) {
-            setPsalmMap(cachedMap);
-            console.log(`[Spotify] Loaded cached map: ${Object.keys(cachedMap).length} psalms`);
-          } else {
-            // Map was never built (e.g. first launch after connecting) — build now.
-            triggerMapBuild(validToken);
-          }
         }
       }
 
@@ -134,9 +106,6 @@ export function SpotifyProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   // ── Handle OAuth response ─────────────────────────────────────────────────
-  //
-  // No initDone guard — the response effect must run immediately on any
-  // render, including after a remount triggered by the redirect deep link.
 
   useEffect(() => {
     if (!response) return;
@@ -161,8 +130,6 @@ export function SpotifyProvider({ children }: { children: React.ReactNode }) {
 
     (async () => {
       try {
-        // Prefer the live request's verifier; fall back to the value we
-        // persisted before opening the browser, in case of a remount.
         const codeVerifier =
           request?.codeVerifier ??
           (await SecureStore.getItemAsync(SECURE_KEY_CODE_VERIFIER));
@@ -192,16 +159,11 @@ export function SpotifyProvider({ children }: { children: React.ReactNode }) {
         const profile = await fetchUserProfile(tokenResult.accessToken);
         const name = profile?.display_name ?? 'Spotify User';
         await saveDisplayName(name);
-
         setDisplayName(name);
         setConnectError(null);
         setIsConnected(true);
-
-        // Build the psalm map immediately after connecting.
-        await triggerMapBuild(tokenResult.accessToken);
       } catch (err: any) {
         setConnectError(err?.message ?? 'Could not complete Spotify sign-in. Please try again.');
-        console.warn('[Spotify] Token exchange failed:', err);
       } finally {
         setIsConnecting(false);
       }
@@ -213,7 +175,6 @@ export function SpotifyProvider({ children }: { children: React.ReactNode }) {
   const connect = useCallback(async () => {
     setConnectError(null);
     setIsConnecting(true);
-    // Persist the verifier before opening the browser so it survives a remount.
     if (request?.codeVerifier) {
       await SecureStore.setItemAsync(SECURE_KEY_CODE_VERIFIER, request.codeVerifier);
     }
@@ -221,6 +182,7 @@ export function SpotifyProvider({ children }: { children: React.ReactNode }) {
   }, [promptAsync, request]);
 
   const disconnect = useCallback(async () => {
+    const AsyncStorage = (await import('@react-native-async-storage/async-storage')).default;
     await clearTokens();
     await AsyncStorage.removeItem(ASYNC_KEY_SPOTIFY_ENABLED);
     await SecureStore.deleteItemAsync(SECURE_KEY_CODE_VERIFIER);
@@ -228,27 +190,18 @@ export function SpotifyProvider({ children }: { children: React.ReactNode }) {
     setDisplayName(null);
     setConnectError(null);
     _setEnabled(false);
-    setPsalmMap({});
   }, []);
 
-  // When the toggle is turned on: if the map is empty but we're connected,
-  // fetch a valid token and rebuild. This is the recovery path for a silent
-  // build failure on first connect.
   const setSpotifyEnabled = useCallback((v: boolean) => {
     _setEnabled(v);
-    AsyncStorage.setItem(ASYNC_KEY_SPOTIFY_ENABLED, String(v));
-
-    if (v && Object.keys(psalmMap).length === 0) {
-      getValidToken().then((token) => {
-        if (token) triggerMapBuild(token);
-      });
-    }
-  }, [psalmMap, triggerMapBuild]);
+    import('@react-native-async-storage/async-storage').then(m =>
+      m.default.setItem(ASYNC_KEY_SPOTIFY_ENABLED, String(v)));
+  }, []);
 
   return (
     <SpotifyContext.Provider value={{
-      isConnected, isConnecting, isMapBuilding,
-      connectError, displayName, spotifyEnabled, psalmMap,
+      isConnected, isConnecting, connectError,
+      displayName, spotifyEnabled, psalmMap,
       setSpotifyEnabled, connect, disconnect,
     }}>
       {children}

@@ -1,9 +1,9 @@
 import React from 'react';
-import { TouchableOpacity, Text } from 'react-native';
+import { TouchableOpacity, Text, Alert } from 'react-native';
 import { Typography } from '../theme';
 import { useTheme } from '../context/SettingsContext';
 import { useSpotify } from '../context/SpotifyContext';
-import { openSpotifyTrack } from '../services/spotify';
+import { playSpotifyTrack } from '../services/spotify';
 
 interface Props {
   psalmNumber: number;
@@ -13,14 +13,32 @@ export function PsalmPlayButton({ psalmNumber }: Props) {
   const { colors, sizes } = useTheme();
   const { isConnected, spotifyEnabled, psalmMap } = useSpotify();
 
-  if (!isConnected || !spotifyEnabled) return null;
-
   const uri = psalmMap[String(psalmNumber)];
-  if (!uri) return null;
+
+  if (!isConnected || !spotifyEnabled || !uri) return null;
+
+  const handlePress = async () => {
+    try {
+      await playSpotifyTrack(uri);
+    } catch (err: any) {
+      if (err?.message === 'no_device') {
+        Alert.alert(
+          'No Active Device',
+          'Open Spotify on this device first, then try again.',
+        );
+      } else if (err?.message === 'premium_required') {
+        Alert.alert(
+          'Spotify Premium Required',
+          'Playback requires a Spotify Premium subscription.',
+        );
+      }
+      // not_authenticated and other errors are silent — user should reconnect via Settings
+    }
+  };
 
   return (
     <TouchableOpacity
-      onPress={() => openSpotifyTrack(uri)}
+      onPress={handlePress}
       activeOpacity={0.6}
       hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
       style={{ marginLeft: 8, justifyContent: 'center' }}
