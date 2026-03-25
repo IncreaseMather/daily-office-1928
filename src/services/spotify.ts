@@ -145,3 +145,18 @@ export async function playSpotifyTrack(uri: string): Promise<void> {
   if (res.status === 204 || res.ok) return; // 204 No Content = success
   throw new Error(`playback_error_${res.status}`);
 }
+
+/** Pauses playback on the user's active Spotify device. */
+export async function pauseSpotifyPlayback(): Promise<void> {
+  const token = await getValidToken();
+  if (!token) throw new Error('not_authenticated');
+
+  const res = await fetch('https://api.spotify.com/v1/me/player/pause', {
+    method: 'PUT',
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  if (res.status === 404) throw new Error('no_device');
+  if (res.status === 204 || res.ok) return;
+  throw new Error(`pause_error_${res.status}`);
+}

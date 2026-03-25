@@ -18,6 +18,8 @@ import {
   loadDisplayName,
   refreshAccessToken,
   fetchUserProfile,
+  playSpotifyTrack,
+  pauseSpotifyPlayback,
 } from '../services/spotify';
 
 WebBrowser.maybeCompleteAuthSession();
@@ -33,9 +35,12 @@ interface SpotifyContextValue {
   displayName: string | null;
   spotifyEnabled: boolean;
   psalmMap: Record<string, string>;
+  currentlyPlayingPsalm: number | null;
   setSpotifyEnabled: (v: boolean) => void;
   connect: () => Promise<void>;
   disconnect: () => Promise<void>;
+  playPsalm: (psalmNumber: number, uri: string) => Promise<void>;
+  pausePlayback: () => Promise<void>;
 }
 
 const SpotifyContext = createContext<SpotifyContextValue>({
@@ -45,9 +50,12 @@ const SpotifyContext = createContext<SpotifyContextValue>({
   displayName: null,
   spotifyEnabled: false,
   psalmMap: staticPsalmMap as Record<string, string>,
+  currentlyPlayingPsalm: null,
   setSpotifyEnabled: () => {},
   connect: async () => {},
   disconnect: async () => {},
+  playPsalm: async () => {},
+  pausePlayback: async () => {},
 });
 
 export function useSpotify(): SpotifyContextValue {
@@ -59,11 +67,12 @@ export function useSpotify(): SpotifyContextValue {
 const ASYNC_KEY_SPOTIFY_ENABLED = 'spotify_enabled';
 
 export function SpotifyProvider({ children }: { children: React.ReactNode }) {
-  const [isConnected, setIsConnected]   = useState(false);
-  const [isConnecting, setIsConnecting] = useState(false);
-  const [connectError, setConnectError] = useState<string | null>(null);
-  const [displayName, setDisplayName]   = useState<string | null>(null);
-  const [spotifyEnabled, _setEnabled]   = useState(false);
+  const [isConnected, setIsConnected]               = useState(false);
+  const [isConnecting, setIsConnecting]             = useState(false);
+  const [connectError, setConnectError]             = useState<string | null>(null);
+  const [displayName, setDisplayName]               = useState<string | null>(null);
+  const [spotifyEnabled, _setEnabled]               = useState(false);
+  const [currentlyPlayingPsalm, setCurrentlyPlayingPsalm] = useState<number | null>(null);
 
   // Psalm map is always the static file — no runtime fetching needed
   const psalmMap = staticPsalmMap as Record<string, string>;
@@ -189,7 +198,18 @@ export function SpotifyProvider({ children }: { children: React.ReactNode }) {
     setIsConnected(false);
     setDisplayName(null);
     setConnectError(null);
+    setCurrentlyPlayingPsalm(null);
     _setEnabled(false);
+  }, []);
+
+  const playPsalm = useCallback(async (psalmNumber: number, uri: string) => {
+    await playSpotifyTrack(uri);
+    setCurrentlyPlayingPsalm(psalmNumber);
+  }, []);
+
+  const pausePlayback = useCallback(async () => {
+    await pauseSpotifyPlayback();
+    setCurrentlyPlayingPsalm(null);
   }, []);
 
   const setSpotifyEnabled = useCallback((v: boolean) => {
@@ -202,7 +222,9 @@ export function SpotifyProvider({ children }: { children: React.ReactNode }) {
     <SpotifyContext.Provider value={{
       isConnected, isConnecting, connectError,
       displayName, spotifyEnabled, psalmMap,
+      currentlyPlayingPsalm,
       setSpotifyEnabled, connect, disconnect,
+      playPsalm, pausePlayback,
     }}>
       {children}
     </SpotifyContext.Provider>

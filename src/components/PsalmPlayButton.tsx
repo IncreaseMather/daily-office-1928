@@ -3,7 +3,6 @@ import { TouchableOpacity, Text, Alert } from 'react-native';
 import { Typography } from '../theme';
 import { useTheme } from '../context/SettingsContext';
 import { useSpotify } from '../context/SpotifyContext';
-import { playSpotifyTrack } from '../services/spotify';
 
 interface Props {
   psalmNumber: number;
@@ -11,15 +10,21 @@ interface Props {
 
 export function PsalmPlayButton({ psalmNumber }: Props) {
   const { colors, sizes } = useTheme();
-  const { isConnected, spotifyEnabled, psalmMap } = useSpotify();
+  const { isConnected, spotifyEnabled, psalmMap, currentlyPlayingPsalm, playPsalm, pausePlayback } = useSpotify();
 
   const uri = psalmMap[String(psalmNumber)];
 
   if (!isConnected || !spotifyEnabled || !uri) return null;
 
+  const isPlaying = currentlyPlayingPsalm === psalmNumber;
+
   const handlePress = async () => {
     try {
-      await playSpotifyTrack(uri);
+      if (isPlaying) {
+        await pausePlayback();
+      } else {
+        await playPsalm(psalmNumber, uri);
+      }
     } catch (err: any) {
       if (err?.message === 'no_device') {
         Alert.alert(
@@ -32,7 +37,6 @@ export function PsalmPlayButton({ psalmNumber }: Props) {
           'Playback requires a Spotify Premium subscription.',
         );
       }
-      // not_authenticated and other errors are silent — user should reconnect via Settings
     }
   };
 
@@ -49,7 +53,7 @@ export function PsalmPlayButton({ psalmNumber }: Props) {
         color: colors.rubric,
         lineHeight: sizes.subheading,
       }}>
-        {'▶'}
+        {isPlaying ? '⏸' : '▶'}
       </Text>
     </TouchableOpacity>
   );
