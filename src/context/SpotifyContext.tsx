@@ -1,6 +1,7 @@
 import React, {
   createContext, useContext, useState, useEffect, useCallback, useMemo,
 } from 'react';
+import { AppState } from 'react-native';
 import * as AuthSession from 'expo-auth-session';
 import * as WebBrowser from 'expo-web-browser';
 import * as SecureStore from 'expo-secure-store';
@@ -113,6 +114,46 @@ export function SpotifyProvider({ children }: { children: React.ReactNode }) {
       if (enabled === 'true') _setEnabled(true);
     })();
   }, []);
+
+  // ── Sync playback state when app returns to foreground ───────────────────
+
+  const syncPlaybackState = useCallback(async () => {
+    const { getValidToken: gvt } = await import('../services/spotify');
+    const token = await gvt();
+    if (!token) return;
+    try {
+      const res = await fetch('https://api.spotify.com/v1/me/player', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      // 204 = no active device / nothing playing
+      if (res.status === 204 || !res.ok) {
+        setCurrentlyPlayingPsalm(null);
+        return;
+      }
+      const data = await res.json();
+      if (!data.is_playing) {
+        setCurrentlyPlayingPsalm(null);
+        return;
+      }
+      const playingUri: string | undefined = data?.item?.uri;
+      if (!playingUri) {
+        setCurrentlyPlayingPsalm(null);
+        return;
+      }
+      const map = staticPsalmMap as Record<string, string>;
+      const entry = Object.entries(map).find(([, v]) => v === playingUri);
+      setCurrentlyPlayingPsalm(entry ? Number(entry[0]) : null);
+    } catch {
+      // Network error — leave state as-is
+    }
+  }, []);
+
+  useEffect(() => {
+    const sub = AppState.addEventListener('change', (state) => {
+      if (state === 'active') syncPlaybackState();
+    });
+    return () => sub.remove();
+  }, [syncPlaybackState]);
 
   // ── Handle OAuth response ─────────────────────────────────────────────────
 

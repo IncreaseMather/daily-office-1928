@@ -1,6 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, Text, Alert } from 'react-native';
-import { Typography } from '../theme';
+import { TouchableOpacity, Text, View, Alert } from 'react-native';
 import { useTheme } from '../context/SettingsContext';
 import { useSpotify } from '../context/SpotifyContext';
 
@@ -40,21 +39,33 @@ export function PsalmPlayButton({ psalmNumber }: Props) {
     }
   };
 
+  const iconSize = sizes.rubric + 2;
+
   return (
     <TouchableOpacity
       onPress={handlePress}
       activeOpacity={0.6}
       hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-      style={{ marginLeft: 8, justifyContent: 'center' }}
+      style={{ marginLeft: 8 }}
     >
-      <Text style={{
-        fontFamily: Typography.serif,
-        fontSize: sizes.rubric,
-        color: colors.rubric,
-        lineHeight: sizes.subheading,
+      <View style={{
+        width: iconSize + 8,
+        height: iconSize + 8,
+        borderRadius: (iconSize + 8) / 2,
+        backgroundColor: colors.rubric,
+        justifyContent: 'center',
+        alignItems: 'center',
       }}>
-        {isPlaying ? '⏸' : '▶'}
-      </Text>
+        <Text style={{
+          fontSize: iconSize - 2,
+          color: colors.parchment,
+          includeFontPadding: false,
+          textAlignVertical: 'center',
+          lineHeight: iconSize,
+        }}>
+          {isPlaying ? '⏸' : '▶'}
+        </Text>
+      </View>
     </TouchableOpacity>
   );
 }
