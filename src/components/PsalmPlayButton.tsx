@@ -1,5 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Text, View, Alert } from 'react-native';
+import { Typography } from '../theme';
 import { useTheme } from '../context/SettingsContext';
 import { useSpotify } from '../context/SpotifyContext';
 
@@ -39,33 +40,35 @@ export function PsalmPlayButton({ psalmNumber }: Props) {
     }
   };
 
-  const iconSize = sizes.rubric + 2;
+  // Bar dimensions sized to visually match the play triangle
+  const barHeight = sizes.rubric;
+  const barWidth  = Math.round(barHeight * 0.22);
+  const barGap    = Math.round(barHeight * 0.18);
 
   return (
     <TouchableOpacity
       onPress={handlePress}
       activeOpacity={0.6}
       hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-      style={{ marginLeft: 8 }}
+      style={{ marginLeft: 8, justifyContent: 'center' }}
     >
-      <View style={{
-        width: iconSize + 8,
-        height: iconSize + 8,
-        borderRadius: (iconSize + 8) / 2,
-        backgroundColor: colors.rubric,
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
+      {isPlaying ? (
+        // Pause: two plain red rectangles
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: barGap }}>
+          <View style={{ width: barWidth, height: barHeight, backgroundColor: colors.rubric, borderRadius: 1 }} />
+          <View style={{ width: barWidth, height: barHeight, backgroundColor: colors.rubric, borderRadius: 1 }} />
+        </View>
+      ) : (
+        // Play: plain red triangle character
         <Text style={{
-          fontSize: iconSize - 2,
-          color: colors.parchment,
-          includeFontPadding: false,
-          textAlignVertical: 'center',
-          lineHeight: iconSize,
+          fontFamily: Typography.serif,
+          fontSize: sizes.rubric,
+          color: colors.rubric,
+          lineHeight: sizes.subheading,
         }}>
-          {isPlaying ? '⏸' : '▶'}
+          {'▶'}
         </Text>
-      </View>
+      )}
     </TouchableOpacity>
   );
 }
