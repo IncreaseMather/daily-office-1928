@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, View, Text, Switch, TouchableOpacity, Linking, Alert } from 'react-native';
+import { View, Text, Switch, TouchableOpacity, Linking, Alert } from 'react-native';
+import { ScrollableScreen } from '../components/ScrollableScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Clipboard from 'expo-clipboard';
 import QRCode from 'react-native-qrcode-svg';
@@ -218,7 +219,7 @@ export function SettingsScreen() {
   };
 
   return (
-    <ScrollView
+    <ScrollableScreen
       style={{ flex: 1, backgroundColor: colors.parchment }}
       contentContainerStyle={{ paddingHorizontal: 24, paddingTop: 28, paddingBottom: 80 }}
     >
@@ -530,6 +531,6 @@ export function SettingsScreen() {
           The lessons and readings in this app may be drawn from the following translations: the King James Version (public domain); the Revised Standard Version, copyright © National Council of Churches; the English Standard Version, copyright © Crossway; the New American Standard Bible, copyright © The Lockman Foundation; and the New King James Version, copyright © Thomas Nelson. These translations are used in small quantities for personal, devotional, and non-commercial purposes only. This app is free and will always remain free. No copyright infringement is intended. If you are a rights holder and have concerns, please contact us.
         </Text>
       </View>
-    </ScrollView>
+    </ScrollableScreen>
   );
 }

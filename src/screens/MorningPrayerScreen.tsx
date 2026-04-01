@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { ScrollView, View, Text, TouchableOpacity, Modal, Pressable, StyleSheet, Platform } from 'react-native';
+import { ScrollableScreen } from '../components/ScrollableScreen';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Typography } from '../theme';
 import { formatLiturgicalDate, formatShortDate } from '../utils/dateHelpers';
@@ -317,7 +318,7 @@ export function MorningPrayerScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.parchment }}>
-      <ScrollView ref={scrollRef} style={s.scroll} contentContainerStyle={s.content}>
+      <ScrollableScreen ref={scrollRef} style={s.scroll} contentContainerStyle={s.content}>
 
         <TouchableOpacity onPress={() => setCalOpen(true)} activeOpacity={0.65}>
           <Text style={[s.dateLabel, { textDecorationLine: 'underline' }]}>
@@ -608,7 +609,7 @@ export function MorningPrayerScreen() {
         <View style={s.closing}>
           <Text style={s.closingText}>Here endeth Morning Prayer.</Text>
         </View>
-      </ScrollView>
+      </ScrollableScreen>
 
       {/* Section nav modal */}
       <Modal transparent visible={navOpen} animationType="fade" onRequestClose={() => setNavOpen(false)}>
