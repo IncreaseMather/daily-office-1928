@@ -1,11 +1,21 @@
-import React, { useState } from 'react';
-import { ScrollView, View, Text, Switch, TouchableOpacity, Linking, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { ScrollView, View, Text, Switch, TouchableOpacity, Linking, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Clipboard from 'expo-clipboard';
 import QRCode from 'react-native-qrcode-svg';
 import { Typography } from '../theme';
 import { useSettings, useTheme } from '../context/SettingsContext';
-import { useSpotify } from '../context/SpotifyContext';
+import {
+  requestNotificationPermissions,
+  scheduleMpReminder,
+  cancelMpReminder,
+  scheduleEpReminder,
+  cancelEpReminder,
+} from '../utils/notifications';
 import type { LayAbsolution, PriestAbsolutionForm, CreedChoice, FontSize, BibleTranslation, DeuterocanonTranslation } from '../context/SettingsContext';
+
+const ASYNC_KEY_MP_REMINDER = '@settings/mpReminder';
+const ASYNC_KEY_EP_REMINDER = '@settings/epReminder';
 
 // ── Reusable sub-components ──────────────────────────────────────────────────
 
@@ -137,16 +147,56 @@ const BTC_ADDRESS = 'bc1q6d7vqadw6n6cm6wpjpt0ae9dglyfuqeutrqh8n';
 export function SettingsScreen() {
   const { colors, sizes } = useTheme();
   const [btcCopied, setBtcCopied] = useState(false);
-  const {
-    isConnected: spotifyConnected,
-    isConnecting,
-    connectError: spotifyError,
-    displayName: spotifyName,
-    spotifyEnabled,
-    setSpotifyEnabled,
-    connect: connectSpotify,
-    disconnect: disconnectSpotify,
-  } = useSpotify();
+  const [mpReminder, setMpReminder] = useState(false);
+  const [epReminder, setEpReminder] = useState(false);
+
+  useEffect(() => {
+    Promise.all([
+      AsyncStorage.getItem(ASYNC_KEY_MP_REMINDER),
+      AsyncStorage.getItem(ASYNC_KEY_EP_REMINDER),
+    ]).then(([mp, ep]) => {
+      if (mp === 'true') setMpReminder(true);
+      if (ep === 'true') setEpReminder(true);
+    });
+  }, []);
+
+  const handleMpToggle = async () => {
+    const next = !mpReminder;
+    if (next) {
+      const granted = await requestNotificationPermissions();
+      if (!granted) {
+        Alert.alert(
+          'Notifications Disabled',
+          'To receive Morning Prayer reminders, enable notifications for this app in your device Settings.',
+        );
+        return;
+      }
+      await scheduleMpReminder();
+    } else {
+      await cancelMpReminder();
+    }
+    setMpReminder(next);
+    await AsyncStorage.setItem(ASYNC_KEY_MP_REMINDER, String(next));
+  };
+
+  const handleEpToggle = async () => {
+    const next = !epReminder;
+    if (next) {
+      const granted = await requestNotificationPermissions();
+      if (!granted) {
+        Alert.alert(
+          'Notifications Disabled',
+          'To receive Evening Prayer reminders, enable notifications for this app in your device Settings.',
+        );
+        return;
+      }
+      await scheduleEpReminder();
+    } else {
+      await cancelEpReminder();
+    }
+    setEpReminder(next);
+    await AsyncStorage.setItem(ASYNC_KEY_EP_REMINDER, String(next));
+  };
   const {
     leadType, setLeadType,
     priestAbsolutionForm, setPriestAbsolutionForm,
@@ -239,13 +289,23 @@ export function SettingsScreen() {
         </Text>
       </View>
 
-      {/* ── Daily Reminders (placeholder) ─────────────────────────────────── */}
+      {/* ── Daily Reminders ───────────────────────────────────────────────── */}
       <View style={sectionStyle}>
-        <Text style={{ fontFamily: Typography.serifBold, fontSize: sizes.subheading, color: colors.ink, marginBottom: 8 }}>
+        <Text style={{ fontFamily: Typography.serifBold, fontSize: sizes.subheading, color: colors.ink, marginBottom: 12 }}>
           Daily Reminders
         </Text>
-        <Text style={{ fontFamily: Typography.serifItalic, fontSize: sizes.rubric, color: colors.inkLight, lineHeight: Math.round(sizes.rubric * 1.55) }}>
-          Daily reminders available in the full app release.
+        <SettingRow
+          label="Morning Prayer — 7:00 AM"
+          value={mpReminder}
+          onToggle={handleMpToggle}
+        />
+        <SettingRow
+          label="Evening Prayer — 7:00 PM"
+          value={epReminder}
+          onToggle={handleEpToggle}
+        />
+        <Text style={{ fontFamily: Typography.serifItalic, fontSize: sizes.rubric, color: colors.inkLight, lineHeight: Math.round(sizes.rubric * 1.55), marginTop: 4 }}>
+          Daily notifications will include an opening sentence from the current liturgical season.
         </Text>
       </View>
 
@@ -338,134 +398,6 @@ export function SettingsScreen() {
           <Text style={{ fontFamily: Typography.serifItalic, fontSize: sizes.rubric, color: colors.inkLight, lineHeight: Math.round(sizes.rubric * 1.55), marginTop: 8 }}>
             * The Athanasian Creed (Quicunque Vult) does not appear in the 1928 American Book of Common Prayer. It is included here as a historical Anglican creed for optional use.
           </Text>
-        )}
-      </View>
-
-      {/* ── Spotify ───────────────────────────────────────────────────────── */}
-      <View style={sectionStyle}>
-        <Text style={{
-          fontFamily: Typography.serifBold,
-          fontSize: sizes.subheading,
-          color: colors.ink,
-          marginBottom: 8,
-        }}>
-          Spotify
-        </Text>
-
-        {spotifyConnected ? (
-          <>
-            <Text style={{
-              fontFamily: Typography.serifItalic,
-              fontSize: sizes.rubric,
-              color: colors.inkLight,
-              marginBottom: 4,
-            }}>
-              Connected as {spotifyName}
-            </Text>
-            <TouchableOpacity
-              style={{
-                alignSelf: 'center',
-                paddingVertical: 8,
-                paddingHorizontal: 20,
-                borderRadius: 4,
-                borderWidth: 1,
-                borderColor: colors.rule,
-                marginBottom: 16,
-              }}
-              onPress={disconnectSpotify}
-              activeOpacity={0.65}
-            >
-              <Text style={{
-                fontFamily: Typography.serifItalic,
-                fontSize: sizes.rubric,
-                color: colors.inkLight,
-              }}>
-                Disconnect
-              </Text>
-            </TouchableOpacity>
-
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-              <Text style={{ fontFamily: Typography.serif, fontSize: sizes.body, color: colors.ink, flex: 1 }}>
-                Play Psalm chants via Spotify
-              </Text>
-              <Switch
-                value={spotifyEnabled}
-                onValueChange={setSpotifyEnabled}
-                trackColor={{ false: colors.rule, true: colors.inkLight }}
-                thumbColor={colors.parchment}
-              />
-            </View>
-            <Text style={{
-              fontFamily: Typography.serifItalic,
-              fontSize: sizes.rubric,
-              color: colors.inkLight,
-              lineHeight: Math.round(sizes.rubric * 1.55),
-            }}>
-              Requires Spotify Premium for full playback.
-            </Text>
-          </>
-        ) : (
-          <>
-            <Text style={{
-              fontFamily: Typography.serifItalic,
-              fontSize: sizes.rubric,
-              color: colors.inkLight,
-              lineHeight: Math.round(sizes.rubric * 1.55),
-              marginBottom: 14,
-            }}>
-              Connect to play Anglican chant recordings of the appointed Psalms.
-            </Text>
-            <TouchableOpacity
-              style={{
-                alignSelf: 'center',
-                paddingVertical: 10,
-                paddingHorizontal: 24,
-                borderRadius: 4,
-                borderWidth: 1,
-                borderColor: colors.rubric,
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}
-              onPress={connectSpotify}
-              disabled={isConnecting}
-              activeOpacity={0.65}
-            >
-              {isConnecting ? (
-                <ActivityIndicator
-                  size="small"
-                  color={colors.rubric}
-                  style={{ marginRight: 8 }}
-                />
-              ) : null}
-              <Text style={{
-                fontFamily: Typography.serifItalic,
-                fontSize: sizes.body,
-                color: colors.rubric,
-                letterSpacing: 0.3,
-              }}>
-                {isConnecting ? 'Connecting…' : 'Connect Spotify'}
-              </Text>
-            </TouchableOpacity>
-            <Text style={{
-              fontFamily: Typography.serifItalic,
-              fontSize: sizes.rubric,
-              color: colors.inkLight,
-              marginTop: 10,
-            }}>
-              Requires Spotify Premium for full playback.
-            </Text>
-            {spotifyError ? (
-              <Text style={{
-                fontFamily: Typography.serifItalic,
-                fontSize: sizes.rubric,
-                color: colors.rubric,
-                marginTop: 10,
-                textAlign: 'center',
-              }}>
-                {spotifyError}
-              </Text>
-            ) : null}
-          </>
         )}
       </View>
 

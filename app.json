@@ -1,41 +1,40 @@
 {
-  "plugins": [
-    "expo-asset",
-    "expo-font",
-    "expo-notifications"
-  ],
-  "extra": {
-    "eas": {
-      "projectId": "9e768fee-eb59-47a7-a90e-75874248d570"
-    }
-  },
   "expo": {
     "name": "1928 Daily Office",
     "slug": "daily-office-1928",
-    "scheme": "dailyoffice1928",
+    "version": "1.0.0",
+    "orientation": "portrait",
     "description": "The 1928 American Book of Common Prayer Daily Office for Morning and Evening Prayer",
-    "android": {
-      "package": "com.increasemather.dailyoffice1928",
-      "intentFilters": [
-        {
-          "action": "VIEW",
-          "autoVerify": true,
-          "data": [{ "scheme": "dailyoffice1928" }],
-          "category": ["BROWSABLE", "DEFAULT"]
-        }
-      ]
+    "icon": "./icon.png",
+    "splash": {
+      "image": "./icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#F5F0E8"
     },
     "ios": {
-      "bundleIdentifier": "com.increasemather.dailyoffice1928"
+      "bundleIdentifier": "com.increasemather.dailyoffice1928",
+      "supportsTablet": false,
+      "infoPlist": {
+        "NSCameraUsageDescription": false
+      }
     },
-    "extra": {
-      "eas": {
-        "projectId": "3f951bc2-0fac-4172-9442-a629041790ec"
+    "android": {
+      "package": "com.increasemather.dailyoffice1928",
+      "adaptiveIcon": {
+        "foregroundImage": "./icon.png",
+        "backgroundColor": "#F5F0E8"
       }
     },
     "plugins": [
-      "expo-secure-store",
-      "expo-web-browser"
-    ]
+      "expo-asset",
+      "expo-font",
+      "expo-notifications"
+    ],
+    "extra": {
+      "privacyPolicyUrl": "https://your-privacy-policy-url-here.com",
+      "eas": {
+        "projectId": "3f951bc2-0fac-4172-9442-a629041790ec"
+      }
+    }
   }
 }

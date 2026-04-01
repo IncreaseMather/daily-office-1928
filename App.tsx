@@ -19,7 +19,7 @@ import { Colors, DarkColors, Typography } from './src/theme';
 import { getInitialOffice } from './src/utils/dateHelpers';
 import { SettingsProvider, useTheme } from './src/context/SettingsContext';
 import { SelectedDateProvider } from './src/context/SelectedDateContext';
-import { SpotifyProvider } from './src/context/SpotifyContext';
+import { rescheduleActiveReminders } from './src/utils/notifications';
 
 // ── Navigation themes ─────────────────────────────────────────────────────────
 // Passing a `theme` to NavigationContainer propagates colors to all navigation
@@ -68,6 +68,7 @@ function OfficeSwitcher() {
   const appStateRef = useRef(AppState.currentState);
 
   useEffect(() => {
+    rescheduleActiveReminders();
     const sub = AppState.addEventListener('change', (nextState) => {
       if (
         appStateRef.current.match(/inactive|background/) &&
@@ -75,6 +76,7 @@ function OfficeSwitcher() {
       ) {
         const office = new Date().getHours() < 12 ? 'Morning Prayer' : 'Evening Prayer';
         navigation.navigate(office);
+        rescheduleActiveReminders();
       }
       appStateRef.current = nextState;
     });
@@ -170,11 +172,9 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <SettingsProvider>
-        <SpotifyProvider>
-          <SelectedDateProvider>
-            <AppInner />
-          </SelectedDateProvider>
-        </SpotifyProvider>
+        <SelectedDateProvider>
+          <AppInner />
+        </SelectedDateProvider>
       </SettingsProvider>
     </SafeAreaProvider>
   );
