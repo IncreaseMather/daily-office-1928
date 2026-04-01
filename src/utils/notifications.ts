@@ -2,6 +2,15 @@ import * as Notifications from 'expo-notifications';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getLiturgicalSeason, type LiturgicalSeason } from './liturgicalCalendar';
 
+// ── AsyncStorage keys (exported so SettingsScreen can share them) ─────────────
+
+export const ASYNC_KEY_MP_REMINDER = '@settings/mpReminder';
+export const ASYNC_KEY_EP_REMINDER = '@settings/epReminder';
+export const ASYNC_KEY_MP_HOUR     = '@settings/mpHour';
+export const ASYNC_KEY_MP_MINUTES  = '@settings/mpMinutes';
+export const ASYNC_KEY_EP_HOUR     = '@settings/epHour';
+export const ASYNC_KEY_EP_MINUTES  = '@settings/epMinutes';
+
 const MP_ID_KEY = '@notif/mpId';
 const EP_ID_KEY = '@notif/epId';
 
@@ -56,7 +65,11 @@ async function cancelById(storageKey: string) {
 
 // ── Schedule / cancel ─────────────────────────────────────────────────────────
 
-export async function scheduleMpReminder(): Promise<void> {
+/**
+ * hour24  — 24-hour clock value (0–23)
+ * minute  — minute value (0–59)
+ */
+export async function scheduleMpReminder(hour24: number, minute: number): Promise<void> {
   await cancelById(MP_ID_KEY);
   const season = getLiturgicalSeason(new Date());
   const id = await Notifications.scheduleNotificationAsync({
@@ -66,8 +79,8 @@ export async function scheduleMpReminder(): Promise<void> {
     },
     trigger: {
       type: Notifications.SchedulableTriggerInputTypes.DAILY,
-      hour: 7,
-      minute: 0,
+      hour: hour24,
+      minute,
     },
   });
   await AsyncStorage.setItem(MP_ID_KEY, id);
@@ -77,7 +90,7 @@ export async function cancelMpReminder(): Promise<void> {
   await cancelById(MP_ID_KEY);
 }
 
-export async function scheduleEpReminder(): Promise<void> {
+export async function scheduleEpReminder(hour24: number, minute: number): Promise<void> {
   await cancelById(EP_ID_KEY);
   const season = getLiturgicalSeason(new Date());
   const id = await Notifications.scheduleNotificationAsync({
@@ -87,8 +100,8 @@ export async function scheduleEpReminder(): Promise<void> {
     },
     trigger: {
       type: Notifications.SchedulableTriggerInputTypes.DAILY,
-      hour: 19,
-      minute: 0,
+      hour: hour24,
+      minute,
     },
   });
   await AsyncStorage.setItem(EP_ID_KEY, id);
@@ -99,14 +112,27 @@ export async function cancelEpReminder(): Promise<void> {
 }
 
 /**
- * Called on app launch to keep notification bodies current with the liturgical
- * season. Re-schedules any active reminders so the season sentence updates.
+ * Called on app launch / foreground. Re-schedules active reminders so the
+ * seasonal opening sentence and saved time stay current.
  */
 export async function rescheduleActiveReminders(): Promise<void> {
-  const [mpId, epId] = await Promise.all([
+  const [mpId, epId, mpH, mpM, epH, epM] = await Promise.all([
     AsyncStorage.getItem(MP_ID_KEY),
     AsyncStorage.getItem(EP_ID_KEY),
+    AsyncStorage.getItem(ASYNC_KEY_MP_HOUR),
+    AsyncStorage.getItem(ASYNC_KEY_MP_MINUTES),
+    AsyncStorage.getItem(ASYNC_KEY_EP_HOUR),
+    AsyncStorage.getItem(ASYNC_KEY_EP_MINUTES),
   ]);
-  if (mpId) await scheduleMpReminder();
-  if (epId) await scheduleEpReminder();
+
+  if (mpId) {
+    const h = parseInt(mpH ?? '7', 10);
+    const m = parseInt(mpM ?? '0', 10);
+    await scheduleMpReminder(h === 12 ? 0 : h, m);
+  }
+  if (epId) {
+    const h = parseInt(epH ?? '7', 10);
+    const m = parseInt(epM ?? '0', 10);
+    await scheduleEpReminder(h === 12 ? 12 : h + 12, m);
+  }
 }

@@ -31,7 +31,7 @@
       "expo-notifications"
     ],
     "extra": {
-      "privacyPolicyUrl": "https://your-privacy-policy-url-here.com",
+      "privacyPolicyUrl": "https://increasemather.github.io/dailyoffice-privacy",
       "eas": {
         "projectId": "3f951bc2-0fac-4172-9442-a629041790ec"
       }

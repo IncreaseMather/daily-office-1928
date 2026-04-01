@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Switch, TouchableOpacity, Linking, Alert } from 'react-native';
+import { View, Text, Switch, TouchableOpacity, TextInput, Linking, Alert } from 'react-native';
 import { ScrollableScreen } from '../components/ScrollableScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Clipboard from 'expo-clipboard';
@@ -12,11 +12,18 @@ import {
   cancelMpReminder,
   scheduleEpReminder,
   cancelEpReminder,
+  ASYNC_KEY_MP_REMINDER,
+  ASYNC_KEY_EP_REMINDER,
+  ASYNC_KEY_MP_HOUR,
+  ASYNC_KEY_MP_MINUTES,
+  ASYNC_KEY_EP_HOUR,
+  ASYNC_KEY_EP_MINUTES,
 } from '../utils/notifications';
 import type { LayAbsolution, PriestAbsolutionForm, CreedChoice, FontSize, BibleTranslation, DeuterocanonTranslation } from '../context/SettingsContext';
 
-const ASYNC_KEY_MP_REMINDER = '@settings/mpReminder';
-const ASYNC_KEY_EP_REMINDER = '@settings/epReminder';
+// 12-hour → 24-hour conversion
+function toHour24AM(h: number): number { return h === 12 ? 0 : h; }
+function toHour24PM(h: number): number { return h === 12 ? 12 : h + 12; }
 
 // ── Reusable sub-components ──────────────────────────────────────────────────
 
@@ -150,53 +157,145 @@ export function SettingsScreen() {
   const [btcCopied, setBtcCopied] = useState(false);
   const [mpReminder, setMpReminder] = useState(false);
   const [epReminder, setEpReminder] = useState(false);
+  const [mpHour,    setMpHour]    = useState('7');
+  const [mpMinute,  setMpMinute]  = useState('00');
+  const [epHour,    setEpHour]    = useState('7');
+  const [epMinute,  setEpMinute]  = useState('00');
 
   useEffect(() => {
     Promise.all([
       AsyncStorage.getItem(ASYNC_KEY_MP_REMINDER),
       AsyncStorage.getItem(ASYNC_KEY_EP_REMINDER),
-    ]).then(([mp, ep]) => {
-      if (mp === 'true') setMpReminder(true);
-      if (ep === 'true') setEpReminder(true);
+      AsyncStorage.getItem(ASYNC_KEY_MP_HOUR),
+      AsyncStorage.getItem(ASYNC_KEY_MP_MINUTES),
+      AsyncStorage.getItem(ASYNC_KEY_EP_HOUR),
+      AsyncStorage.getItem(ASYNC_KEY_EP_MINUTES),
+    ]).then(([mp, ep, mph, mpm, eph, epm]) => {
+      if (mp  === 'true') setMpReminder(true);
+      if (ep  === 'true') setEpReminder(true);
+      if (mph) setMpHour(mph);
+      if (mpm) setMpMinute(mpm);
+      if (eph) setEpHour(eph);
+      if (epm) setEpMinute(epm);
     });
   }, []);
 
+  // ── Toggle handlers — state updated immediately to prevent Switch glitch ───
+
   const handleMpToggle = async () => {
     const next = !mpReminder;
+    setMpReminder(next); // optimistic update so Switch doesn't snap back
     if (next) {
       const granted = await requestNotificationPermissions();
       if (!granted) {
+        setMpReminder(false);
+        await AsyncStorage.setItem(ASYNC_KEY_MP_REMINDER, 'false');
         Alert.alert(
           'Notifications Disabled',
           'To receive Morning Prayer reminders, enable notifications for this app in your device Settings.',
         );
         return;
       }
-      await scheduleMpReminder();
+      const h = parseInt(mpHour, 10) || 7;
+      const m = parseInt(mpMinute, 10) || 0;
+      await scheduleMpReminder(toHour24AM(h), m);
     } else {
       await cancelMpReminder();
     }
-    setMpReminder(next);
     await AsyncStorage.setItem(ASYNC_KEY_MP_REMINDER, String(next));
   };
 
   const handleEpToggle = async () => {
     const next = !epReminder;
+    setEpReminder(next);
     if (next) {
       const granted = await requestNotificationPermissions();
       if (!granted) {
+        setEpReminder(false);
+        await AsyncStorage.setItem(ASYNC_KEY_EP_REMINDER, 'false');
         Alert.alert(
           'Notifications Disabled',
           'To receive Evening Prayer reminders, enable notifications for this app in your device Settings.',
         );
         return;
       }
-      await scheduleEpReminder();
+      const h = parseInt(epHour, 10) || 7;
+      const m = parseInt(epMinute, 10) || 0;
+      await scheduleEpReminder(toHour24PM(h), m);
     } else {
       await cancelEpReminder();
     }
-    setEpReminder(next);
     await AsyncStorage.setItem(ASYNC_KEY_EP_REMINDER, String(next));
+  };
+
+  // ── Time input handlers — changing time auto-disables the toggle ───────────
+
+  const disableMpReminder = () => {
+    setMpReminder(false);
+    cancelMpReminder();
+    AsyncStorage.setItem(ASYNC_KEY_MP_REMINDER, 'false');
+  };
+
+  const disableEpReminder = () => {
+    setEpReminder(false);
+    cancelEpReminder();
+    AsyncStorage.setItem(ASYNC_KEY_EP_REMINDER, 'false');
+  };
+
+  const handleMpHourChange = (text: string) => {
+    const digits = text.replace(/\D/g, '').slice(0, 2);
+    setMpHour(digits);
+    if (mpReminder) disableMpReminder();
+    AsyncStorage.setItem(ASYNC_KEY_MP_HOUR, digits);
+  };
+
+  const handleMpHourBlur = () => {
+    const n = parseInt(mpHour, 10);
+    const clamped = isNaN(n) || n < 1 ? '1' : n > 12 ? '12' : String(n);
+    setMpHour(clamped);
+    AsyncStorage.setItem(ASYNC_KEY_MP_HOUR, clamped);
+  };
+
+  const handleMpMinuteChange = (text: string) => {
+    const digits = text.replace(/\D/g, '').slice(0, 2);
+    setMpMinute(digits);
+    if (mpReminder) disableMpReminder();
+    AsyncStorage.setItem(ASYNC_KEY_MP_MINUTES, digits);
+  };
+
+  const handleMpMinuteBlur = () => {
+    const n = parseInt(mpMinute, 10);
+    const padded = isNaN(n) || n < 0 ? '00' : n > 59 ? '59' : String(n).padStart(2, '0');
+    setMpMinute(padded);
+    AsyncStorage.setItem(ASYNC_KEY_MP_MINUTES, padded);
+  };
+
+  const handleEpHourChange = (text: string) => {
+    const digits = text.replace(/\D/g, '').slice(0, 2);
+    setEpHour(digits);
+    if (epReminder) disableEpReminder();
+    AsyncStorage.setItem(ASYNC_KEY_EP_HOUR, digits);
+  };
+
+  const handleEpHourBlur = () => {
+    const n = parseInt(epHour, 10);
+    const clamped = isNaN(n) || n < 1 ? '1' : n > 12 ? '12' : String(n);
+    setEpHour(clamped);
+    AsyncStorage.setItem(ASYNC_KEY_EP_HOUR, clamped);
+  };
+
+  const handleEpMinuteChange = (text: string) => {
+    const digits = text.replace(/\D/g, '').slice(0, 2);
+    setEpMinute(digits);
+    if (epReminder) disableEpReminder();
+    AsyncStorage.setItem(ASYNC_KEY_EP_MINUTES, digits);
+  };
+
+  const handleEpMinuteBlur = () => {
+    const n = parseInt(epMinute, 10);
+    const padded = isNaN(n) || n < 0 ? '00' : n > 59 ? '59' : String(n).padStart(2, '0');
+    setEpMinute(padded);
+    AsyncStorage.setItem(ASYNC_KEY_EP_MINUTES, padded);
   };
   const {
     leadType, setLeadType,
@@ -295,18 +394,107 @@ export function SettingsScreen() {
         <Text style={{ fontFamily: Typography.serifBold, fontSize: sizes.subheading, color: colors.ink, marginBottom: 12 }}>
           Daily Reminders
         </Text>
+
+        {/* Morning Prayer */}
         <SettingRow
-          label="Morning Prayer — 7:00 AM"
+          label="Morning Prayer"
           value={mpReminder}
           onToggle={handleMpToggle}
         />
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16, paddingLeft: 2 }}>
+          <TextInput
+            value={mpHour}
+            onChangeText={handleMpHourChange}
+            onBlur={handleMpHourBlur}
+            keyboardType="number-pad"
+            maxLength={2}
+            selectTextOnFocus
+            style={{
+              fontFamily: Typography.serif,
+              fontSize: sizes.body,
+              color: colors.ink,
+              width: 32,
+              textAlign: 'center',
+              borderBottomWidth: 1,
+              borderBottomColor: colors.rule,
+              paddingVertical: 2,
+              includeFontPadding: false,
+            }}
+          />
+          <Text style={{ fontFamily: Typography.serif, fontSize: sizes.body, color: colors.inkLight, marginHorizontal: 4 }}>:</Text>
+          <TextInput
+            value={mpMinute}
+            onChangeText={handleMpMinuteChange}
+            onBlur={handleMpMinuteBlur}
+            keyboardType="number-pad"
+            maxLength={2}
+            selectTextOnFocus
+            style={{
+              fontFamily: Typography.serif,
+              fontSize: sizes.body,
+              color: colors.ink,
+              width: 32,
+              textAlign: 'center',
+              borderBottomWidth: 1,
+              borderBottomColor: colors.rule,
+              paddingVertical: 2,
+              includeFontPadding: false,
+            }}
+          />
+          <Text style={{ fontFamily: Typography.serif, fontSize: sizes.body, color: colors.inkLight, marginLeft: 8 }}>AM</Text>
+        </View>
+
+        {/* Evening Prayer */}
         <SettingRow
-          label="Evening Prayer — 7:00 PM"
+          label="Evening Prayer"
           value={epReminder}
           onToggle={handleEpToggle}
         />
-        <Text style={{ fontFamily: Typography.serifItalic, fontSize: sizes.rubric, color: colors.inkLight, lineHeight: Math.round(sizes.rubric * 1.55), marginTop: 4 }}>
-          Daily notifications will include an opening sentence from the current liturgical season.
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12, paddingLeft: 2 }}>
+          <TextInput
+            value={epHour}
+            onChangeText={handleEpHourChange}
+            onBlur={handleEpHourBlur}
+            keyboardType="number-pad"
+            maxLength={2}
+            selectTextOnFocus
+            style={{
+              fontFamily: Typography.serif,
+              fontSize: sizes.body,
+              color: colors.ink,
+              width: 32,
+              textAlign: 'center',
+              borderBottomWidth: 1,
+              borderBottomColor: colors.rule,
+              paddingVertical: 2,
+              includeFontPadding: false,
+            }}
+          />
+          <Text style={{ fontFamily: Typography.serif, fontSize: sizes.body, color: colors.inkLight, marginHorizontal: 4 }}>:</Text>
+          <TextInput
+            value={epMinute}
+            onChangeText={handleEpMinuteChange}
+            onBlur={handleEpMinuteBlur}
+            keyboardType="number-pad"
+            maxLength={2}
+            selectTextOnFocus
+            style={{
+              fontFamily: Typography.serif,
+              fontSize: sizes.body,
+              color: colors.ink,
+              width: 32,
+              textAlign: 'center',
+              borderBottomWidth: 1,
+              borderBottomColor: colors.rule,
+              paddingVertical: 2,
+              includeFontPadding: false,
+            }}
+          />
+          <Text style={{ fontFamily: Typography.serif, fontSize: sizes.body, color: colors.inkLight, marginLeft: 8 }}>PM</Text>
+        </View>
+
+        <Text style={{ fontFamily: Typography.serifItalic, fontSize: sizes.rubric, color: colors.inkLight, lineHeight: Math.round(sizes.rubric * 1.55) }}>
+          Changing the time turns off the reminder. Re-enable the toggle to schedule it at the new time.
         </Text>
       </View>
 
