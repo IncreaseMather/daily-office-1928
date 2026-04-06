@@ -11,8 +11,10 @@ export const ASYNC_KEY_MP_MINUTES  = '@settings/mpMinutes';
 export const ASYNC_KEY_EP_HOUR     = '@settings/epHour';
 export const ASYNC_KEY_EP_MINUTES  = '@settings/epMinutes';
 
-const MP_ID_KEY = '@notif/mpId';
-const EP_ID_KEY = '@notif/epId';
+// Fixed identifiers so cancellation always targets the right notification,
+// regardless of whether the stored ID ever gets out of sync.
+const MP_NOTIF_ID = 'morning-prayer-reminder';
+const EP_NOTIF_ID = 'evening-prayer-reminder';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -55,14 +57,6 @@ export async function requestNotificationPermissions(): Promise<boolean> {
   return status === 'granted';
 }
 
-async function cancelById(storageKey: string) {
-  const id = await AsyncStorage.getItem(storageKey);
-  if (id) {
-    await Notifications.cancelScheduledNotificationAsync(id).catch(() => {});
-    await AsyncStorage.removeItem(storageKey);
-  }
-}
-
 // ── Schedule / cancel ─────────────────────────────────────────────────────────
 
 /**
@@ -70,9 +64,10 @@ async function cancelById(storageKey: string) {
  * minute  — minute value (0–59)
  */
 export async function scheduleMpReminder(hour24: number, minute: number): Promise<void> {
-  await cancelById(MP_ID_KEY);
+  await Notifications.cancelScheduledNotificationAsync(MP_NOTIF_ID).catch(() => {});
   const season = getLiturgicalSeason(new Date());
-  const id = await Notifications.scheduleNotificationAsync({
+  await Notifications.scheduleNotificationAsync({
+    identifier: MP_NOTIF_ID,
     content: {
       title: 'Time for Morning Prayer',
       body: MORNING_SENTENCES[season],
@@ -83,17 +78,17 @@ export async function scheduleMpReminder(hour24: number, minute: number): Promis
       minute,
     },
   });
-  await AsyncStorage.setItem(MP_ID_KEY, id);
 }
 
 export async function cancelMpReminder(): Promise<void> {
-  await cancelById(MP_ID_KEY);
+  await Notifications.cancelScheduledNotificationAsync(MP_NOTIF_ID).catch(() => {});
 }
 
 export async function scheduleEpReminder(hour24: number, minute: number): Promise<void> {
-  await cancelById(EP_ID_KEY);
+  await Notifications.cancelScheduledNotificationAsync(EP_NOTIF_ID).catch(() => {});
   const season = getLiturgicalSeason(new Date());
-  const id = await Notifications.scheduleNotificationAsync({
+  await Notifications.scheduleNotificationAsync({
+    identifier: EP_NOTIF_ID,
     content: {
       title: 'Time for Evening Prayer',
       body: EVENING_SENTENCES[season],
@@ -104,35 +99,38 @@ export async function scheduleEpReminder(hour24: number, minute: number): Promis
       minute,
     },
   });
-  await AsyncStorage.setItem(EP_ID_KEY, id);
 }
 
 export async function cancelEpReminder(): Promise<void> {
-  await cancelById(EP_ID_KEY);
+  await Notifications.cancelScheduledNotificationAsync(EP_NOTIF_ID).catch(() => {});
 }
 
 /**
  * Called on app launch / foreground. Re-schedules active reminders so the
- * seasonal opening sentence and saved time stay current.
+ * seasonal opening sentence stays current for that day's liturgical season.
+ * Checks the user's saved preference (not a stored notification ID) so that
+ * a cancelled reminder is never silently revived.
  */
 export async function rescheduleActiveReminders(): Promise<void> {
-  const [mpId, epId, mpH, mpM, epH, epM] = await Promise.all([
-    AsyncStorage.getItem(MP_ID_KEY),
-    AsyncStorage.getItem(EP_ID_KEY),
+  const [mpEnabled, epEnabled, mpH, mpM, epH, epM] = await Promise.all([
+    AsyncStorage.getItem(ASYNC_KEY_MP_REMINDER),
+    AsyncStorage.getItem(ASYNC_KEY_EP_REMINDER),
     AsyncStorage.getItem(ASYNC_KEY_MP_HOUR),
     AsyncStorage.getItem(ASYNC_KEY_MP_MINUTES),
     AsyncStorage.getItem(ASYNC_KEY_EP_HOUR),
     AsyncStorage.getItem(ASYNC_KEY_EP_MINUTES),
   ]);
 
-  if (mpId) {
+  if (mpEnabled === 'true') {
     const h = parseInt(mpH ?? '7', 10);
     const m = parseInt(mpM ?? '0', 10);
+    // Stored hour is 12-hour AM value; convert to 24-hour
     await scheduleMpReminder(h === 12 ? 0 : h, m);
   }
-  if (epId) {
+  if (epEnabled === 'true') {
     const h = parseInt(epH ?? '7', 10);
     const m = parseInt(epM ?? '0', 10);
+    // Stored hour is 12-hour PM value; convert to 24-hour
     await scheduleEpReminder(h === 12 ? 12 : h + 12, m);
   }
 }

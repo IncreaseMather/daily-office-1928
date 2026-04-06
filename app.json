@@ -15,7 +15,8 @@
       "bundleIdentifier": "com.increasemather.dailyoffice1928",
       "supportsTablet": false,
       "infoPlist": {
-        "NSCameraUsageDescription": false
+        "NSCameraUsageDescription": false,
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
