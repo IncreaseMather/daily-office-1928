@@ -227,6 +227,20 @@ export function showGloriaPatri(season: LiturgicalSeason): boolean {
   return season !== 'Advent' && season !== 'Lent' && season !== 'Pre-Lent';
 }
 
+/** Returns the traditional Anglican display label for a liturgical season. */
+export function getSeasonDisplayLabel(season: LiturgicalSeason): string {
+  const labels: Record<LiturgicalSeason, string> = {
+    Advent:    'Advent',
+    Christmas: 'Christmastide',
+    Epiphany:  'Epiphanytide',
+    'Pre-Lent': 'Pre-Lent',
+    Lent:      'Lent',
+    Easter:    'Eastertide',
+    Trinity:   'Trinitytide',
+  };
+  return labels[season];
+}
+
 // ─── Proper collect helpers ────────────────────────────────────────────────
 
 export type ProperCollectKey =
@@ -412,6 +426,66 @@ export function getProperCollectKey(date: Date): ProperCollectKey | null {
   // ── 4. Weekday: fall back to most recent Sunday's collect ─────────────────
   const prevSunday = new Date(year, date.getMonth(), day - dow);
   return getProperCollectKey(prevSunday); // safe: prevSunday is always a Sunday (dow === 0)
+}
+
+/**
+ * Returns all collect keys appointed for the given date, in order.
+ *
+ * Rules (1928 BCP):
+ *  - Moveable principal feasts / Holy Week days → single collect
+ *  - Fixed feasts (saints' days, etc.) → [feast collect, week's Sunday collect]
+ *    so that both are read; if the feast IS on a Sunday the week collect is its
+ *    own proper Sunday collect (which may differ from the feast collect).
+ *  - National observances (Independence Day, Thanksgiving) → single collect
+ *  - Ordinary Sundays → single collect
+ *  - Ordinary weekdays → single collect (preceding Sunday's)
+ */
+export function getProperCollectKeys(date: Date): ProperCollectKey[] {
+  const dfe  = daysFromEasterFor(date);
+  const month = date.getMonth() + 1;
+  const day   = date.getDate();
+  const year  = date.getFullYear();
+  const dow   = date.getDay();
+
+  // ── 1. Moveable feasts ────────────────────────────────────────────────────
+  if (dfe === -46) return ['ashWednesday'];
+  if (dfe === -7)  return ['palmSunday'];
+  if (dfe === -6)  return ['holyMonday'];
+  if (dfe === -5)  return ['holyTuesday'];
+  if (dfe === -4)  return ['holyWednesday'];
+  if (dfe === -3)  return ['maundyThursday'];
+  if (dfe === -2)  return ['goodFriday'];
+  if (dfe === -1)  return ['holySaturday'];
+  if (dfe >= 0  && dfe <= 6)  return ['easterDay'];
+  if (dfe === 39)             return ['ascensionDay'];
+  if (dfe >= 40 && dfe <= 41) return ['ascensionDay'];
+  if (dfe >= 43 && dfe <= 48) return ['ascensionDay'];
+  if (dfe === 49)             return ['whitsunday'];
+  if (dfe === 56)             return ['trinitySunday'];
+
+  // ── 2. Fixed feasts → feast collect + week Sunday collect ─────────────────
+  const fixedKey = FIXED_FEAST_COLLECT_KEYS[`${month}-${day}`];
+  if (fixedKey) {
+    const sundayDate = dow === 0 ? date : new Date(year, date.getMonth(), day - dow);
+    const weekKey = getSundayCollectKey(sundayDate);
+    if (weekKey && weekKey !== fixedKey) return [fixedKey, weekKey];
+    return [fixedKey];
+  }
+
+  // ── 3. National observances (single collect) ──────────────────────────────
+  const thanksgiving = getThanksgivingDay(year);
+  if (month === 11 && day === thanksgiving.getDate()) return ['thanksgivingDay'];
+
+  // ── 4. Named Sunday ───────────────────────────────────────────────────────
+  if (dow === 0) {
+    const k = getSundayCollectKey(date);
+    return k ? [k] : [];
+  }
+
+  // ── 5. Weekday: preceding Sunday's collect ────────────────────────────────
+  const prevSunday = new Date(year, date.getMonth(), day - dow);
+  const k = getSundayCollectKey(prevSunday);
+  return k ? [k] : [];
 }
 
 /**

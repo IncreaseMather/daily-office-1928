@@ -7,9 +7,9 @@ import { formatLiturgicalDate, formatShortDate } from '../utils/dateHelpers';
 import { useSelectedDate } from '../context/SelectedDateContext';
 import { CalendarPicker } from '../components/CalendarPicker';
 import {
-  getLiturgicalSeason, showGloriaPatri,
+  getLiturgicalSeason, showGloriaPatri, getSeasonDisplayLabel,
   isGoodFriday, isAscensiontide, isWhitsuntide, isTrinitySunday,
-  getProperCollectKey, showLentDailyCollect,
+  getProperCollectKeys, showLentDailyCollect,
   getFeastDay, getAppointedPsalmsKey,
 } from '../utils/liturgicalCalendar';
 import {
@@ -189,8 +189,8 @@ export function EveningPrayerScreen() {
   if (shorterForm) return <ShorterFormScreen type="evening" />;
 
   const proper = (collectsData as any).proper;
-  const properCollectKey = getProperCollectKey(today);
-  const properCollectText: string | null = properCollectKey ? proper[properCollectKey] : null;
+  const properCollectKeys = getProperCollectKeys(today);
+  const properCollectTexts: string[] = properCollectKeys.map(k => proper[k]).filter(Boolean);
   const appendLentCollect = showLentDailyCollect(today);
 
   const absolution = (collectsData.common as any).absolution[priestAbsolutionForm as PriestAbsolutionForm];
@@ -295,7 +295,7 @@ export function EveningPrayerScreen() {
           </Text>
         </TouchableOpacity>
         <Text style={s.officeTitle}>Evening Prayer</Text>
-        <Text style={s.seasonLabel}>{season}</Text>
+        <Text style={s.seasonLabel}>{getSeasonDisplayLabel(season)}</Text>
         {feastDay && <Text style={s.holyDayLabel}>{feastDay.name}</Text>}
         {!isViewingToday && (
           <TouchableOpacity onPress={resetToToday} activeOpacity={0.7}>
@@ -494,8 +494,13 @@ export function EveningPrayerScreen() {
         <View onLayout={markSection('collects')}>
           <Section title="The Collect of the Day">
             <RubricText text="Then shall follow the Collect of the Day." />
-            {properCollectText ? (
-              <BodyText text={properCollectText} />
+            {properCollectTexts.length > 0 ? (
+              properCollectTexts.map((text, i) => (
+                <React.Fragment key={i}>
+                  {i > 0 && <View style={s.spacer} />}
+                  <BodyText text={text} />
+                </React.Fragment>
+              ))
             ) : (
               <RubricText noMark text="[Proper Collect — to be added]" />
             )}
