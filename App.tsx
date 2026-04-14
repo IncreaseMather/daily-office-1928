@@ -139,21 +139,23 @@ function TabNavigator() {
         options={{
           headerTitle: () => (
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-              <Svg width={24} height={20} viewBox="0 0 24 20">
-                <Circle cx="12" cy="10" r="4" stroke={colors.ink} strokeWidth="1.5" fill="none" />
-                <Path d="M1 16 L23 16" stroke={colors.ink} strokeWidth="1.5" strokeLinecap="round" fill="none" />
-                <Path d="M12 4 L12 2" stroke={colors.ink} strokeWidth="1.5" strokeLinecap="round" />
-                <Path d="M6.5 6.5 L5 5" stroke={colors.ink} strokeWidth="1.5" strokeLinecap="round" />
-                <Path d="M17.5 6.5 L19 5" stroke={colors.ink} strokeWidth="1.5" strokeLinecap="round" />
-                <Path d="M5.5 10 L3.5 10" stroke={colors.ink} strokeWidth="1.5" strokeLinecap="round" />
-                <Path d="M18.5 10 L20.5 10" stroke={colors.ink} strokeWidth="1.5" strokeLinecap="round" />
+              <Svg width={20} height={20} viewBox="0 0 20 20">
+                <Circle cx="10" cy="10" r="5" stroke={colors.ink} strokeWidth="1.5" fill="none" />
+                <Path d="M17 10 L19 10" stroke={colors.ink} strokeWidth="1.5" strokeLinecap="round" />
+                <Path d="M14.95 14.95 L16.36 16.36" stroke={colors.ink} strokeWidth="1.5" strokeLinecap="round" />
+                <Path d="M10 17 L10 19" stroke={colors.ink} strokeWidth="1.5" strokeLinecap="round" />
+                <Path d="M5.05 14.95 L3.64 16.36" stroke={colors.ink} strokeWidth="1.5" strokeLinecap="round" />
+                <Path d="M3 10 L1 10" stroke={colors.ink} strokeWidth="1.5" strokeLinecap="round" />
+                <Path d="M5.05 5.05 L3.64 3.64" stroke={colors.ink} strokeWidth="1.5" strokeLinecap="round" />
+                <Path d="M10 3 L10 1" stroke={colors.ink} strokeWidth="1.5" strokeLinecap="round" />
+                <Path d="M14.95 5.05 L16.36 3.64" stroke={colors.ink} strokeWidth="1.5" strokeLinecap="round" />
               </Svg>
               <Text style={{ fontFamily: Typography.serifBold, fontSize: Typography.sizes.subheading, color: colors.ink }}>
                 Morning Prayer
               </Text>
             </View>
           ),
-          headerTitleAlign: 'center',
+          headerTitleAlign: 'left',
         }}
       />
       <Tab.Screen
@@ -162,16 +164,18 @@ function TabNavigator() {
         options={{
           headerTitle: () => (
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-              <Svg width={18} height={18} viewBox="0 0 18 18">
-                <Circle cx="8" cy="9" r="7" fill={colors.ink} />
-                <Circle cx="12.5" cy="6.5" r="6" fill={colors.parchment} />
+              <Svg width={20} height={20} viewBox="0 0 20 20">
+                <Path
+                  d="M14.9 2.21 A 8 8 0 1 0 14.9 17.79 A 7.8 7.8 0 0 1 14.9 2.21 Z"
+                  fill={colors.ink}
+                />
               </Svg>
               <Text style={{ fontFamily: Typography.serifBold, fontSize: Typography.sizes.subheading, color: colors.ink }}>
                 Evening Prayer
               </Text>
             </View>
           ),
-          headerTitleAlign: 'center',
+          headerTitleAlign: 'left',
         }}
       />
       <Tab.Screen
