@@ -67,7 +67,7 @@ function persist(key: string, value: string) {
 export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const [leadType, setLeadTypeS]               = useState<LeadType>('priest');
   const [priestAbsolutionForm, setPriestAbsS]  = useState<PriestAbsolutionForm>('declaratory');
-  const [layAbsolution, setLayAbsS]            = useState<LayAbsolution>('kyrie');
+  const [layAbsolution, setLayAbsS]            = useState<LayAbsolution>('trinity21');
   const [creedChoice, setCreedS]               = useState<CreedChoice>('apostles');
   const [shorterForm, setShorterS]             = useState(false);
   const [darkMode, setDarkS]                   = useState(false);

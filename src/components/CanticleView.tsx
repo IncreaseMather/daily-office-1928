@@ -14,6 +14,27 @@ interface CanticleData {
   gloria?: boolean;
 }
 
+function toRoman(n: number): string {
+  const vals = [1000,900,500,400,100,90,50,40,10,9,5,4,1];
+  const syms = ['M','CM','D','CD','C','XC','L','XL','X','IX','V','IV','I'];
+  let result = '';
+  for (let i = 0; i < vals.length; i++) {
+    while (n >= vals[i]) { result += syms[i]; n -= vals[i]; }
+  }
+  return result;
+}
+
+function psalmRefWithRomans(ref: string): string {
+  if (!ref.startsWith('Psalm ')) return ref;
+  // Extract only the psalm number(s), drop verse ranges, use lowercase Roman numerals
+  const parts = ref.split('; ');
+  const numerals = parts.map((part, i) => {
+    const m = i === 0 ? part.match(/^Psalm (\d+)/) : part.match(/^(\d+)/);
+    return m ? toRoman(parseInt(m[1], 10)).toLowerCase() : '';
+  }).filter(Boolean);
+  return 'Psalm ' + numerals.join('; ');
+}
+
 export function CanticleView({
   canticle,
   showGloria = true,
@@ -37,7 +58,7 @@ export function CanticleView({
           fontSize: sizes.rubric,
           color: colors.inkLight,
           marginBottom: 8,
-        }}>{canticle.reference}</Text>
+        }}>{psalmRefWithRomans(canticle.reference)}</Text>
       ) : null}
       {canticle.rubric ? <RubricText text={canticle.rubric} /> : null}
       {canticle.verses.map((verse, i) => (

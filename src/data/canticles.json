@@ -13,7 +13,7 @@
         "For the Lord is a great God: * and a great King above all gods.",
         "In his hand are all the corners of the earth: * and the strength of the hills is his also.",
         "The sea is his, and he made it: * and his hands prepared the dry land.",
-        "O come, let us worship and fall down: * and kneel before the Lord our Maker.",
+        "O come, let us worship, and fall down: * and kneel before the Lord our Maker.",
         "For he is the Lord our God: * and we are the people of his pasture, and the sheep of his hand.",
         "O worship the Lord in the beauty of holiness: * let the whole earth stand in awe of him.",
         "For he cometh, for he cometh to judge the earth: * and with righteousness to judge the world, and the peoples with his truth."
@@ -24,7 +24,7 @@
     "easterAnthems": {
       "id": "easter-anthems",
       "title": "Easter Anthems",
-      "reference": "1 Cor. 5:7\u20138; Rom. 6:9\u201311; 1 Cor. 15:20\u201322",
+      "reference": "I Cor. v. 7–8; Rom. vi. 9–11; I Cor. xv. 20–22",
       "rubric": "In place of the Venite, on Easter Day shall be sung or said the following Anthem.",
       "verses": [
         "Christ our Passover is sacrificed for us: * therefore let us keep the feast;\nNot with the old leaven, nor with the leaven of malice and wickedness: * but with the unleavened bread of sincerity and truth.   I Cor. v. 7, 8.",
@@ -71,27 +71,10 @@
       ]
     },
 
-    "benedictusEs": {
-      "id": "benedictus-es",
-      "title": "Benedictus es, Domine",
-      "reference": "Song of the Three Young Men, 29\u201334",
-      "rubric": "To be used on Sundays in Lent, and on the Twenty-fifth Day of December, instead of the Te Deum.",
-      "verses": [
-        "Blessèd art thou, O Lord God of our fathers: * praised and exalted above all for ever.",
-        "And blessed is thy glorious and holy Name: * praised and exalted above all for ever.",
-        "Blessèd art thou in the temple of thine holy glory: * praised and exalted above all for ever.",
-        "Blessèd art thou on the glorious throne of thy kingdom: * praised and exalted above all for ever.",
-        "Blessèd art thou who beholdest the depths, and dwellest between the Cherubim: * praised and exalted above all for ever.",
-        "Blessèd art thou in the firmament of heaven: * praised and exalted above all for ever.",
-        "O praise him, and magnify him above all for ever."
-      ],
-      "gloria": true
-    },
-
     "benedictus": {
       "id": "benedictus",
       "title": "Benedictus",
-      "reference": "St. Luke 1:68",
+      "reference": "St. Luke i. 68",
       "rubric": "Then shall be sung or said the following Canticle.",
       "verses": [
         "Blessèd be the Lord God of Israel: * for he hath visited and redeemed his people;",
@@ -141,7 +124,24 @@
     "O ye Fire and Heat, bless ye the Lord: * praise him, and magnify him for ever.",
     "O ye Winter and Summer, bless ye the Lord: * praise him, and magnify him for ever.",
     "O ye Dews and Frosts, bless ye the Lord: * praise him, and magnify him for ever.",
-    "O ye Frost and Cold, bless ye the Lord: * praise him, and magnify him for ever."
+    "O ye Frost and Cold, bless ye the Lord: * praise him, and magnify him for ever.",
+    "O ye Ice and Snow, bless ye the Lord: * praise him, and magnify him for ever.",
+    "O ye Lightnings and Clouds, bless ye the Lord: * praise him, and magnify him for ever.",
+    "O let the Earth bless the Lord: * yea, let it praise him, and magnify him for ever.",
+    "O ye Mountains and Hills, bless ye the Lord: * praise him, and magnify him for ever.",
+    "O all ye Green Things upon the Earth, bless ye the Lord: * praise him, and magnify him for ever.",
+    "O ye Wells, bless ye the Lord: * praise him, and magnify him for ever.",
+    "O ye Seas and Floods, bless ye the Lord: * praise him, and magnify him for ever.",
+    "O ye Whales, and all that move in the waters, bless ye the Lord: * praise him, and magnify him for ever.",
+    "O all ye Fowls of the Air, bless ye the Lord: * praise him, and magnify him for ever.",
+    "O all ye Beasts and Cattle, bless ye the Lord: * praise him, and magnify him for ever.",
+    "O ye Children of Men, bless ye the Lord: * praise him, and magnify him for ever.",
+    "O let Israel bless the Lord: * praise him, and magnify him for ever.",
+    "O ye Priests of the Lord, bless ye the Lord: * praise him, and magnify him for ever.",
+    "O ye Servants of the Lord, bless ye the Lord: * praise him, and magnify him for ever.",
+    "O ye Spirits and Souls of the Righteous, bless ye the Lord: * praise him, and magnify him for ever.",
+    "O ye holy and humble Men of heart, bless ye the Lord: * praise him, and magnify him for ever.",
+    "O Ananias, Azarias, and Misael, bless ye the Lord: * praise him, and magnify him for ever."
   ],
   "gloria": true
   },
@@ -153,10 +153,10 @@
     "rubric": "To be used on Sundays in Lent, and on the Twenty-fifth Day of December, instead of the Te Deum.",
     "verses": [
       "Blessèd art thou, O Lord God of our fathers: * praised and exalted above all for ever.",
-      "And blessed is thy glorious and holy Name: * praised and exalted above all for ever.",
+      "And blessèd is thy glorious and holy Name: * praised and exalted above all for ever.",
       "Blessèd art thou in the temple of thine holy glory: * praised and exalted above all for ever.",
+      "Blessèd art thou that beholdest the depths, and dwellest between the Cherubim: * praised and exalted above all for ever.",
       "Blessèd art thou on the glorious throne of thy kingdom: * praised and exalted above all for ever.",
-      "Blessèd art thou who beholdest the depths, and dwellest between the Cherubim: * praised and exalted above all for ever.",
       "Blessèd art thou in the firmament of heaven: * praised and exalted above all for ever.",
       "O praise him, and magnify him above all for ever."
     ],
@@ -168,12 +168,12 @@
     "magnificat": {
       "id": "magnificat",
       "title": "Magnificat",
-      "reference": "St. Luke 1:46",
+      "reference": "St. Luke i. 46",
       "rubric": "Then shall be said or sung the following Hymn; the People standing.",
       "verses": [
         "My soul doth magnify the Lord: * and my spirit hath rejoiced in God my Saviour.",
         "For he hath regarded: * the lowliness of his hand-maiden.",
-        "For behold, from henceforth: * all generations shall call me blessed.",
+        "For behold, from henceforth: * all generations shall call me blessèd.",
         "For he that is mighty hath magnified me: * and holy is his Name.",
         "And his mercy is on them that fear him: * throughout all generations.",
         "He hath shewed strength with his arm: * he hath scattered the proud in the imagination of their hearts.",
@@ -187,7 +187,7 @@
     "nuncDimittis": {
       "id": "nunc-dimittis",
       "title": "Nunc Dimittis",
-      "reference": "St. Luke 2:29",
+      "reference": "St. Luke ii. 29",
       "rubric": "Then shall be said or sung the following Hymn; the People standing.",
       "verses": [
         "Lord, now lettest thou thy servant depart in peace: * according to thy word.",
@@ -241,10 +241,10 @@
       "reference": "Psalm 92:1\u20134",
       "rubric": "Or this Psalm.",
       "verses": [
-        "It is a good thing to give thanks unto the Lord: * and to sing praises unto thy Name, O Most High;",
-        "To shew forth thy lovingkindness in the morning: * and thy faithfulness every night,",
-        "Upon an instrument of ten strings, and upon the psaltery: * upon the harp with a solemn sound.",
-        "For thou, Lord, hast made me glad through thy work: * I will triumph in the works of thy hands."
+        "It is a good thing to give thanks unto the Lord, * and to sing praises unto thy Name, O Most Highest;",
+        "To tell of thy loving-kindness early in the morning, * and of thy truth in the night-season;",
+        "Upon an instrument of ten strings, and upon the psaltery; * upon the harp with a solemn sound.",
+        "For thou, Lord, hast made me glad through thy works; * and I will triumph in the works of thy hands."
       ],
       "gloria": true
     },
@@ -255,13 +255,13 @@
       "reference": "Psalm 103:1\u20134, 20\u201322",
       "rubric": "Or this Psalm.",
       "verses": [
-        "Bless the Lord, O my soul: * and all that is within me, bless his holy Name.",
-        "Bless the Lord, O my soul: * and forget not all his benefits;",
-        "Who forgiveth all thine iniquities: * and healeth all thine infirmities;",
-        "Who redeemeth thy life from destruction: * and crowneth thee with mercy and loving-kindness.",
-        "O praise the Lord, ye angels of his, ye that excel in strength: * ye that fulfil his commandment, and hearken unto the voice of his words.",
-        "O praise the Lord, all ye his hosts: * ye servants of his that do his pleasure.",
-        "O speak good of the Lord, all ye works of his, in all places of his dominion: * praise thou the Lord, O my soul."
+        "Praise the Lord, O my soul; * and all that is within me, praise his holy Name.",
+        "Praise the Lord, O my soul; * and forget not all his benefits;",
+        "Who forgiveth all thine iniquities; * and healeth all thine infirmities;",
+        "Who redeemeth thy life from destruction; * and crowneth thee with mercy and loving-kindness.",
+        "O praise the Lord, ye angels of his, ye that excel in strength; * ye that fulfil his commandment, and hearken unto the voice of his words.",
+        "O praise the Lord, all ye his hosts; * ye servants of his that do his pleasure.",
+        "O praise the Lord, all ye works of his, in all places of his dominion; * praise thou the Lord, O my soul."
       ],
       "gloria": true
     }

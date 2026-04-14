@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { ScrollView, View, Text, TouchableOpacity, Modal, Pressable, StyleSheet } from 'react-native';
+import Svg, { Path, Circle } from 'react-native-svg';
 import { ScrollableScreen } from '../components/ScrollableScreen';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Typography } from '../theme';
@@ -294,7 +295,13 @@ export function EveningPrayerScreen() {
             {formatLiturgicalDate(today)} ▾
           </Text>
         </TouchableOpacity>
-        <Text style={s.officeTitle}>Evening Prayer</Text>
+        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 10, marginBottom: 4 }}>
+          <Svg width={18} height={18} viewBox="0 0 18 18">
+            <Circle cx="8" cy="9" r="7" fill={colors.ink}/>
+            <Circle cx="12.5" cy="6.5" r="6" fill={colors.parchment}/>
+          </Svg>
+          <Text style={[s.officeTitle, { marginBottom: 0 }]}>Evening Prayer</Text>
+        </View>
         <Text style={s.seasonLabel}>{getSeasonDisplayLabel(season)}</Text>
         {feastDay && <Text style={s.holyDayLabel}>{feastDay.name}</Text>}
         {!isViewingToday && (
@@ -376,7 +383,7 @@ export function EveningPrayerScreen() {
               <>
                 <RubricText noMark text={'Psalms ' + appointedRefs.join(', ')} />
                 {psalmVerses.map((entry: any) => (
-                  <PsalmView key={`${appointedKey}-${entry.psalm}`} entry={entry} showGloria={gloriaInSeason} />
+                  <PsalmView key={`${appointedKey}-${entry.psalm}`} entry={entry} showGloria={false} />
                 ))}
               </>
             ) : (

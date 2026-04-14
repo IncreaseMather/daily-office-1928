@@ -706,6 +706,21 @@ export function SettingsScreen() {
         </View>
       </View>
 
+      {/* ── Dedication ────────────────────────────────────────────────────── */}
+      <View style={{ paddingHorizontal: 8, paddingTop: 32, alignItems: 'center' }}>
+        <Text style={{
+          fontFamily: Typography.serifItalic,
+          fontSize: sizes.rubric,
+          color: colors.inkLight,
+          lineHeight: Math.round(sizes.rubric * 1.6),
+          textAlign: 'center',
+          opacity: 0.85,
+        }}>
+          Made to the glory of God and for the benefit of Christ's church.{'\n'}
+          Especially for St. Francis Anglican Church in Austin, Texas.
+        </Text>
+      </View>
+
       {/* ── Legal ─────────────────────────────────────────────────────────── */}
       <View style={{ paddingHorizontal: 8, paddingTop: 24, paddingBottom: 48 }}>
         <Text style={{
