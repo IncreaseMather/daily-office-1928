@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { ActivityIndicator, View, Text, Platform, AppState } from 'react-native';
+import Svg, { Path, Circle } from 'react-native-svg';
 import { NavigationContainer, DefaultTheme, DarkTheme, useNavigation, type Theme } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -132,8 +133,47 @@ function TabNavigator() {
         tabBarIcon: () => null,
       }}
     >
-      <Tab.Screen name="Morning Prayer" children={() => <ErrorBoundary><MorningPrayerScreen /></ErrorBoundary>} />
-      <Tab.Screen name="Evening Prayer" children={() => <ErrorBoundary><EveningPrayerScreen /></ErrorBoundary>} />
+      <Tab.Screen
+        name="Morning Prayer"
+        children={() => <ErrorBoundary><MorningPrayerScreen /></ErrorBoundary>}
+        options={{
+          headerTitle: () => (
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+              <Svg width={24} height={20} viewBox="0 0 24 20">
+                <Circle cx="12" cy="10" r="4" stroke={colors.ink} strokeWidth="1.5" fill="none" />
+                <Path d="M1 16 L23 16" stroke={colors.ink} strokeWidth="1.5" strokeLinecap="round" fill="none" />
+                <Path d="M12 4 L12 2" stroke={colors.ink} strokeWidth="1.5" strokeLinecap="round" />
+                <Path d="M6.5 6.5 L5 5" stroke={colors.ink} strokeWidth="1.5" strokeLinecap="round" />
+                <Path d="M17.5 6.5 L19 5" stroke={colors.ink} strokeWidth="1.5" strokeLinecap="round" />
+                <Path d="M5.5 10 L3.5 10" stroke={colors.ink} strokeWidth="1.5" strokeLinecap="round" />
+                <Path d="M18.5 10 L20.5 10" stroke={colors.ink} strokeWidth="1.5" strokeLinecap="round" />
+              </Svg>
+              <Text style={{ fontFamily: Typography.serifBold, fontSize: Typography.sizes.subheading, color: colors.ink }}>
+                Morning Prayer
+              </Text>
+            </View>
+          ),
+          headerTitleAlign: 'center',
+        }}
+      />
+      <Tab.Screen
+        name="Evening Prayer"
+        children={() => <ErrorBoundary><EveningPrayerScreen /></ErrorBoundary>}
+        options={{
+          headerTitle: () => (
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+              <Svg width={18} height={18} viewBox="0 0 18 18">
+                <Circle cx="8" cy="9" r="7" fill={colors.ink} />
+                <Circle cx="12.5" cy="6.5" r="6" fill={colors.parchment} />
+              </Svg>
+              <Text style={{ fontFamily: Typography.serifBold, fontSize: Typography.sizes.subheading, color: colors.ink }}>
+                Evening Prayer
+              </Text>
+            </View>
+          ),
+          headerTitleAlign: 'center',
+        }}
+      />
       <Tab.Screen
         name="Settings"
         component={SettingsScreen}

@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react';
 import { ScrollView, View, Text, TouchableOpacity, Modal, Pressable, StyleSheet, Platform } from 'react-native';
-import Svg, { Path } from 'react-native-svg';
 import { ScrollableScreen } from '../components/ScrollableScreen';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Typography } from '../theme';
@@ -145,8 +144,8 @@ const EXHORTATION =
   'humble voice unto the throne of the heavenly grace.';
 
 const GLORIA_PATRI =
-  'Glory be to the Father, and to the Son: and to the Holy Ghost;\n' +
-  'As it was in the beginning, is now, and ever shall be: world without end. Amen.';
+  'GLORY be to the Father, and to the Son, * and to the Holy Ghost;\n' +
+  'As it was in the beginning, is now, and ever shall be, * world without end. Amen.';
 
 
 function isLitanyDay(date: Date): boolean {
@@ -197,6 +196,7 @@ export function MorningPrayerScreen() {
   const [calOpen, setCalOpen] = useState(false);
   const season = getLiturgicalSeason(today);
   const gloriaInSeason = showGloriaPatri(season);
+  const isAdventSunday = season === 'Advent' && today.getDay() === 0;
   const feastDay = getFeastDay(today);
   const insets = useSafeAreaInsets();
 
@@ -255,6 +255,12 @@ export function MorningPrayerScreen() {
 
   const { venite, easterAnthems: easterAnthem, teDeum, benedicite, benedictusDominus, benedictus, jubilate } =
     canticlesData.morning as any;
+
+  // On Sundays in Advent the full Benedictus (v1–12) is required; on all other
+  // days the latter portion (v9–12, "And thou, child…") is omitted by default.
+  const benedictusDisplay = isAdventSunday
+    ? benedictus
+    : { ...benedictus, verses: benedictus.verses.slice(0, 8) };
 
   const { collectForGrace, collectForPeace } = collectsData.morning;
 
@@ -326,16 +332,7 @@ export function MorningPrayerScreen() {
             {formatLiturgicalDate(today)} ▾
           </Text>
         </TouchableOpacity>
-        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 10, marginBottom: 4 }}>
-          <Svg width={22} height={16} viewBox="0 0 22 16">
-            <Path d="M3 12 A8 8 0 0 1 19 12" stroke={colors.ink} strokeWidth="1.5" strokeLinecap="round" fill="none"/>
-            <Path d="M1 12 L21 12" stroke={colors.ink} strokeWidth="1.5" strokeLinecap="round" fill="none"/>
-            <Path d="M11 4 L11 1" stroke={colors.ink} strokeWidth="1.5" strokeLinecap="round" fill="none"/>
-            <Path d="M5.5 6.5 L3.5 4.5" stroke={colors.ink} strokeWidth="1.5" strokeLinecap="round" fill="none"/>
-            <Path d="M16.5 6.5 L18.5 4.5" stroke={colors.ink} strokeWidth="1.5" strokeLinecap="round" fill="none"/>
-          </Svg>
-          <Text style={[s.officeTitle, { marginBottom: 0 }]}>Morning Prayer</Text>
-        </View>
+        <Text style={s.officeTitle}>Morning Prayer</Text>
         <Text style={s.seasonLabel}>{getSeasonDisplayLabel(season)}</Text>
         {feastDay && <Text style={s.holyDayLabel}>{feastDay.name}</Text>}
         {!isViewingToday && (
@@ -403,8 +400,8 @@ export function MorningPrayerScreen() {
           <RubricText text="Then shall be said," />
           <MinisterText text="O Lord, open thou our lips." />
           <PeopleText text="And our mouth shall shew forth thy praise." />
-          <MinisterText text="Glory be to the Father, and to the Son: and to the Holy Ghost;" />
-          <PeopleText text="As it was in the beginning, is now, and ever shall be: world without end. Amen." />
+          <MinisterText text="Glory be to the Father, and to the Son, and to the Holy Ghost;" />
+          <PeopleText text="As it was in the beginning, is now, and ever shall be, world without end. Amen." />
           <MinisterText text="Praise ye the Lord." />
           <PeopleText text="The Lord's Name be praised." />
         </Section>
@@ -499,7 +496,7 @@ export function MorningPrayerScreen() {
           </Section>
         </View>
 
-        <CanticleView canticle={benedictus} showGloria={gloriaInSeason} />
+        <CanticleView canticle={benedictusDisplay} showGloria={gloriaInSeason} />
         <OrDivider />
         <CanticleView canticle={jubilate} showGloria={gloriaInSeason} />
 

@@ -12,7 +12,7 @@ interface PsalmEntry {
   text: string;
 }
 
-const GLORIA = 'Glory be to the Father, and to the Son: * and to the Holy Ghost;\nAs it was in the beginning, is now, and ever shall be: * world without end. Amen.';
+const GLORIA = 'GLORY be to the Father, and to the Son, * and to the Holy Ghost;\nAs it was in the beginning, is now, and ever shall be, * world without end. Amen.';
 
 export function PsalmView({ entry, showGloria = true }: { entry: PsalmEntry; showGloria?: boolean }) {
   const { colors, sizes, lineHeights } = useTheme();

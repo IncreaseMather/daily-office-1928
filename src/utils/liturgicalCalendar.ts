@@ -127,41 +127,43 @@ export function getVeniteInvitatory(date: Date): string | null {
   const month = date.getMonth() + 1;
   const day = date.getDate();
 
-  // Trinity Sunday
+  // Trinity Sunday (dfe 56)
   if (isTrinitySunday(date)) {
-    return 'Holy, holy, holy, Lord God of hosts: O come, let us worship him.';
+    return 'Father, Son, and Holy Ghost, one God; * O come, let us adore him.';
   }
-  // Whitsunday (Pentecost)
-  if (isWhitsunday(date)) {
-    return 'Alleluia. The Spirit of the Lord filleth the world: O come, let us worship him. Alleluia.';
+  // Whitsunday and six days after (dfe 49–55)
+  if (d >= 49 && d <= 55) {
+    return 'Alleluia. The Spirit of the Lord filleth the world; * O come, let us adore him. Alleluia.';
   }
-  // Ascension Day through Whitsunday Eve
+  // Ascension Day through Whitsunday Eve (dfe 39–48)
   if (d >= 39 && d <= 48) {
-    return 'Alleluia. Christ is ascended up on high: O come, let us worship him. Alleluia.';
+    return 'Alleluia. Christ the Lord ascendeth into heaven; * O come, let us adore him. Alleluia.';
   }
-  // Easter week through Ascension Eve
+  // Monday in Easter Week through Ascension Eve (dfe 1–38)
   if (d >= 1 && d <= 38) {
-    return 'Alleluia. The Lord is risen indeed: O come, let us worship him. Alleluia.';
+    return 'Alleluia. The Lord is risen indeed; * O come, let us adore him. Alleluia.';
   }
-  // Christmas Day
-  if (month === 12 && day === 25) {
-    return 'Alleluia. Unto us a Child is born: O come, let us worship him. Alleluia.';
+  // Christmas Day and until Epiphany (Dec 25 – Jan 5)
+  if ((month === 12 && day === 25) || (month === 12 && day > 25) || (month === 1 && day <= 5)) {
+    return 'Alleluia. Unto us a child is born; * O come, let us adore him. Alleluia.';
   }
-  // Christmas season (Dec 26 – Jan 5)
-  if ((month === 12 && day > 25) || (month === 1 && day <= 5)) {
-    return 'Unto us a Child is born: O come, let us worship him.';
+  // The Epiphany and seven days after (Jan 6–13)
+  if (month === 1 && day >= 6 && day <= 13) {
+    return 'The Lord hath manifested forth his glory; * O come, let us adore him.';
   }
-  // Epiphany season (Jan 6 onward through Pre-Lent)
-  if (month === 1 && day >= 6) {
-    return 'The Lord hath manifested forth his glory: O come, let us worship him.';
+  // The Transfiguration (Aug 6)
+  if (month === 8 && day === 6) {
+    return 'The Lord hath manifested forth his glory; * O come, let us adore him.';
+  }
+  // The Purification (Feb 2) and The Annunciation (Mar 25)
+  if ((month === 2 && day === 2) || (month === 3 && day === 25)) {
+    return 'The Word was made flesh, and dwelt among us; * O come, let us adore him.';
   }
 
   const season = getLiturgicalSeason(date);
+  // Sundays in Advent
   if (season === 'Advent') {
-    return 'Our King and Saviour draweth nigh: O come, let us worship him.';
-  }
-  if (season === 'Epiphany') {
-    return 'The Lord hath manifested forth his glory: O come, let us worship him.';
+    return 'Our King and Saviour draweth nigh; * O come, let us adore him.';
   }
 
   return null;

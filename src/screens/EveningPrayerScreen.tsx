@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react';
 import { ScrollView, View, Text, TouchableOpacity, Modal, Pressable, StyleSheet } from 'react-native';
-import Svg, { Path, Circle } from 'react-native-svg';
 import { ScrollableScreen } from '../components/ScrollableScreen';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Typography } from '../theme';
@@ -32,6 +31,10 @@ import lessonsEsv              from '../data/lessons-esv.json';
 import lessonsNasb             from '../data/lessons-nasb.json';
 import lessonsNkjv             from '../data/lessons-nkjv.json';
 import lessonsRsvDeuterocanon  from '../data/lessons-rsv-deuterocanon.json';
+
+const GLORIA_PATRI =
+  'GLORY be to the Father, and to the Son, * and to the Holy Ghost;\n' +
+  'As it was in the beginning, is now, and ever shall be, * world without end. Amen.';
 
 const GLORIA_IN_EXCELSIS_EP =
   'GLORY be to God on high, and on earth peace, good will towards men.\n' +
@@ -295,13 +298,7 @@ export function EveningPrayerScreen() {
             {formatLiturgicalDate(today)} ▾
           </Text>
         </TouchableOpacity>
-        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 10, marginBottom: 4 }}>
-          <Svg width={18} height={18} viewBox="0 0 18 18">
-            <Circle cx="8" cy="9" r="7" fill={colors.ink}/>
-            <Circle cx="12.5" cy="6.5" r="6" fill={colors.parchment}/>
-          </Svg>
-          <Text style={[s.officeTitle, { marginBottom: 0 }]}>Evening Prayer</Text>
-        </View>
+        <Text style={s.officeTitle}>Evening Prayer</Text>
         <Text style={s.seasonLabel}>{getSeasonDisplayLabel(season)}</Text>
         {feastDay && <Text style={s.holyDayLabel}>{feastDay.name}</Text>}
         {!isViewingToday && (
@@ -369,8 +366,8 @@ export function EveningPrayerScreen() {
           <RubricText text="Then shall be said," />
           <MinisterText text="O Lord, open thou our lips." />
           <PeopleText text="And our mouth shall shew forth thy praise." />
-          <MinisterText text="Glory be to the Father, and to the Son: and to the Holy Ghost;" />
-          <PeopleText text="As it was in the beginning, is now, and ever shall be: world without end. Amen." />
+          <MinisterText text="Glory be to the Father, and to the Son, and to the Holy Ghost;" />
+          <PeopleText text="As it was in the beginning, is now, and ever shall be, world without end. Amen." />
           <MinisterText text="Praise ye the Lord." />
           <PeopleText text="The Lord's Name be praised." />
         </Section>
@@ -389,15 +386,20 @@ export function EveningPrayerScreen() {
             ) : (
               <RubricText noMark text="[Psalms for this day — to be added]" />
             )}
-            {gloriaInSeason && psalmVerses.length > 0 && (
+            {psalmVerses.length > 0 && (
               <View style={s.psalmClose}>
                 <RubricText text="At the end of the Psalms shall be said or sung," />
-                <SectionHeading text="Gloria in Excelsis" />
-                <Text style={s.gloriaText}>{GLORIA_IN_EXCELSIS_EP}</Text>
+                <SectionHeading text="Gloria Patri" />
+                <Text style={s.gloriaText}>{GLORIA_PATRI}</Text>
+                {gloriaInSeason ? (
+                  <>
+                    <SectionHeading text="Gloria in Excelsis" />
+                    <Text style={s.gloriaText}>{GLORIA_IN_EXCELSIS_EP}</Text>
+                  </>
+                ) : (
+                  <RubricText noMark text="The Gloria in Excelsis is omitted in Advent, Pre-Lent, and Lent." />
+                )}
               </View>
-            )}
-            {!gloriaInSeason && (
-              <RubricText noMark text="The Gloria in Excelsis is omitted in Advent, Pre-Lent, and Lent." />
             )}
           </Section>
         </View>

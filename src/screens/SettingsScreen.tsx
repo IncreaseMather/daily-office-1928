@@ -590,6 +590,21 @@ export function SettingsScreen() {
         )}
       </View>
 
+      {/* ── Dedication ────────────────────────────────────────────────────── */}
+      <View style={{ paddingHorizontal: 8, paddingTop: 8, paddingBottom: 24, alignItems: 'center' }}>
+        <Text style={{
+          fontFamily: Typography.serifItalic,
+          fontSize: sizes.rubric,
+          color: colors.inkLight,
+          lineHeight: Math.round(sizes.rubric * 1.6),
+          textAlign: 'center',
+          opacity: 0.85,
+        }}>
+          To the greater glory of God, and in loving service{'\n'}
+          to St. Francis Anglican Church, Austin, Texas.
+        </Text>
+      </View>
+
       {/* ── Support ───────────────────────────────────────────────────────── */}
       <View style={{ ...sectionStyle, alignItems: 'center', paddingBottom: 8 }}>
         <Text style={{
@@ -704,21 +719,6 @@ export function SettingsScreen() {
             Tap to copy Bitcoin address
           </Text>
         </View>
-      </View>
-
-      {/* ── Dedication ────────────────────────────────────────────────────── */}
-      <View style={{ paddingHorizontal: 8, paddingTop: 32, alignItems: 'center' }}>
-        <Text style={{
-          fontFamily: Typography.serifItalic,
-          fontSize: sizes.rubric,
-          color: colors.inkLight,
-          lineHeight: Math.round(sizes.rubric * 1.6),
-          textAlign: 'center',
-          opacity: 0.85,
-        }}>
-          Made to the glory of God and for the benefit of Christ's church.{'\n'}
-          Especially for St. Francis Anglican Church in Austin, Texas.
-        </Text>
       </View>
 
       {/* ── Legal ─────────────────────────────────────────────────────────── */}
