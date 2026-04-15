@@ -166,7 +166,7 @@ function TabNavigator() {
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
               <Svg width={20} height={20} viewBox="0 0 20 20">
                 <Path
-                  d="M14.9 2.21 A 8 8 0 1 0 14.9 17.79 A 7.8 7.8 0 0 1 14.9 2.21 Z"
+                  d="M16.04 3.1 A 8 8 0 1 0 16.04 16.9 A 7.2 7.2 0 0 1 16.04 3.1 Z"
                   fill={colors.ink}
                 />
               </Svg>

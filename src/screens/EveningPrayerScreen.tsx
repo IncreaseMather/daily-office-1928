@@ -388,9 +388,6 @@ export function EveningPrayerScreen() {
             )}
             {psalmVerses.length > 0 && (
               <View style={s.psalmClose}>
-                <RubricText text="At the end of the Psalms shall be said or sung," />
-                <SectionHeading text="Gloria Patri" />
-                <Text style={s.gloriaText}>{GLORIA_PATRI}</Text>
                 {gloriaInSeason ? (
                   <>
                     <SectionHeading text="Gloria in Excelsis" />
