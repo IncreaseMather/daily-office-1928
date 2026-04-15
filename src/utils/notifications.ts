@@ -29,23 +29,25 @@ Notifications.setNotificationHandler({
 // ── Seasonal opening sentences ────────────────────────────────────────────────
 
 const MORNING_SENTENCES: Record<LiturgicalSeason, string> = {
-  Advent:    'In the wilderness prepare the way of the Lord; make straight in the desert a highway for our God.',
-  Christmas: 'Behold, I bring you good news of a great joy which will come to all people; for to you is born this day a Savior, who is Christ the Lord.',
-  Epiphany:  'Arise, shine; for your light has come, and the glory of the Lord has risen upon you.',
-  'Pre-Lent':'If we say we have no sin, we deceive ourselves, but if we confess our sins, God is faithful and just to forgive us our sins.',
-  Lent:      'If we say we have no sin, we deceive ourselves, but if we confess our sins, God is faithful and just to forgive us our sins.',
-  Easter:    'Alleluia! Christ is risen! The Lord is risen indeed, Alleluia!',
-  Trinity:   'O Lord, open thou our lips. And our mouth shall shew forth thy praise.',
+  Advent:      'In the wilderness prepare the way of the Lord; make straight in the desert a highway for our God.',
+  Christmas:   'Behold, I bring you good news of a great joy which will come to all people; for to you is born this day a Savior, who is Christ the Lord.',
+  Epiphany:    'Arise, shine; for your light has come, and the glory of the Lord has risen upon you.',
+  'Pre-Lent':  'If we say we have no sin, we deceive ourselves, but if we confess our sins, God is faithful and just to forgive us our sins.',
+  Lent:        'If we say we have no sin, we deceive ourselves, but if we confess our sins, God is faithful and just to forgive us our sins.',
+  Easter:      'Alleluia! Christ is risen! The Lord is risen indeed, Alleluia!',
+  Whitsuntide: 'Ye shall receive power, after that the Holy Ghost is come upon you.',
+  Trinity:     'O Lord, open thou our lips. And our mouth shall shew forth thy praise.',
 };
 
 const EVENING_SENTENCES: Record<LiturgicalSeason, string> = {
-  Advent:    'The Lord will give you a sign; a young woman shall conceive and bear a son.',
-  Christmas: 'The Word was made flesh and dwelt among us, and we beheld his glory.',
-  Epiphany:  'Nations shall come to your light, and kings to the brightness of your rising.',
-  'Pre-Lent':'Seek the Lord while he may be found, call upon him while he is near.',
-  Lent:      'Seek the Lord while he may be found, call upon him while he is near.',
-  Easter:    'Thanks be to God, who gives us the victory through our Lord Jesus Christ.',
-  Trinity:   'O God, make speed to save us. O Lord, make haste to help us.',
+  Advent:      'The Lord will give you a sign; a young woman shall conceive and bear a son.',
+  Christmas:   'The Word was made flesh and dwelt among us, and we beheld his glory.',
+  Epiphany:    'Nations shall come to your light, and kings to the brightness of your rising.',
+  'Pre-Lent':  'Seek the Lord while he may be found, call upon him while he is near.',
+  Lent:        'Seek the Lord while he may be found, call upon him while he is near.',
+  Easter:      'Thanks be to God, who gives us the victory through our Lord Jesus Christ.',
+  Whitsuntide: 'The love of God is shed abroad in our hearts by the Holy Ghost which is given unto us.',
+  Trinity:     'O God, make speed to save us. O Lord, make haste to help us.',
 };
 
 // ── Helpers ───────────────────────────────────────────────────────────────────

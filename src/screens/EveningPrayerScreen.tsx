@@ -10,7 +10,7 @@ import {
   getLiturgicalSeason, showGloriaPatri, getSeasonDisplayLabel,
   isGoodFriday, isAscensiontide, isWhitsuntide, isTrinitySunday,
   getProperCollectKeys, showLentDailyCollect,
-  getFeastDay, getAppointedPsalmsKey,
+  getFeastDay, getAppointedPsalmsKey, getSundayDisplayName,
 } from '../utils/liturgicalCalendar';
 import {
   Section, SectionHeading, BodyText, RubricText, Divider, OrDivider, MinisterText, PeopleText,
@@ -180,6 +180,7 @@ export function EveningPrayerScreen() {
   const season = getLiturgicalSeason(today);
   const gloriaInSeason = showGloriaPatri(season);
   const feastDay = getFeastDay(today);
+  const sundayName = getSundayDisplayName(today);
   const insets = useSafeAreaInsets();
 
   const { leadType, priestAbsolutionForm, layAbsolution, creedChoice, shorterForm, bibleTranslation, deuterocanonTranslation } = useSettings();
@@ -300,7 +301,7 @@ export function EveningPrayerScreen() {
         </TouchableOpacity>
         <Text style={s.officeTitle}>Evening Prayer</Text>
         <Text style={s.seasonLabel}>{getSeasonDisplayLabel(season)}</Text>
-        {feastDay && <Text style={s.holyDayLabel}>{feastDay.name}</Text>}
+        {(feastDay?.name ?? sundayName) ? <Text style={s.holyDayLabel}>{feastDay?.name ?? sundayName}</Text> : null}
         {!isViewingToday && (
           <TouchableOpacity onPress={resetToToday} activeOpacity={0.7}>
             <Text style={s.bannerText}>

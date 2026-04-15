@@ -11,7 +11,7 @@ import {
   useEasterAnthems, omitVenite, getVeniteInvitatory,
   isAshWednesday, isGoodFriday, isAscensiontide, isWhitsuntide, isTrinitySunday, isThanksgivingDay,
   getProperCollectKeys, showLentDailyCollect,
-  getFeastDay, getAppointedPsalmsKey,
+  getFeastDay, getAppointedPsalmsKey, getSundayDisplayName,
 } from '../utils/liturgicalCalendar';
 import {
   Section, SectionHeading, BodyText, RubricText, Divider, OrDivider, MinisterText, PeopleText,
@@ -198,6 +198,7 @@ export function MorningPrayerScreen() {
   const gloriaInSeason = showGloriaPatri(season);
   const isAdventSunday = season === 'Advent' && today.getDay() === 0;
   const feastDay = getFeastDay(today);
+  const sundayName = getSundayDisplayName(today);
   const insets = useSafeAreaInsets();
 
   const { leadType, priestAbsolutionForm, layAbsolution, creedChoice, shorterForm, litanyEnabled, bibleTranslation, deuterocanonTranslation } = useSettings();
@@ -334,7 +335,7 @@ export function MorningPrayerScreen() {
         </TouchableOpacity>
         <Text style={s.officeTitle}>Morning Prayer</Text>
         <Text style={s.seasonLabel}>{getSeasonDisplayLabel(season)}</Text>
-        {feastDay && <Text style={s.holyDayLabel}>{feastDay.name}</Text>}
+        {(feastDay?.name ?? sundayName) ? <Text style={s.holyDayLabel}>{feastDay?.name ?? sundayName}</Text> : null}
         {!isViewingToday && (
           <TouchableOpacity onPress={resetToToday} activeOpacity={0.7}>
             <Text style={s.bannerText}>

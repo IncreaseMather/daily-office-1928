@@ -5,7 +5,7 @@ import { useTheme } from '../context/SettingsContext';
 import { formatLiturgicalDate, formatShortDate } from '../utils/dateHelpers';
 import { useSelectedDate } from '../context/SelectedDateContext';
 import { CalendarPicker } from '../components/CalendarPicker';
-import { getLiturgicalSeason, getSeasonDisplayLabel, getProperCollectKeys, showLentDailyCollect, getFeastDay } from '../utils/liturgicalCalendar';
+import { getLiturgicalSeason, getSeasonDisplayLabel, getProperCollectKeys, showLentDailyCollect, getFeastDay, getSundayDisplayName } from '../utils/liturgicalCalendar';
 import { Section, BodyText, RubricText, Divider } from '../components/OfficeSection';
 import collectsData from '../data/collects.json';
 
@@ -42,6 +42,7 @@ export function ShorterFormScreen({ type }: { type: 'morning' | 'evening' }) {
   const [calOpen, setCalOpen] = useState(false);
   const season = getLiturgicalSeason(today);
   const feastDay = getFeastDay(today);
+  const sundayName = getSundayDisplayName(today);
 
   const proper = (collectsData as any).proper;
   const properCollectKeys = getProperCollectKeys(today);
@@ -65,11 +66,11 @@ export function ShorterFormScreen({ type }: { type: 'morning' | 'evening' }) {
       <Text style={{ fontFamily: Typography.serifItalic, fontSize: sizes.rubric, color: colors.rubric, textAlign: 'center', marginBottom: 4 }}>
         {getSeasonDisplayLabel(season)}
       </Text>
-      {feastDay && (
+      {(feastDay?.name ?? sundayName) ? (
         <Text style={{ fontFamily: Typography.serifBold, fontSize: sizes.rubric, color: colors.rubric, textAlign: 'center', marginBottom: 16 }}>
-          {feastDay.name}
+          {feastDay?.name ?? sundayName}
         </Text>
-      )}
+      ) : null}
       {!isViewingToday && (
         <TouchableOpacity onPress={resetToToday} activeOpacity={0.7}>
           <Text style={{ fontFamily: Typography.serifItalic, fontSize: sizes.rubric, color: colors.rubric, textAlign: 'center', marginTop: 8, marginBottom: 4 }}>

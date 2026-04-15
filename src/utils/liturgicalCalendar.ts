@@ -5,6 +5,7 @@ export type LiturgicalSeason =
   | 'Pre-Lent'
   | 'Lent'
   | 'Easter'
+  | 'Whitsuntide'
   | 'Trinity';
 
 /** Gregorian calendar Easter date calculation (Anonymous Gregorian algorithm). */
@@ -181,7 +182,8 @@ export function getVeniteInvitatory(date: Date): string | null {
  *   Epiphany     — Jan 6 through Septuagesima Eve (Easter–64)
  *   Pre-Lent     — Septuagesima Sun (Easter–63) through Shrove Tue (Easter–47)
  *   Lent         — Ash Wednesday (Easter–46) through Holy Saturday (Easter–1)
- *   Easter       — Easter Day through Whitsunday (Easter+49)
+ *   Easter       — Easter Day through Saturday before Whit Sunday (Easter+48)
+ *   Whitsuntide  — Whit Sunday (Easter+49) through Saturday (Easter+55)
  *   Trinity      — Trinity Sunday (Easter+56) through Advent
  */
 export function getLiturgicalSeason(date: Date = new Date()): LiturgicalSeason {
@@ -194,8 +196,11 @@ export function getLiturgicalSeason(date: Date = new Date()): LiturgicalSeason {
   const easterTs = easter.getTime();
   const dfe = Math.round((ts - easterTs) / DAY);
 
-  // Easter season: Easter Day → Whitsunday inclusive
-  if (dfe >= 0 && dfe <= 49) return 'Easter';
+  // Easter season: Easter Day → Saturday before Whit Sunday
+  if (dfe >= 0 && dfe <= 48) return 'Easter';
+
+  // Whitsuntide: Whit Sunday → Saturday after
+  if (dfe >= 49 && dfe <= 55) return 'Whitsuntide';
 
   // Pre-Lent: Septuagesima Sun → Shrove Tuesday
   if (dfe >= -63 && dfe <= -47) return 'Pre-Lent';
@@ -232,15 +237,111 @@ export function showGloriaPatri(season: LiturgicalSeason): boolean {
 /** Returns the traditional Anglican display label for a liturgical season. */
 export function getSeasonDisplayLabel(season: LiturgicalSeason): string {
   const labels: Record<LiturgicalSeason, string> = {
-    Advent:    'Advent',
-    Christmas: 'Christmastide',
-    Epiphany:  'Epiphanytide',
-    'Pre-Lent': 'Pre-Lent',
-    Lent:      'Lent',
-    Easter:    'Eastertide',
-    Trinity:   'Trinitytide',
+    Advent:      'Advent',
+    Christmas:   'Christmastide',
+    Epiphany:    'Epiphanytide',
+    'Pre-Lent':  'Pre-Lent',
+    Lent:        'Lent',
+    Easter:      'Eastertide',
+    Whitsuntide: 'Whitsuntide',
+    Trinity:     'Trinitytide',
   };
   return labels[season];
+}
+
+// ─── Sunday display names ──────────────────────────────────────────────────
+
+const _ORDINALS = [
+  '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th',
+  '11th', '12th', '13th', '14th', '15th', '16th', '17th', '18th', '19th', '20th',
+  '21st', '22nd', '23rd', '24th', '25th', '26th', '27th',
+] as const;
+
+/**
+ * Returns the proper liturgical name for a Sunday (or principal feast falling
+ * on a Sunday), following 1928 BCP conventions.  Principal feasts take
+ * precedence over numbered Sunday labels.  Returns null for non-Sundays.
+ */
+export function getSundayDisplayName(date: Date): string | null {
+  if (date.getDay() !== 0) return null;
+
+  const dfe    = daysFromEasterFor(date);
+  const month  = date.getMonth() + 1;
+  const day    = date.getDate();
+  const year   = date.getFullYear();
+  const MS_WEEK = 7 * 86400000;
+
+  // ── Moveable principal feasts (supersede numbered labels) ─────────────────
+  if (dfe === -7)  return 'Palm Sunday';
+  if (dfe ===  0)  return 'Easter Day';
+  if (dfe === 49)  return 'Whitsunday';
+  if (dfe === 56)  return 'Trinity Sunday';
+
+  // ── Fixed principal feasts that can fall on a Sunday (supersede numbered labels)
+  if (month === 1  && day ===  6) return 'The Epiphany';
+  if (month === 6  && day === 24) return 'The Nativity of Saint John the Baptist';
+  if (month === 6  && day === 29) return 'Saint Peter the Apostle';
+  if (month === 9  && day === 29) return 'Saint Michael and All Angels';
+  if (month === 11 && day ===  1) return "All Saints' Day";
+  if (month === 12 && day === 25) return 'Christmas Day';
+
+  // ── Pre-Lent Sundays ─────────────────────────────────────────────────────
+  if (dfe === -63) return 'Septuagesima';
+  if (dfe === -56) return 'Sexagesima';
+  if (dfe === -49) return 'Quinquagesima';
+
+  // ── Lent ──────────────────────────────────────────────────────────────────
+  if (dfe === -42) return '1st Sunday in Lent';
+  if (dfe === -35) return '2nd Sunday in Lent';
+  if (dfe === -28) return '3rd Sunday in Lent';
+  if (dfe === -21) return '4th Sunday in Lent';
+  if (dfe === -14) return '5th Sunday in Lent';
+
+  // ── Eastertide ────────────────────────────────────────────────────────────
+  if (dfe ===  7)  return 'Low Sunday';
+  if (dfe === 14)  return '2nd Sunday after Easter';
+  if (dfe === 21)  return '3rd Sunday after Easter';
+  if (dfe === 28)  return '4th Sunday after Easter';
+  if (dfe === 35)  return 'Rogation Sunday';
+  if (dfe === 42)  return 'Sunday after Ascension';
+
+  // ── Advent Sundays ────────────────────────────────────────────────────────
+  for (const y of [year, year - 1]) {
+    const adventStart = getAdventStart(y);
+    const n = Math.round((date.getTime() - adventStart.getTime()) / MS_WEEK);
+    if (n >= 0 && n <= 3) return `${_ORDINALS[n]} Sunday in Advent`;
+  }
+
+  // ── Sundays after Christmas (Dec 26 – Jan 5) ──────────────────────────────
+  if ((month === 12 && day >= 26) || (month === 1 && day <= 5)) {
+    const xmasYear = month === 1 ? year - 1 : year;
+    const dec26    = new Date(xmasYear, 11, 26);
+    const dec26dow = dec26.getDay();
+    const firstSun = new Date(xmasYear, 11, 26 + (dec26dow === 0 ? 0 : 7 - dec26dow));
+    return date.getTime() === firstSun.getTime()
+      ? '1st Sunday after Christmas'
+      : '2nd Sunday after Christmas';
+  }
+
+  // ── Sundays after Epiphany ────────────────────────────────────────────────
+  if (dfe < -63) {
+    const jan6    = new Date(year, 0, 6);
+    const jan6dow = jan6.getDay();
+    const daysToFirst = jan6dow === 0 ? 7 : 7 - jan6dow;
+    const epiphany1   = new Date(year, 0, 6 + daysToFirst);
+    const n   = Math.round((date.getTime() - epiphany1.getTime()) / MS_WEEK) + 1;
+    const idx = Math.min(Math.max(n, 1), 6) - 1;
+    return `${_ORDINALS[idx]} Sunday after the Epiphany`;
+  }
+
+  // ── Sundays after Trinity ─────────────────────────────────────────────────
+  if (dfe >= 63) {
+    const n   = Math.round((dfe - 56) / 7);
+    const idx = Math.min(Math.max(n, 1), 27) - 1;
+    return `${_ORDINALS[idx]} Sunday after Trinity`;
+  }
+
+  return null;
 }
 
 // ─── Proper collect helpers ────────────────────────────────────────────────
@@ -249,7 +350,7 @@ export type ProperCollectKey =
   // Advent
   | 'advent1' | 'advent2' | 'advent3' | 'advent4'
   // Christmas
-  | 'christmasDay' | 'sundayAfterChristmas' | 'circumcision'
+  | 'christmasDay' | 'christmasEve' | 'sundayAfterChristmas' | 'circumcision'
   // Epiphany
   | 'epiphany' | 'epiphany1' | 'epiphany2' | 'epiphany3' | 'epiphany4' | 'epiphany5' | 'epiphany6'
   // Pre-Lent
@@ -300,6 +401,7 @@ const FIXED_FEAST_COLLECT_KEYS: Record<string, ProperCollectKey> = {
   '11-1':  'allSaints',
   '11-30': 'stAndrew',
   '12-21': 'stThomas',
+  '12-24': 'christmasEve',
   '12-25': 'christmasDay',
   '12-26': 'stStephen',
   '12-27': 'stJohnEvangelist',
@@ -533,11 +635,22 @@ const FIXED_FEASTS: Record<string, FeastDay> = {
   '11-1':  { name: "All Saints' Day",                              type: 'principalFeast' },
   '11-30': { name: 'Saint Andrew the Apostle',                     type: 'holyDay' },
   '12-21': { name: 'Saint Thomas the Apostle',                     type: 'holyDay' },
+  '12-24': { name: 'Christmas Eve',                                 type: 'holyDay' },
   '12-25': { name: 'Christmas Day',                                type: 'principalFeast' },
   '12-26': { name: 'Saint Stephen the Martyr',                     type: 'holyDay' },
   '12-27': { name: 'Saint John the Evangelist',                    type: 'holyDay' },
   '12-28': { name: 'The Holy Innocents',                           type: 'holyDay' },
 };
+
+/**
+ * Returns the first occurrence of `targetDow` (0=Sun…6=Sat) that falls
+ * strictly AFTER the given base date (year/month1/day).
+ */
+function nextDayOfWeekAfter(year: number, month1: number, day: number, targetDow: number): Date {
+  const dow = new Date(year, month1 - 1, day).getDay();
+  const offset = ((targetDow - dow + 7) % 7) || 7;
+  return new Date(year, month1 - 1, day + offset);
+}
 
 /** Returns the 4th Thursday of November for a given year (US Thanksgiving). */
 function getThanksgivingDay(year: number): Date {
@@ -643,8 +756,11 @@ export function getFeastDay(date: Date): FeastDay | null {
   // Moveable feasts checked first
   const dfe = daysFromEasterFor(date);
   switch (dfe) {
-    case -46: return { name: 'Ash Wednesday',          type: 'holyDay' };
-    case -7:  return { name: 'Palm Sunday',            type: 'holyDay' };
+    case -46: return { name: 'Ash Wednesday',              type: 'holyDay' };
+    case -39: return { name: 'Ember Wednesday in Lent',   type: 'holyDay' };
+    case -37: return { name: 'Ember Friday in Lent',      type: 'holyDay' };
+    case -36: return { name: 'Ember Saturday in Lent',    type: 'holyDay' };
+    case -7:  return { name: 'Palm Sunday',               type: 'holyDay' };
     case -6:  return { name: 'Monday in Holy Week',    type: 'holyDay' };
     case -5:  return { name: 'Tuesday in Holy Week',   type: 'holyDay' };
     case -4:  return { name: 'Wednesday in Holy Week', type: 'holyDay' };
@@ -652,9 +768,22 @@ export function getFeastDay(date: Date): FeastDay | null {
     case -2:  return { name: 'Good Friday',            type: 'principalFeast' };
     case -1:  return { name: 'Holy Saturday',          type: 'holyDay' };
     case 0:   return { name: 'Easter Day',             type: 'principalFeast' };
-    case 39:  return { name: 'Ascension Day',          type: 'principalFeast' };
-    case 49:  return { name: 'Whitsunday',             type: 'principalFeast' };
-    case 56:  return { name: 'Trinity Sunday',         type: 'principalFeast' };
+    case 1:   return { name: 'Easter Monday',          type: 'holyDay' };
+    case 2:   return { name: 'Easter Tuesday',         type: 'holyDay' };
+    case 35:  return { name: 'Rogation Sunday',                   type: 'holyDay' };
+    case 36:  return { name: 'Rogation Monday',                   type: 'holyDay' };
+    case 37:  return { name: 'Rogation Tuesday',                  type: 'holyDay' };
+    case 38:  return { name: 'Ascension Eve',                     type: 'holyDay' };
+    case 39:  return { name: 'Ascension Day',                     type: 'principalFeast' };
+    case 48:  return { name: 'Whitsun Eve',                      type: 'holyDay' };
+    case 49:  return { name: 'Whitsunday',                       type: 'principalFeast' };
+    case 50:  return { name: 'Whit Monday',                      type: 'holyDay' };
+    case 51:  return { name: 'Whit Tuesday',                     type: 'holyDay' };
+    case 52:  return { name: 'Ember Wednesday in Whitsun Week',  type: 'holyDay' };
+    case 53:  return { name: 'Thursday in Whitsun Week',         type: 'holyDay' };
+    case 54:  return { name: 'Ember Friday in Whitsun Week',     type: 'holyDay' };
+    case 55:  return { name: 'Trinity Eve',                      type: 'holyDay' };
+    case 56:  return { name: 'Trinity Sunday',                   type: 'principalFeast' };
   }
 
   const month = date.getMonth() + 1;
@@ -668,6 +797,20 @@ export function getFeastDay(date: Date): FeastDay | null {
   const thanksgiving = getThanksgivingDay(year);
   if (month === 11 && day === thanksgiving.getDate()) {
     return { name: 'Thanksgiving Day', type: 'nationalObservance' };
+  }
+
+  // September Ember Days — Wed, Fri, Sat after September 14 (Holy Cross Day)
+  if (month === 9 && day >= 15 && day <= 21) {
+    if (day === nextDayOfWeekAfter(year, 9, 14, 3).getDate()) return { name: 'Ember Wednesday in September', type: 'holyDay' };
+    if (day === nextDayOfWeekAfter(year, 9, 14, 5).getDate()) return { name: 'Ember Friday in September',    type: 'holyDay' };
+    if (day === nextDayOfWeekAfter(year, 9, 14, 6).getDate()) return { name: 'Ember Saturday in September',  type: 'holyDay' };
+  }
+
+  // December Ember Days — Wed, Fri, Sat after December 13 (St. Lucy's Day)
+  if (month === 12 && day >= 14 && day <= 20) {
+    if (day === nextDayOfWeekAfter(year, 12, 13, 3).getDate()) return { name: 'Ember Wednesday in Advent', type: 'holyDay' };
+    if (day === nextDayOfWeekAfter(year, 12, 13, 5).getDate()) return { name: 'Ember Friday in Advent',    type: 'holyDay' };
+    if (day === nextDayOfWeekAfter(year, 12, 13, 6).getDate()) return { name: 'Ember Saturday in Advent',  type: 'holyDay' };
   }
 
   return null;

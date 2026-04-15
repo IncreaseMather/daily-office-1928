@@ -364,7 +364,8 @@
       "Bash(node -e \"\nconst AuthSession = require\\('./node_modules/expo-auth-session'\\);\nconsole.log\\('makeRedirectUri keys:', Object.keys\\(AuthSession\\)\\);\n\" 2>&1 | head -5)",
       "Bash(find /c/Users/aliss/DailyOffice/node_modules/expo-auth-session/build -name \"*.js\" | xargs grep -l \"makeRedirectUri\" 2>/dev/null | head -5)",
       "Bash(python3 --version && python3 -c \"from PIL import Image, ImageDraw, ImageFont; print\\('Pillow OK'\\)\" 2>&1)",
-      "Bash(py --version && py -c \"from PIL import Image, ImageDraw, ImageFont; print\\('Pillow OK'\\)\" 2>&1)"
+      "Bash(py --version && py -c \"from PIL import Image, ImageDraw, ImageFont; print\\('Pillow OK'\\)\" 2>&1)",
+      "Bash(grep -r \"getSundayDisplayName\\\\|displayName\\\\|dayLabel\" /c/Users/aliss/DailyOffice/src --include=\"*.tsx\" --include=\"*.ts\" 2>/dev/null | grep -v node_modules)"
     ]
   }
 }
