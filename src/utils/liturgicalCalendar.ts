@@ -302,7 +302,7 @@ export function getSundayDisplayName(date: Date): string | null {
   if (dfe === 14)  return '2nd Sunday after Easter';
   if (dfe === 21)  return '3rd Sunday after Easter';
   if (dfe === 28)  return '4th Sunday after Easter';
-  if (dfe === 35)  return 'Rogation Sunday';
+  if (dfe === 35)  return '5th Sunday after Easter';
   if (dfe === 42)  return 'Sunday after Ascension';
 
   // ── Advent Sundays ────────────────────────────────────────────────────────
@@ -770,19 +770,17 @@ export function getFeastDay(date: Date): FeastDay | null {
     case 0:   return { name: 'Easter Day',             type: 'principalFeast' };
     case 1:   return { name: 'Easter Monday',          type: 'holyDay' };
     case 2:   return { name: 'Easter Tuesday',         type: 'holyDay' };
-    case 35:  return { name: 'Rogation Sunday',                   type: 'holyDay' };
     case 36:  return { name: 'Rogation Monday',                   type: 'holyDay' };
     case 37:  return { name: 'Rogation Tuesday',                  type: 'holyDay' };
-    case 38:  return { name: 'Ascension Eve',                     type: 'holyDay' };
+    case 38:  return { name: 'Rogation Wednesday',                type: 'holyDay' };
     case 39:  return { name: 'Ascension Day',                     type: 'principalFeast' };
-    case 48:  return { name: 'Whitsun Eve',                      type: 'holyDay' };
     case 49:  return { name: 'Whitsunday',                       type: 'principalFeast' };
     case 50:  return { name: 'Whit Monday',                      type: 'holyDay' };
     case 51:  return { name: 'Whit Tuesday',                     type: 'holyDay' };
     case 52:  return { name: 'Ember Wednesday in Whitsun Week',  type: 'holyDay' };
     case 53:  return { name: 'Thursday in Whitsun Week',         type: 'holyDay' };
     case 54:  return { name: 'Ember Friday in Whitsun Week',     type: 'holyDay' };
-    case 55:  return { name: 'Trinity Eve',                      type: 'holyDay' };
+    case 55:  return { name: 'Ember Saturday in Whitsun Week',   type: 'holyDay' };
     case 56:  return { name: 'Trinity Sunday',                   type: 'principalFeast' };
   }
 
