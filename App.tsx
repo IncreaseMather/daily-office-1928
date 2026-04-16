@@ -137,6 +137,19 @@ function TabNavigator() {
         name="Morning Prayer"
         children={() => <ErrorBoundary><MorningPrayerScreen /></ErrorBoundary>}
         options={{
+          tabBarIcon: ({ color }) => (
+            <Svg width={16} height={16} viewBox="0 0 20 20">
+              <Circle cx="10" cy="10" r="5" stroke={color} strokeWidth="1.5" fill="none" />
+              <Path d="M17 10 L19 10" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
+              <Path d="M14.95 14.95 L16.36 16.36" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
+              <Path d="M10 17 L10 19" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
+              <Path d="M5.05 14.95 L3.64 16.36" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
+              <Path d="M3 10 L1 10" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
+              <Path d="M5.05 5.05 L3.64 3.64" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
+              <Path d="M10 3 L10 1" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
+              <Path d="M14.95 5.05 L16.36 3.64" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
+            </Svg>
+          ),
           headerTitle: () => (
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
               <Svg width={20} height={20} viewBox="0 0 20 20">
@@ -162,6 +175,14 @@ function TabNavigator() {
         name="Evening Prayer"
         children={() => <ErrorBoundary><EveningPrayerScreen /></ErrorBoundary>}
         options={{
+          tabBarIcon: ({ color }) => (
+            <Svg width={16} height={16} viewBox="0 0 20 20">
+              <Path
+                d="M16.04 3.1 A 8 8 0 1 0 16.04 16.9 A 7.2 7.2 0 0 1 16.04 3.1 Z"
+                fill={color}
+              />
+            </Svg>
+          ),
           headerTitle: () => (
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
               <Svg width={20} height={20} viewBox="0 0 20 20">
