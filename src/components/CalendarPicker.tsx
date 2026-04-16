@@ -5,7 +5,7 @@ import {
 import { useTheme } from '../context/SettingsContext';
 import { Typography } from '../theme';
 import { isSameDay } from '../context/SelectedDateContext';
-import { getFeastDay } from '../utils/liturgicalCalendar';
+import { isBCPTableFeast } from '../utils/liturgicalCalendar';
 
 const MONTH_NAMES = [
   'January', 'February', 'March',    'April',   'May',      'June',
@@ -74,10 +74,7 @@ export function CalendarPicker({ visible, selectedDate, onSelectDate, onClose }:
     isSameDay(selectedDate, new Date(viewYear, viewMonth, d));
   const isToday = (d: number) =>
     isSameDay(today, new Date(viewYear, viewMonth, d));
-  const isFeastOrSunday = (d: number) => {
-    const date = new Date(viewYear, viewMonth, d);
-    return date.getDay() === 0 || getFeastDay(date) !== null;
-  };
+  const isFeastOrSunday = (d: number) => isBCPTableFeast(new Date(viewYear, viewMonth, d));
 
   return (
     <Modal transparent visible={visible} animationType="fade" onRequestClose={onClose}>
@@ -133,7 +130,7 @@ export function CalendarPicker({ visible, selectedDate, onSelectDate, onClose }:
                       <Text style={{
                         fontFamily: sel ? Typography.serifBold : Typography.serif,
                         fontSize: sizes.body,
-                        color: sel ? colors.parchment : feast ? colors.rubric : colors.ink,
+                        color: sel ? colors.parchment : feast ? '#CC0000' : colors.ink,
                       }}>
                         {day}
                       </Text>

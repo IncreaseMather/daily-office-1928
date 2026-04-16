@@ -38,7 +38,7 @@ const FIXED_FEASTS = {
   '2-2':   'The Purification of Saint Mary the Virgin',
   '2-24':  'Saint Matthias the Apostle',
   '3-19':  'Saint Joseph',
-  '3-25':  'The Annunciation of the Blessed Virgin Mary',
+  '3-25':  'The Annunciation of the Blessèd Virgin Mary',
   '4-25':  'Saint Mark the Evangelist',
   '5-1':   'Saint Philip and Saint James',
   '6-24':  'The Nativity of Saint John the Baptist',
@@ -94,7 +94,7 @@ function addDays(d, n) { const r = new Date(d); r.setDate(r.getDate() + n); retu
 const cases = [
   { label: 'Christmas Day',           date: new Date(YEAR, 11, 25), expected: 'Christmas Day' },
   { label: 'Epiphany',                date: new Date(YEAR, 0, 6),   expected: 'The Epiphany' },
-  { label: 'Annunciation',            date: new Date(YEAR, 2, 25),  expected: 'The Annunciation of the Blessed Virgin Mary' },
+  { label: 'Annunciation',            date: new Date(YEAR, 2, 25),  expected: 'The Annunciation of the Blessèd Virgin Mary' },
   { label: 'St. John Baptist',        date: new Date(YEAR, 5, 24),  expected: 'The Nativity of Saint John the Baptist' },
   { label: 'All Saints',              date: new Date(YEAR, 10, 1),  expected: "All Saints' Day" },
   { label: 'Easter Day',              date: E,                       expected: 'Easter Day' },

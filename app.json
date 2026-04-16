@@ -2,7 +2,7 @@
   "expo": {
     "name": "1928 Daily Office",
     "slug": "daily-office-1928",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "orientation": "portrait",
     "description": "The 1928 American Book of Common Prayer Daily Office for Morning and Evening Prayer",
     "icon": "./icon.png",

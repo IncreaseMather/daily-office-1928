@@ -614,31 +614,33 @@ export interface FeastDay {
 }
 
 const FIXED_FEASTS: Record<string, FeastDay> = {
-  '1-1':   { name: 'The Circumcision of Christ',                   type: 'holyDay' },
+  '1-1':   { name: 'The Circumcision of our Lord Jesus Christ',    type: 'holyDay' },
   '1-6':   { name: 'The Epiphany',                                 type: 'principalFeast' },
   '1-25':  { name: 'The Conversion of Saint Paul',                 type: 'holyDay' },
-  '2-2':   { name: 'The Purification of Saint Mary the Virgin',    type: 'holyDay' },
+  '2-2':   { name: 'The Purification of the Blessèd Virgin Mary',  type: 'holyDay' },
   '2-24':  { name: 'Saint Matthias the Apostle',                   type: 'holyDay' },
   '3-19':  { name: 'Saint Joseph',                                 type: 'holyDay' },
   '3-25':  { name: 'The Annunciation of the Blessèd Virgin Mary',  type: 'holyDay' },
   '4-25':  { name: 'Saint Mark the Evangelist',                    type: 'holyDay' },
-  '5-1':   { name: 'Saint Philip and Saint James',                 type: 'holyDay' },
+  '5-1':   { name: 'Saint Philip and Saint James, Apostles',       type: 'holyDay' },
+  '6-11':  { name: 'Saint Barnabas the Apostle',                   type: 'holyDay' },
   '6-24':  { name: 'The Nativity of Saint John the Baptist',       type: 'principalFeast' },
   '6-29':  { name: 'Saint Peter the Apostle',                      type: 'principalFeast' },
   '7-4':   { name: 'Independence Day',                             type: 'nationalObservance' },
-  '8-6':   { name: 'The Transfiguration of Our Lord Jesus Christ', type: 'holyDay' },
+  '7-25':  { name: 'Saint James the Apostle',                      type: 'holyDay' },
+  '8-6':   { name: 'The Transfiguration of our Lord Jesus Christ', type: 'holyDay' },
   '8-24':  { name: 'Saint Bartholomew the Apostle',                type: 'holyDay' },
-  '9-21':  { name: 'Saint Matthew the Apostle and Evangelist',     type: 'holyDay' },
+  '9-21':  { name: 'Saint Matthew, Apostle and Evangelist',        type: 'holyDay' },
   '9-29':  { name: 'Saint Michael and All Angels',                 type: 'principalFeast' },
   '10-18': { name: 'Saint Luke the Evangelist',                    type: 'holyDay' },
-  '10-28': { name: 'Saint Simon and Saint Jude',                   type: 'holyDay' },
+  '10-28': { name: 'Saint Simon and Saint Jude, Apostles',         type: 'holyDay' },
   '11-1':  { name: "All Saints' Day",                              type: 'principalFeast' },
   '11-30': { name: 'Saint Andrew the Apostle',                     type: 'holyDay' },
   '12-21': { name: 'Saint Thomas the Apostle',                     type: 'holyDay' },
-  '12-24': { name: 'Christmas Eve',                                 type: 'holyDay' },
-  '12-25': { name: 'Christmas Day',                                type: 'principalFeast' },
-  '12-26': { name: 'Saint Stephen the Martyr',                     type: 'holyDay' },
-  '12-27': { name: 'Saint John the Evangelist',                    type: 'holyDay' },
+  '12-24': { name: 'Christmas Eve',                                type: 'holyDay' },
+  '12-25': { name: 'The Nativity of our Lord Jesus Christ',        type: 'principalFeast' },
+  '12-26': { name: 'Saint Stephen, Deacon and Martyr',             type: 'holyDay' },
+  '12-27': { name: 'Saint John, Apostle and Evangelist',           type: 'holyDay' },
   '12-28': { name: 'The Holy Innocents',                           type: 'holyDay' },
 };
 
@@ -812,4 +814,42 @@ export function getFeastDay(date: Date): FeastDay | null {
   }
 
   return null;
+}
+
+// ─── BCP Table of Feasts ──────────────────────────────────────────────────────
+
+/**
+ * Returns true for every day that appears in the Table of Feasts in the
+ * 1928 American Book of Common Prayer:
+ *   - All Sundays
+ *   - The fixed feasts listed in the BCP table (apostles, evangelists, etc.)
+ *   - The moveable feasts: Easter Mon/Tue, Ascension, Whitsunday,
+ *     Whit Mon/Tue, Trinity Sunday
+ *
+ * Used by the calendar picker to colour date numbers red for feast days only.
+ */
+const BCP_TABLE_FIXED: ReadonlySet<string> = new Set([
+  '1-1',  '1-6',  '1-25',
+  '2-2',  '2-24',
+  '3-25',
+  '4-25',
+  '5-1',
+  '6-11', '6-24', '6-29',
+  '7-25',
+  '8-6',  '8-24',
+  '9-21', '9-29',
+  '10-18','10-28',
+  '11-1', '11-30',
+  '12-21','12-25','12-26','12-27','12-28',
+]);
+
+export function isBCPTableFeast(date: Date): boolean {
+  if (date.getDay() === 0) return true;
+  const dfe = daysFromEasterFor(date);
+  if (dfe === 1 || dfe === 2)  return true;   // Easter Mon / Tue
+  if (dfe === 39)               return true;   // Ascension Day
+  if (dfe === 49)               return true;   // Whitsunday
+  if (dfe === 50 || dfe === 51) return true;   // Whit Mon / Tue
+  if (dfe === 56)               return true;   // Trinity Sunday
+  return BCP_TABLE_FIXED.has(`${date.getMonth() + 1}-${date.getDate()}`);
 }
