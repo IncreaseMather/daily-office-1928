@@ -201,9 +201,9 @@ export function MorningPrayerScreen() {
   const sundayName = getSundayDisplayName(today);
   const insets = useSafeAreaInsets();
 
-  const { leadType, priestAbsolutionForm, layAbsolution, creedChoice, shorterForm, litanyEnabled, bibleTranslation, deuterocanonTranslation } = useSettings();
+  const { leadType, priestAbsolutionForm, layAbsolution, creedChoice, shorterForm, litanyEnabled, litanyDays, bibleTranslation, deuterocanonTranslation } = useSettings();
   const ministerTerm = leadType === 'priest' ? 'Clergy' : 'Officiant';
-  const showLitany = litanyEnabled && isLitanyDay(today);
+  const showLitany = litanyEnabled && litanyDays.includes(today.getDay());
 
   // ── Section navigation hooks — must come before any early return ────────────
   const scrollRef = useRef<ScrollView>(null);
@@ -523,7 +523,7 @@ export function MorningPrayerScreen() {
             </>
           ) : (
             <>
-              <MinisterText text="Lord, hear our prayer." />
+              <MinisterText text="O Lord, hear our prayer." />
               <PeopleText text="And let our cry come unto thee." />
             </>
           )}
@@ -534,14 +534,6 @@ export function MorningPrayerScreen() {
           <RubricText text="Then shall be said," />
           <MinisterText text="O Lord, shew thy mercy upon us." />
           <PeopleText text="And grant us thy salvation." />
-          <MinisterText text="O Lord, save the State." />
-          <PeopleText text="And mercifully hear us when we call upon thee." />
-          <MinisterText text="Endue thy Ministers with righteousness." />
-          <PeopleText text="And make thy chosen people joyful." />
-          <MinisterText text="O Lord, save thy people." />
-          <PeopleText text="And bless thine inheritance." />
-          <MinisterText text="Give peace in our time, O Lord." />
-          <PeopleText text="For it is thou, Lord, only, that makest us dwell in safety." />
           <MinisterText text="O God, make clean our hearts within us." />
           <PeopleText text="And take not thy Holy Spirit from us." />
         </Section>

@@ -474,7 +474,7 @@ export function EveningPrayerScreen() {
             </>
           ) : (
             <>
-              <MinisterText text="Lord, hear our prayer." />
+              <MinisterText text="O Lord, hear our prayer." />
               <PeopleText text="And let our cry come unto thee." />
             </>
           )}

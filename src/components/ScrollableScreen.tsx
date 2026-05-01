@@ -216,7 +216,7 @@ export const ScrollableScreen = React.forwardRef<ScrollView, Props>(
         <ScrollView
           ref={mergeRef}
           style={{ flex: 1 }}
-          contentContainerStyle={contentContainerStyle}
+          contentContainerStyle={[contentContainerStyle, { paddingRight: BAR_WIDTH_ACTIVE + HIT_SLOP + 3 }]}
           onScroll={handleScroll}
           scrollEventThrottle={16}
           showsVerticalScrollIndicator={false}

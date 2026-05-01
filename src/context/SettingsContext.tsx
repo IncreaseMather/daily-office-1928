@@ -23,6 +23,7 @@ const K = {
   EP_ENABLED:        '@s/epEnabled',
   EP_TIME:           '@s/epTime',
   LITANY_ENABLED:    '@s/litanyEnabled',
+  LITANY_DAYS:       '@s/litanyDays',
   BIBLE_TRANSLATION:        '@s/bibleTranslation',
   DEUTEROCANON_TRANSLATION: '@s/deuterocanonTranslation',
 };
@@ -52,6 +53,8 @@ interface SettingsContextValue {
   setEpReminderTime: (v: string) => void;
   litanyEnabled: boolean;
   setLitanyEnabled: (v: boolean) => void;
+  litanyDays: number[];
+  setLitanyDays: (v: number[]) => void;
   bibleTranslation: BibleTranslation;
   setBibleTranslation: (v: BibleTranslation) => void;
   deuterocanonTranslation: DeuterocanonTranslation;
@@ -77,6 +80,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const [epReminderEnabled, setEpEnabledS]     = useState(false);
   const [epReminderTime, setEpTimeS]           = useState('18:00');
   const [litanyEnabled, setLitanyS]            = useState(false);
+  const [litanyDays, setLitanyDaysS]           = useState<number[]>([0, 3, 5]);
   const [bibleTranslation, setBibleTransS]          = useState<BibleTranslation>('kjv');
   const [deuterocanonTranslation, setDeuterocanonS] = useState<DeuterocanonTranslation>('kjv');
 
@@ -96,6 +100,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         if (m[K.EP_ENABLED])      setEpEnabledS(m[K.EP_ENABLED] === 'true');
         if (m[K.EP_TIME])         setEpTimeS(m[K.EP_TIME]);
         if (m[K.LITANY_ENABLED])      setLitanyS(m[K.LITANY_ENABLED] === 'true');
+        if (m[K.LITANY_DAYS])        { try { setLitanyDaysS(JSON.parse(m[K.LITANY_DAYS])); } catch {} }
         if (m[K.BIBLE_TRANSLATION])        setBibleTransS(m[K.BIBLE_TRANSLATION] as BibleTranslation);
         if (m[K.DEUTEROCANON_TRANSLATION]) setDeuterocanonS(m[K.DEUTEROCANON_TRANSLATION] as DeuterocanonTranslation);
       } catch {
@@ -116,6 +121,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const setEpReminderEnabled     = (v: boolean)               => { setEpEnabledS(v); persist(K.EP_ENABLED, String(v)); };
   const setEpReminderTime        = (v: string)                => { setEpTimeS(v);    persist(K.EP_TIME, v); };
   const setLitanyEnabled         = (v: boolean)               => { setLitanyS(v);          persist(K.LITANY_ENABLED, String(v)); };
+  const setLitanyDays            = (v: number[])              => { setLitanyDaysS(v);      persist(K.LITANY_DAYS, JSON.stringify(v)); };
   const setBibleTranslation         = (v: BibleTranslation)         => { setBibleTransS(v);      persist(K.BIBLE_TRANSLATION, v); };
   const setDeuterocanonTranslation  = (v: DeuterocanonTranslation)  => { setDeuterocanonS(v);   persist(K.DEUTEROCANON_TRANSLATION, v); };
 
@@ -133,6 +139,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       epReminderEnabled, setEpReminderEnabled,
       epReminderTime, setEpReminderTime,
       litanyEnabled, setLitanyEnabled,
+      litanyDays, setLitanyDays,
       bibleTranslation, setBibleTranslation,
       deuterocanonTranslation, setDeuterocanonTranslation,
     }}>

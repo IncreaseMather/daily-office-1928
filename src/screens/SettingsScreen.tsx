@@ -21,6 +21,49 @@ import {
 } from '../utils/notifications';
 import type { LayAbsolution, PriestAbsolutionForm, CreedChoice, FontSize, BibleTranslation, DeuterocanonTranslation } from '../context/SettingsContext';
 
+const DAY_LABELS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+const CIRCLE_SIZE = 36;
+
+function LitanyDayPicker({ days, onChange }: { days: number[]; onChange: (v: number[]) => void }) {
+  const { colors, sizes, isDark } = useTheme();
+  const selectedTextColor = isDark ? colors.ink : colors.parchment;
+  return (
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10, marginBottom: 2 }}>
+      {DAY_LABELS.map((label, i) => {
+        const selected = days.includes(i);
+        return (
+          <TouchableOpacity
+            key={i}
+            onPress={() => {
+              const next = selected ? days.filter(d => d !== i) : [...days, i].sort((a, b) => a - b);
+              onChange(next);
+            }}
+            activeOpacity={0.7}
+            style={{
+              width: CIRCLE_SIZE,
+              height: CIRCLE_SIZE,
+              borderRadius: CIRCLE_SIZE / 2,
+              borderWidth: selected ? 0 : 1.5,
+              borderColor: colors.rule,
+              backgroundColor: selected ? colors.rubric : 'transparent',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Text style={{
+              fontFamily: Typography.serifBold,
+              fontSize: sizes.rubric,
+              color: selected ? selectedTextColor : colors.inkLight,
+            }}>
+              {label}
+            </Text>
+          </TouchableOpacity>
+        );
+      })}
+    </View>
+  );
+}
+
 // 12-hour → 24-hour conversion
 function toHour24AM(h: number): number { return h === 12 ? 0 : h; }
 function toHour24PM(h: number): number { return h === 12 ? 12 : h + 12; }
@@ -306,6 +349,7 @@ export function SettingsScreen() {
     darkMode, setDarkMode,
     fontSize, setFontSize,
     litanyEnabled, setLitanyEnabled,
+    litanyDays, setLitanyDays,
     bibleTranslation, setBibleTranslation,
     deuterocanonTranslation, setDeuterocanonTranslation,
   } = useSettings();
@@ -519,11 +563,18 @@ export function SettingsScreen() {
           value={litanyEnabled}
           onToggle={() => setLitanyEnabled(!litanyEnabled)}
         />
-        <Text style={{ fontFamily: Typography.serifItalic, fontSize: sizes.rubric, color: colors.inkLight, lineHeight: Math.round(sizes.rubric * 1.55) }}>
-          {litanyEnabled
-            ? 'The Litany will be said at Morning Prayer on Sundays, Wednesdays, and Fridays.'
-            : 'The Litany is not currently enabled. When enabled, it is said on Sundays, Wednesdays, and Fridays.'}
-        </Text>
+        {litanyEnabled ? (
+          <>
+            <LitanyDayPicker days={litanyDays} onChange={setLitanyDays} />
+            <Text style={{ fontFamily: Typography.serifItalic, fontSize: sizes.rubric, color: colors.inkLight, lineHeight: Math.round(sizes.rubric * 1.55), marginTop: 10 }}>
+              The Litany will be said at Morning Prayer on the selected days.
+            </Text>
+          </>
+        ) : (
+          <Text style={{ fontFamily: Typography.serifItalic, fontSize: sizes.rubric, color: colors.inkLight, lineHeight: Math.round(sizes.rubric * 1.55) }}>
+            The Litany is not currently enabled. When enabled, choose which days it is said.
+          </Text>
+        )}
       </View>
 
       {/* ── Office Leadership ─────────────────────────────────────────────── */}
