@@ -581,7 +581,7 @@ export function MorningPrayerScreen() {
             <RubricText text={
               litanyEnabled
                 ? 'The Litany is appointed for Sundays, Wednesdays, and Fridays.'
-                : 'The Litany (appointed for Sundays, Wednesdays, and Fridays) may be enabled in Settings.'
+                : 'The Litany may be enabled in Settings.'
             } />
             <Divider />
             <Section title="A Prayer for the President of the United States and all in Civil Authority">
