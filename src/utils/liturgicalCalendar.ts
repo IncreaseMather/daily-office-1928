@@ -608,7 +608,35 @@ export function getProperCollectKeys(date: Date): ProperCollectKey[] {
     return k ? [k] : [];
   }
 
-  // ── 5. Weekday: preceding Sunday's collect ────────────────────────────────
+  // ── 5. Computed Ember Days — preceding Sunday collect + Ember Days collect ──
+  // Lent Ember Days: Wed/Fri/Sat of the week after the 1st Sunday in Lent (dfe -39, -37, -36)
+  if (dfe === -39 || dfe === -37 || dfe === -36) {
+    const prevSunday = new Date(year, date.getMonth(), day - dow);
+    const sundayKey = getSundayCollectKey(prevSunday);
+    return sundayKey ? [sundayKey, 'emberDays'] : ['emberDays'];
+  }
+  // September Ember Days: Wed/Fri/Sat after Holy Cross Day (Sep 14)
+  if (month === 9 && day >= 15 && day <= 21) {
+    if (day === nextDayOfWeekAfter(year, 9, 14, 3).getDate() ||
+        day === nextDayOfWeekAfter(year, 9, 14, 5).getDate() ||
+        day === nextDayOfWeekAfter(year, 9, 14, 6).getDate()) {
+      const prevSunday = new Date(year, date.getMonth(), day - dow);
+      const sundayKey = getSundayCollectKey(prevSunday);
+      return sundayKey ? [sundayKey, 'emberDays'] : ['emberDays'];
+    }
+  }
+  // December Ember Days: Wed/Fri/Sat after Dec 13
+  if (month === 12 && day >= 14 && day <= 20) {
+    if (day === nextDayOfWeekAfter(year, 12, 13, 3).getDate() ||
+        day === nextDayOfWeekAfter(year, 12, 13, 5).getDate() ||
+        day === nextDayOfWeekAfter(year, 12, 13, 6).getDate()) {
+      const prevSunday = new Date(year, date.getMonth(), day - dow);
+      const sundayKey = getSundayCollectKey(prevSunday);
+      return sundayKey ? [sundayKey, 'emberDays'] : ['emberDays'];
+    }
+  }
+
+  // ── 6. Weekday: preceding Sunday's collect ────────────────────────────────
   const prevSunday = new Date(year, date.getMonth(), day - dow);
   const k = getSundayCollectKey(prevSunday);
   return k ? [k] : [];
