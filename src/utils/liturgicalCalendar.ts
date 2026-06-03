@@ -5,6 +5,7 @@ export type LiturgicalSeason =
   | 'Pre-Lent'
   | 'Lent'
   | 'Easter'
+  | 'Ascensiontide'
   | 'Whitsuntide'
   | 'Trinity';
 
@@ -196,8 +197,11 @@ export function getLiturgicalSeason(date: Date = new Date()): LiturgicalSeason {
   const easterTs = easter.getTime();
   const dfe = Math.round((ts - easterTs) / DAY);
 
-  // Easter season: Easter Day → Saturday before Whit Sunday
-  if (dfe >= 0 && dfe <= 48) return 'Easter';
+  // Easter season: Easter Day → Saturday before Ascension
+  if (dfe >= 0 && dfe <= 38) return 'Easter';
+
+  // Ascensiontide: Ascension Day → Saturday before Whitsunday
+  if (dfe >= 39 && dfe <= 48) return 'Ascensiontide';
 
   // Whitsuntide: Whit Sunday → Saturday after
   if (dfe >= 49 && dfe <= 55) return 'Whitsuntide';
@@ -237,14 +241,15 @@ export function showGloriaPatri(season: LiturgicalSeason): boolean {
 /** Returns the traditional Anglican display label for a liturgical season. */
 export function getSeasonDisplayLabel(season: LiturgicalSeason): string {
   const labels: Record<LiturgicalSeason, string> = {
-    Advent:      'Advent',
-    Christmas:   'Christmastide',
-    Epiphany:    'Epiphanytide',
-    'Pre-Lent':  'Pre-Lent',
-    Lent:        'Lent',
-    Easter:      'Eastertide',
-    Whitsuntide: 'Whitsuntide',
-    Trinity:     'Trinitytide',
+    Advent:        'Advent',
+    Christmas:     'Christmastide',
+    Epiphany:      'Epiphanytide',
+    'Pre-Lent':    'Pre-Lent',
+    Lent:          'Lent',
+    Easter:        'Eastertide',
+    Ascensiontide: 'Ascensiontide',
+    Whitsuntide:   'Whitsuntide',
+    Trinity:       'Trinitytide',
   };
   return labels[season];
 }
@@ -361,7 +366,10 @@ export type ProperCollectKey =
   | 'maundyThursday' | 'goodFriday' | 'holySaturday'
   // Easter & Ascension
   | 'easterDay' | 'easter1' | 'easter2' | 'easter3' | 'easter4' | 'easter5'
-  | 'ascensionDay' | 'sundayAfterAscension' | 'whitsunday' | 'trinitySunday'
+  | 'rogationDays'
+  | 'ascensionDay' | 'sundayAfterAscension'
+  | 'whitMonday' | 'whitTuesday' | 'emberDays'
+  | 'whitsunday' | 'trinitySunday'
   // Sundays after Trinity
   | 'trinity1'  | 'trinity2'  | 'trinity3'  | 'trinity4'  | 'trinity5'
   | 'trinity6'  | 'trinity7'  | 'trinity8'  | 'trinity9'  | 'trinity10'
@@ -509,12 +517,17 @@ export function getProperCollectKey(date: Date): ProperCollectKey | null {
   if (dfe === -2)  return 'goodFriday';
   if (dfe === -1)  return 'holySaturday';
   if (dfe >= 0  && dfe <= 6)  return 'easterDay';   // Easter Day through Easter Saturday
+  if (dfe >= 36 && dfe <= 38) return 'rogationDays'; // Rogation Mon–Wed
   if (dfe === 39)             return 'ascensionDay'; // Ascension Day (Thursday)
   if (dfe >= 40 && dfe <= 41) return 'ascensionDay'; // Fri–Sat after Ascension
   // dfe 42 = Sunday after Ascension — falls through to Sunday / seasonal checks
   if (dfe >= 43 && dfe <= 48) return 'ascensionDay'; // Mon–Sat before Whitsunday
   if (dfe === 49)             return 'whitsunday';
+  if (dfe === 50)             return 'whitMonday';
+  if (dfe === 51)             return 'whitTuesday';
+  if (dfe >= 52 && dfe <= 55) return 'whitsunday';  // Ember Wed/Thu/Fri/Sat: primary = Whitsunday
   if (dfe === 56)             return 'trinitySunday';
+  if (dfe >= 57 && dfe <= 62) return 'trinitySunday'; // Trinity week weekdays
 
   // ── 2. Fixed feasts (take priority over weekday Sunday-fallback) ──────────
   const fixedKey = FIXED_FEAST_COLLECT_KEYS[`${month}-${day}`];
@@ -561,11 +574,20 @@ export function getProperCollectKeys(date: Date): ProperCollectKey[] {
   if (dfe === -2)  return ['goodFriday'];
   if (dfe === -1)  return ['holySaturday'];
   if (dfe >= 0  && dfe <= 6)  return ['easterDay'];
+  if (dfe >= 36 && dfe <= 38) return ['rogationDays']; // Rogation Mon–Wed
   if (dfe === 39)             return ['ascensionDay'];
-  if (dfe >= 40 && dfe <= 41) return ['ascensionDay'];
-  if (dfe >= 43 && dfe <= 48) return ['ascensionDay'];
+  if (dfe >= 40 && dfe <= 41) return ['ascensionDay']; // Fri–Sat after Ascension
+  if (dfe === 42)             return ['sundayAfterAscension', 'ascensionDay']; // Sunday after Ascension: both collects
+  if (dfe >= 43 && dfe <= 48) return ['ascensionDay']; // Mon–Sat before Whitsunday
   if (dfe === 49)             return ['whitsunday'];
+  if (dfe === 50)             return ['whitMonday'];
+  if (dfe === 51)             return ['whitTuesday'];
+  if (dfe === 52)             return ['whitsunday', 'emberDays']; // Ember Wednesday
+  if (dfe === 53)             return ['whitsunday'];               // Thursday
+  if (dfe === 54)             return ['whitsunday', 'emberDays']; // Ember Friday
+  if (dfe === 55)             return ['whitsunday', 'emberDays']; // Ember Saturday
   if (dfe === 56)             return ['trinitySunday'];
+  if (dfe >= 57 && dfe <= 62) return ['trinitySunday']; // Trinity week weekdays
 
   // ── 2. Fixed feasts → feast collect + week Sunday collect ─────────────────
   const fixedKey = FIXED_FEAST_COLLECT_KEYS[`${month}-${day}`];
