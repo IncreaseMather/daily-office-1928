@@ -15,7 +15,8 @@ const K = {
   PRIEST_ABS:        '@s/priestAbs',
   LAY_ABS:           '@s/layAbs',
   CREED:             '@s/creed',
-  SHORTER_FORM:      '@s/shorterForm',
+  SHORTER_FORM:        '@s/shorterForm',
+  SHORTER_FORM_PSALMS: '@s/shorterFormPsalms',
   DARK_MODE:         '@s/darkMode',
   FONT_SIZE:         '@s/fontSize',
   MP_ENABLED:        '@s/mpEnabled',
@@ -39,6 +40,8 @@ interface SettingsContextValue {
   setCreedChoice: (v: CreedChoice) => void;
   shorterForm: boolean;
   setShorterForm: (v: boolean) => void;
+  shorterFormPsalms: boolean;
+  setShorterFormPsalms: (v: boolean) => void;
   darkMode: boolean;
   setDarkMode: (v: boolean) => void;
   fontSize: FontSize;
@@ -73,6 +76,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const [layAbsolution, setLayAbsS]            = useState<LayAbsolution>('trinity21');
   const [creedChoice, setCreedS]               = useState<CreedChoice>('apostles');
   const [shorterForm, setShorterS]             = useState(false);
+  const [shorterFormPsalms, setShorterPsalmsS] = useState(false);
   const [darkMode, setDarkS]                   = useState(false);
   const [fontSize, setFontS]                   = useState<FontSize>('medium');
   const [mpReminderEnabled, setMpEnabledS]     = useState(false);
@@ -92,7 +96,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         if (m[K.PRIEST_ABS])   setPriestAbsS(m[K.PRIEST_ABS] as PriestAbsolutionForm);
         if (m[K.LAY_ABS])      setLayAbsS(m[K.LAY_ABS] as LayAbsolution);
         if (m[K.CREED])        setCreedS(m[K.CREED] as CreedChoice);
-        if (m[K.SHORTER_FORM]) setShorterS(m[K.SHORTER_FORM] === 'true');
+        if (m[K.SHORTER_FORM])        setShorterS(m[K.SHORTER_FORM] === 'true');
+        if (m[K.SHORTER_FORM_PSALMS]) setShorterPsalmsS(m[K.SHORTER_FORM_PSALMS] === 'true');
         if (m[K.DARK_MODE])    setDarkS(m[K.DARK_MODE] === 'true');
         if (m[K.FONT_SIZE])    setFontS(m[K.FONT_SIZE] as FontSize);
         if (m[K.MP_ENABLED])   setMpEnabledS(m[K.MP_ENABLED] === 'true');
@@ -113,7 +118,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const setPriestAbsolutionForm  = (v: PriestAbsolutionForm)  => { setPriestAbsS(v); persist(K.PRIEST_ABS, v); };
   const setLayAbsolution         = (v: LayAbsolution)         => { setLayAbsS(v);    persist(K.LAY_ABS, v); };
   const setCreedChoice           = (v: CreedChoice)           => { setCreedS(v);     persist(K.CREED, v); };
-  const setShorterForm           = (v: boolean)               => { setShorterS(v);   persist(K.SHORTER_FORM, String(v)); };
+  const setShorterForm           = (v: boolean)               => { setShorterS(v);       persist(K.SHORTER_FORM, String(v)); };
+  const setShorterFormPsalms     = (v: boolean)               => { setShorterPsalmsS(v); persist(K.SHORTER_FORM_PSALMS, String(v)); };
   const setDarkMode              = (v: boolean)               => { setDarkS(v);      persist(K.DARK_MODE, String(v)); };
   const setFontSize              = (v: FontSize)              => { setFontS(v);      persist(K.FONT_SIZE, v); };
   const setMpReminderEnabled     = (v: boolean)               => { setMpEnabledS(v); persist(K.MP_ENABLED, String(v)); };
@@ -132,6 +138,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       layAbsolution, setLayAbsolution,
       creedChoice, setCreedChoice,
       shorterForm, setShorterForm,
+      shorterFormPsalms, setShorterFormPsalms,
       darkMode, setDarkMode,
       fontSize, setFontSize,
       mpReminderEnabled, setMpReminderEnabled,

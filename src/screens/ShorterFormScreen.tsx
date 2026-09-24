@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
 import { Typography } from '../theme';
-import { useTheme } from '../context/SettingsContext';
+import { useSettings, useTheme } from '../context/SettingsContext';
 import { formatLiturgicalDate, formatShortDate } from '../utils/dateHelpers';
 import { useSelectedDate } from '../context/SelectedDateContext';
 import { CalendarPicker } from '../components/CalendarPicker';
-import { getLiturgicalSeason, getSeasonDisplayLabel, getProperCollectKeys, showLentDailyCollect, getFeastDay, getSundayDisplayName } from '../utils/liturgicalCalendar';
-import { Section, BodyText, RubricText, Divider } from '../components/OfficeSection';
+import { getLiturgicalSeason, showGloriaPatri, getSeasonDisplayLabel, getProperCollectKeys, showLentDailyCollect, getFeastDay, getAppointedPsalmsKey, getSundayDisplayName } from '../utils/liturgicalCalendar';
+import { Section, SectionHeading, BodyText, RubricText, Divider } from '../components/OfficeSection';
+import { PsalmView } from '../components/PsalmView';
+import { resolveAppointedPsalm } from '../utils/psalmLookup';
 import collectsData from '../data/collects.json';
+import appointedPsalmsData from '../data/appointedPsalms.json';
 
 const LORDS_PRAYER =
   'Our Father, who art in heaven, Hallowed be thy Name. Thy kingdom come. Thy will be done, On earth as it is in heaven. ' +
@@ -36,8 +39,58 @@ const OPENING_RUBRIC =
   'After the reading of a brief portion of Holy Scripture, let the Head of the Household, or some other member of the family, ' +
   "say as followeth, all kneeling, and repeating with him the Lord's Prayer.";
 
+const GLORIA_PATRI =
+  'GLORY be to the Father, and to the Son, * and to the Holy Ghost;\n' +
+  'As it was in the beginning, is now, and ever shall be, * world without end. Amen.';
+
+function AppointedPsalms({ type, date }: { type: 'morning' | 'evening'; date: Date }) {
+  const { colors, sizes, lineHeights } = useTheme();
+  const gloriaInSeason = showGloriaPatri(getLiturgicalSeason(date));
+  const appointedKey = getAppointedPsalmsKey(date);
+  const appointedRefs: string[] = (appointedPsalmsData as any)[appointedKey]?.[type] ?? [];
+  const psalms = appointedRefs
+    .map((ref) => ({ ref, entry: resolveAppointedPsalm(ref) }))
+    .filter((row): row is { ref: string; entry: NonNullable<ReturnType<typeof resolveAppointedPsalm>> } => row.entry !== null);
+
+  return (
+    <>
+      <Section title="The Psalms">
+        <RubricText text="Then shall follow the Psalms in order as they are appointed." />
+        {psalms.length > 0 ? (
+          <>
+            <RubricText noMark text={'Psalms ' + appointedRefs.join(', ')} />
+            {psalms.map(({ ref, entry }) => (
+              <PsalmView key={`${appointedKey}-${ref}`} entry={entry} showGloria={false} />
+            ))}
+          </>
+        ) : (
+          <RubricText noMark text="[Psalms for this day — to be added]" />
+        )}
+        {!gloriaInSeason && (
+          <RubricText noMark text="The Gloria Patri is omitted in Advent, Pre-Lent, and Lent." />
+        )}
+        {gloriaInSeason && psalms.length > 0 && (
+          <View style={{ marginTop: 8 }}>
+            <RubricText text="At the end of the Psalms shall be said or sung," />
+            <SectionHeading text="Gloria Patri" />
+            <Text style={{
+              fontFamily: Typography.serifItalic,
+              fontSize: sizes.body,
+              lineHeight: lineHeights.body,
+              color: colors.ink,
+              marginBottom: 4,
+            }}>{GLORIA_PATRI}</Text>
+          </View>
+        )}
+      </Section>
+      <Divider />
+    </>
+  );
+}
+
 export function ShorterFormScreen({ type }: { type: 'morning' | 'evening' }) {
   const { colors, sizes } = useTheme();
+  const { shorterFormPsalms } = useSettings();
   const { selectedDate: today, isViewingToday, setSelectedDate, resetToToday } = useSelectedDate();
   const [calOpen, setCalOpen] = useState(false);
   const season = getLiturgicalSeason(today);
@@ -85,6 +138,8 @@ export function ShorterFormScreen({ type }: { type: 'morning' | 'evening' }) {
         onSelectDate={setSelectedDate}
         onClose={() => setCalOpen(false)}
       />
+
+      {shorterFormPsalms && <AppointedPsalms type={type} date={today} />}
 
       <Section title="Family Prayer">
         <RubricText text={OPENING_RUBRIC} />

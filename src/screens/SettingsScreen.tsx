@@ -346,6 +346,7 @@ export function SettingsScreen() {
     layAbsolution, setLayAbsolution,
     creedChoice, setCreedChoice,
     shorterForm, setShorterForm,
+    shorterFormPsalms, setShorterFormPsalms,
     darkMode, setDarkMode,
     fontSize, setFontSize,
     litanyEnabled, setLitanyEnabled,
@@ -549,11 +550,25 @@ export function SettingsScreen() {
           value={shorterForm}
           onToggle={() => setShorterForm(!shorterForm)}
         />
+        {shorterForm && (
+          <SettingRow
+            label="Psalms of the Day"
+            value={shorterFormPsalms}
+            onToggle={() => setShorterFormPsalms(!shorterFormPsalms)}
+          />
+        )}
         <Text style={{ fontFamily: Typography.serifItalic, fontSize: sizes.rubric, color: colors.inkLight }}>
           {shorterForm
             ? 'The Family Prayer shorter form will be used in place of the full office.'
             : 'The full office will be said.'}
         </Text>
+        {shorterForm && (
+          <Text style={{ fontFamily: Typography.serifItalic, fontSize: sizes.rubric, color: colors.inkLight, marginTop: 8 }}>
+            {shorterFormPsalms
+              ? 'The Psalms appointed for the day will be read in the Family Prayer shorter form.'
+              : 'The shorter form will be said without the Psalms.'}
+          </Text>
+        )}
       </View>
 
       {/* ── Litany ────────────────────────────────────────────────────────── */}
