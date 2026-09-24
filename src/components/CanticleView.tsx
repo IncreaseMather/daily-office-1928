@@ -3,6 +3,8 @@ import { View, Text } from 'react-native';
 import { Typography } from '../theme';
 import { useTheme } from '../context/SettingsContext';
 import { RubricText, Divider } from './OfficeSection';
+import { CanticlePlayButton } from './CanticlePlayButton';
+import { hasCanticleAudio } from '../audio/canticleAudio';
 import canticlesData from '../data/canticles.json';
 
 interface CanticleData {
@@ -43,15 +45,19 @@ export function CanticleView({
   showGloria?: boolean;
 }) {
   const { colors, sizes, lineHeights } = useTheme();
+  const audio = hasCanticleAudio(canticle.id);
   return (
     <View>
-      <Text style={{
-        fontFamily: Typography.serifBold,
-        fontSize: sizes.subheading,
-        lineHeight: lineHeights.heading,
-        color: colors.ink,
-        marginBottom: 2,
-      }}>{canticle.title}</Text>
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 2 }}>
+        <Text style={{
+          flex: 1,
+          fontFamily: Typography.serifBold,
+          fontSize: sizes.subheading,
+          lineHeight: lineHeights.heading,
+          color: colors.ink,
+        }}>{canticle.title}</Text>
+        {audio ? <CanticlePlayButton canticleId={canticle.id} /> : null}
+      </View>
       {canticle.reference ? (
         <Text style={{
           fontFamily: Typography.serifItalic,
