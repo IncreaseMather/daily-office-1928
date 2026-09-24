@@ -347,6 +347,7 @@ export function SettingsScreen() {
     creedChoice, setCreedChoice,
     shorterForm, setShorterForm,
     shorterFormPsalms, setShorterFormPsalms,
+    catholicFeasts, setCatholicFeasts,
     darkMode, setDarkMode,
     fontSize, setFontSize,
     litanyEnabled, setLitanyEnabled,
@@ -569,6 +570,20 @@ export function SettingsScreen() {
               : 'The shorter form will be said without the Psalms.'}
           </Text>
         )}
+      </View>
+
+      {/* ── Catholic Feast Days ───────────────────────────────────────────── */}
+      <View style={sectionStyle}>
+        <SettingRow
+          label="Add Catholic Feast Days"
+          value={catholicFeasts}
+          onToggle={() => setCatholicFeasts(!catholicFeasts)}
+        />
+        <Text style={{ fontFamily: Typography.serifItalic, fontSize: sizes.rubric, color: colors.inkLight }}>
+          {catholicFeasts
+            ? 'Saints and feasts from the Catholic kalendar will be added, with a collect where that observance has one of its own.'
+            : 'The office will be said without the additional Catholic feasts.'}
+        </Text>
       </View>
 
       {/* ── Litany ────────────────────────────────────────────────────────── */}

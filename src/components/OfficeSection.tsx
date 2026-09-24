@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import { Typography } from '../theme';
 import { useTheme, useSettings } from '../context/SettingsContext';
+import { SignOfTheCross } from './SignOfTheCross';
 
 /** Split text on [bracketed] segments and render them in italic. */
 function renderWithBrackets(
@@ -30,7 +31,34 @@ export function SectionHeading({ text }: { text: string }) {
   );
 }
 
-export function BodyText({ text, indent }: { text: string; indent?: boolean }) {
+function renderPrayerText(
+  text: string,
+  bracketStyle: object,
+  crossAfter?: string,
+): React.ReactNode {
+  if (!crossAfter) return renderWithBrackets(text, bracketStyle);
+  const idx = text.indexOf(crossAfter);
+  if (idx < 0) return renderWithBrackets(text, bracketStyle);
+  const cut = idx + crossAfter.length;
+  const head = renderWithBrackets(text.slice(0, cut), bracketStyle);
+  const tail = renderWithBrackets(text.slice(cut), bracketStyle);
+  return [
+    ...(Array.isArray(head) ? head : [head]),
+    <SignOfTheCross key="sign-of-the-cross" />,
+    ...(Array.isArray(tail) ? tail : [tail]),
+  ];
+}
+
+export function BodyText({
+  text, indent, crossAfter, crossBefore,
+}: {
+  text: string;
+  indent?: boolean;
+  /** Insert the sign of the cross immediately after the first match. */
+  crossAfter?: string;
+  /** Insert the sign of the cross immediately before the text. */
+  crossBefore?: boolean;
+}) {
   const { colors, sizes, lineHeights } = useTheme();
   const bracketStyle = { fontFamily: Typography.serifItalic, color: colors.inkLight };
   return (
@@ -41,13 +69,16 @@ export function BodyText({ text, indent }: { text: string; indent?: boolean }) {
       color: colors.ink,
       marginBottom: 4,
       paddingLeft: indent ? 22 : 0,
-    }}>{renderWithBrackets(text, bracketStyle)}</Text>
+    }}>
+      {crossBefore ? <SignOfTheCross /> : null}
+      {renderPrayerText(text, bracketStyle, crossAfter)}
+    </Text>
   );
 }
 
 const LABEL_WIDTH = 76;
 
-export function MinisterText({ text, indent }: { text: string; indent?: boolean }) {
+export function MinisterText({ text, indent, crossAfter }: { text: string; indent?: boolean; crossAfter?: string }) {
   const { colors, sizes, lineHeights } = useTheme();
   const { leadType } = useSettings();
   const label = leadType === 'priest' ? 'Clergy' : 'Officiant';
@@ -67,7 +98,7 @@ export function MinisterText({ text, indent }: { text: string; indent?: boolean 
         lineHeight: lineHeights.body,
         color: colors.ink,
         flex: 1,
-      }}>{renderWithBrackets(text, bracketStyle)}</Text>
+      }}>{renderPrayerText(text, bracketStyle, crossAfter)}</Text>
     </View>
   );
 }

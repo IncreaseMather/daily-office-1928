@@ -9,6 +9,7 @@ import { getLiturgicalSeason, showGloriaPatri, getSeasonDisplayLabel, getProperC
 import { Section, SectionHeading, BodyText, RubricText, Divider } from '../components/OfficeSection';
 import { PsalmView } from '../components/PsalmView';
 import { resolveAppointedPsalm } from '../utils/psalmLookup';
+import { getCatholicAdditions } from '../utils/catholicFeasts';
 import collectsData from '../data/collects.json';
 import appointedPsalmsData from '../data/appointedPsalms.json';
 
@@ -90,7 +91,7 @@ function AppointedPsalms({ type, date }: { type: 'morning' | 'evening'; date: Da
 
 export function ShorterFormScreen({ type }: { type: 'morning' | 'evening' }) {
   const { colors, sizes } = useTheme();
-  const { shorterFormPsalms } = useSettings();
+  const { shorterFormPsalms, catholicFeasts } = useSettings();
   const { selectedDate: today, isViewingToday, setSelectedDate, resetToToday } = useSelectedDate();
   const [calOpen, setCalOpen] = useState(false);
   const season = getLiturgicalSeason(today);
@@ -101,6 +102,17 @@ export function ShorterFormScreen({ type }: { type: 'morning' | 'evening' }) {
   const properCollectKeys = getProperCollectKeys(today);
   const properCollectTexts: string[] = properCollectKeys.map(k => proper[k]).filter(Boolean);
   const appendLentCollect = showLentDailyCollect(today);
+  const catholic = catholicFeasts
+    ? getCatholicAdditions(
+        today,
+        feastDay?.name ?? null,
+        appendLentCollect ? [...properCollectTexts, proper.ashWednesday] : properCollectTexts,
+      )
+    : { names: [] as string[], collects: [] as string[] };
+  const headingNames = [
+    ...(feastDay?.name ? [feastDay.name] : sundayName ? [sundayName] : []),
+    ...catholic.names,
+  ];
   const officeName = type === 'morning' ? 'Morning Prayer' : 'Evening Prayer';
 
   return (
@@ -119,11 +131,11 @@ export function ShorterFormScreen({ type }: { type: 'morning' | 'evening' }) {
       <Text style={{ fontFamily: Typography.serifItalic, fontSize: sizes.rubric, color: colors.rubric, textAlign: 'center', marginBottom: 4 }}>
         {getSeasonDisplayLabel(season)}
       </Text>
-      {(feastDay?.name ?? sundayName) ? (
-        <Text style={{ fontFamily: Typography.serifBold, fontSize: sizes.rubric, color: colors.rubric, textAlign: 'center', marginBottom: 16 }}>
-          {feastDay?.name ?? sundayName}
+      {headingNames.map((name, i) => (
+        <Text key={name} style={{ fontFamily: Typography.serifBold, fontSize: sizes.rubric, color: colors.rubric, textAlign: 'center', marginBottom: i < headingNames.length - 1 ? 2 : 16 }}>
+          {name}
         </Text>
-      ) : null}
+      ))}
       {!isViewingToday && (
         <TouchableOpacity onPress={resetToToday} activeOpacity={0.7}>
           <Text style={{ fontFamily: Typography.serifItalic, fontSize: sizes.rubric, color: colors.rubric, textAlign: 'center', marginTop: 8, marginBottom: 4 }}>
@@ -164,11 +176,17 @@ export function ShorterFormScreen({ type }: { type: 'morning' | 'evening' }) {
             <BodyText text={proper.ashWednesday} />
           </>
         )}
+        {catholic.collects.map((text, i) => (
+          <React.Fragment key={`cath-${i}`}>
+            <View style={{ height: 10 }} />
+            <BodyText text={text} />
+          </React.Fragment>
+        ))}
       </Section>
       <Divider />
 
       <Section title="The Lord's Prayer">
-        <BodyText text={LORDS_PRAYER} />
+        <BodyText text={LORDS_PRAYER} crossAfter="lead us not into temptation" />
       </Section>
       <Divider />
 
@@ -190,7 +208,7 @@ export function ShorterFormScreen({ type }: { type: 'morning' | 'evening' }) {
 
       {type === 'morning' ? (
         <Section title="The Grace">
-          <BodyText text={THE_GRACE} />
+          <BodyText text={THE_GRACE} crossBefore />
         </Section>
       ) : (
         <Section title="The Blessing">

@@ -16,8 +16,10 @@ import {
   Section, SectionHeading, BodyText, RubricText, Divider, OrDivider, MinisterText, PeopleText,
 } from '../components/OfficeSection';
 import { CanticleView } from '../components/CanticleView';
+import { withSignOfTheCross } from '../components/SignOfTheCross';
 import { PsalmView } from '../components/PsalmView';
 import { useSettings, useTheme, type PriestAbsolutionForm } from '../context/SettingsContext';
+import { getCatholicAdditions } from '../utils/catholicFeasts';
 import { ShorterFormScreen } from './ShorterFormScreen';
 
 import collectsData from '../data/collects.json';
@@ -183,7 +185,7 @@ export function EveningPrayerScreen() {
   const sundayName = getSundayDisplayName(today);
   const insets = useSafeAreaInsets();
 
-  const { leadType, priestAbsolutionForm, layAbsolution, creedChoice, shorterForm, bibleTranslation, deuterocanonTranslation } = useSettings();
+  const { leadType, priestAbsolutionForm, layAbsolution, creedChoice, shorterForm, bibleTranslation, deuterocanonTranslation, catholicFeasts } = useSettings();
   const ministerTerm = leadType === 'priest' ? 'Clergy' : 'Officiant';
 
   // ── Section navigation hooks — must come before any early return ────────────
@@ -197,6 +199,17 @@ export function EveningPrayerScreen() {
   const properCollectKeys = getProperCollectKeys(today);
   const properCollectTexts: string[] = properCollectKeys.map(k => proper[k]).filter(Boolean);
   const appendLentCollect = showLentDailyCollect(today);
+  const catholic = catholicFeasts
+    ? getCatholicAdditions(
+        today,
+        feastDay?.name ?? null,
+        appendLentCollect ? [...properCollectTexts, proper.ashWednesday] : properCollectTexts,
+      )
+    : { names: [] as string[], collects: [] as string[] };
+  const headingNames = [
+    ...(feastDay?.name ? [feastDay.name] : sundayName ? [sundayName] : []),
+    ...catholic.names,
+  ];
 
   const absolution = (collectsData.common as any).absolution[priestAbsolutionForm as PriestAbsolutionForm];
 
@@ -301,7 +314,9 @@ export function EveningPrayerScreen() {
         </TouchableOpacity>
         <Text style={s.officeTitle}>Evening Prayer</Text>
         <Text style={s.seasonLabel}>{getSeasonDisplayLabel(season)}</Text>
-        {(feastDay?.name ?? sundayName) ? <Text style={s.holyDayLabel}>{feastDay?.name ?? sundayName}</Text> : null}
+        {headingNames.map((name, i) => (
+          <Text key={name} style={[s.holyDayLabel, i < headingNames.length - 1 ? { marginBottom: 2 } : null]}>{name}</Text>
+        ))}
         {!isViewingToday && (
           <TouchableOpacity onPress={resetToToday} activeOpacity={0.7}>
             <Text style={s.bannerText}>
@@ -340,26 +355,29 @@ export function EveningPrayerScreen() {
         {leadType === 'priest' ? (
           <Section title="The Absolution">
             <RubricText text="Then shall the Priest (or Bishop, if he be present) stand and pronounce the Absolution." />
-            <BodyText text={absolution} />
+            <BodyText
+              text={absolution}
+              crossAfter={priestAbsolutionForm === 'precatory' ? 'have mercy upon you' : 'He pardoneth and absolveth'}
+            />
           </Section>
         ) : layAbsolution === 'kyrie' ? (
           <Section title="Kyrie Eleison">
             <RubricText text={`Then shall be said by the ${ministerTerm} and People, all kneeling,`} />
-            <MinisterText text="Lord, have mercy upon us." />
+            <MinisterText text="Lord, have mercy upon us." crossAfter="Lord, have mercy upon us." />
             <PeopleText text="Christ, have mercy upon us." />
             <MinisterText text="Lord, have mercy upon us." />
           </Section>
         ) : (
           <Section title="A Collect for Pardon">
             <RubricText text={`Then the ${ministerTerm} shall say the Collect for the Twenty-first Sunday after Trinity.`} />
-            <BodyText text={collectForTrinity21} />
+            <BodyText text={collectForTrinity21} crossAfter="pardon and peace" />
           </Section>
         )}
         <Divider />
 
         <Section title="The Lord's Prayer">
           <RubricText text={`Then the ${ministerTerm} shall say the Lord's Prayer; the People repeating after him every Petition.`} />
-          <BodyText text={LORDS_PRAYER} />
+          <BodyText text={LORDS_PRAYER} crossAfter="lead us not into temptation" />
         </Section>
         <Divider />
 
@@ -392,7 +410,7 @@ export function EveningPrayerScreen() {
                 {gloriaInSeason ? (
                   <>
                     <SectionHeading text="Gloria in Excelsis" />
-                    <Text style={s.gloriaText}>{GLORIA_IN_EXCELSIS_EP}</Text>
+                    <Text style={s.gloriaText}>{withSignOfTheCross(GLORIA_IN_EXCELSIS_EP, 'in the glory of God the Father')}</Text>
                   </>
                 ) : (
                   <RubricText noMark text="The Gloria in Excelsis is omitted in Advent, Pre-Lent, and Lent." />
@@ -455,7 +473,14 @@ export function EveningPrayerScreen() {
         <View onLayout={markSection('creed')}>
           <Section title={creedTitle}>
             <RubricText text={creedRubric} />
-            <BodyText text={creedText} />
+            <BodyText
+              text={creedText}
+              crossAfter={
+                creedChoice === 'nicene' ? 'the Resurrection of the dead'
+                : creedChoice === 'apostles' ? 'The Resurrection of the body'
+                : undefined
+              }
+            />
             {creedChoice === 'athanasian' && (
               <Text style={{ fontFamily: Typography.serifItalic, fontSize: sizes.rubric, color: colors.inkLight, lineHeight: Math.round(sizes.rubric * 1.55), marginTop: 12 }}>
                 * The Athanasian Creed (Quicunque Vult) does not appear in the 1928 American Book of Common Prayer. It is included here as a historical Anglican creed for optional use.
@@ -518,6 +543,12 @@ export function EveningPrayerScreen() {
                 <BodyText text={proper.ashWednesday} />
               </>
             )}
+            {catholic.collects.map((text, i) => (
+              <React.Fragment key={`cath-${i}`}>
+                <View style={s.spacer} />
+                <BodyText text={text} />
+              </React.Fragment>
+            ))}
           </Section>
         </View>
 
@@ -549,7 +580,7 @@ export function EveningPrayerScreen() {
         </Section>
         <Section title="The Grace">
           <RubricText noMark text="2 Corinthians 13:14" />
-          <BodyText text={theGrace} />
+          <BodyText text={theGrace} crossBefore />
         </Section>
         <Divider />
 
