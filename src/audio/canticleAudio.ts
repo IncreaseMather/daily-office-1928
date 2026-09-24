@@ -70,6 +70,22 @@ export function useCanticlePlaying(id: string): boolean {
   );
 }
 
+/** Move this canticle back to the start without playing. */
+export async function restartCanticle(id: string) {
+  if (!hasCanticleAudio(id)) return;
+  const player = players.get(id);
+  if (!player) return;
+  player.pause();
+  finished.add(id);
+  try {
+    await player.seekTo(0);
+  } catch {
+    // The position is still marked so the next play begins at the start.
+  }
+  player.pause();
+  emit();
+}
+
 export async function toggleCanticle(id: string) {
   if (!hasCanticleAudio(id)) return;
   await ensureAudioMode();
