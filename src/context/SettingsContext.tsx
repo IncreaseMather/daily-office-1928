@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Colors, DarkColors, Typography, FontScales } from '../theme';
+import { Colors, DarkColors, PinkColors, Typography, FontScales } from '../theme';
+import { setKittenMeowEnabled } from '../audio/kittenMeow';
 
 export type LeadType = 'priest' | 'lay';
 export type PriestAbsolutionForm = 'declaratory' | 'precatory';
@@ -18,6 +19,7 @@ const K = {
   SHORTER_FORM:        '@s/shorterForm',
   SHORTER_FORM_PSALMS: '@s/shorterFormPsalms',
   CATHOLIC_FEASTS:     '@s/catholicFeasts',
+  PINK_MODE:           '@s/pinkMode',
   DARK_MODE:         '@s/darkMode',
   FONT_SIZE:         '@s/fontSize',
   MP_ENABLED:        '@s/mpEnabled',
@@ -45,6 +47,8 @@ interface SettingsContextValue {
   setShorterFormPsalms: (v: boolean) => void;
   catholicFeasts: boolean;
   setCatholicFeasts: (v: boolean) => void;
+  pinkMode: boolean;
+  setPinkMode: (v: boolean) => void;
   darkMode: boolean;
   setDarkMode: (v: boolean) => void;
   fontSize: FontSize;
@@ -81,6 +85,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const [shorterForm, setShorterS]             = useState(false);
   const [shorterFormPsalms, setShorterPsalmsS] = useState(false);
   const [catholicFeasts, setCatholicFeastsS]   = useState(false);
+  const [pinkMode, setPinkS]                   = useState(false);
   const [darkMode, setDarkS]                   = useState(false);
   const [fontSize, setFontS]                   = useState<FontSize>('medium');
   const [mpReminderEnabled, setMpEnabledS]     = useState(false);
@@ -103,6 +108,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         if (m[K.SHORTER_FORM])        setShorterS(m[K.SHORTER_FORM] === 'true');
         if (m[K.SHORTER_FORM_PSALMS]) setShorterPsalmsS(m[K.SHORTER_FORM_PSALMS] === 'true');
         if (m[K.CATHOLIC_FEASTS])     setCatholicFeastsS(m[K.CATHOLIC_FEASTS] === 'true');
+        if (m[K.PINK_MODE])           setPinkS(m[K.PINK_MODE] === 'true');
         if (m[K.DARK_MODE])    setDarkS(m[K.DARK_MODE] === 'true');
         if (m[K.FONT_SIZE])    setFontS(m[K.FONT_SIZE] as FontSize);
         if (m[K.MP_ENABLED])   setMpEnabledS(m[K.MP_ENABLED] === 'true');
@@ -119,6 +125,10 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     }).catch(() => {});
   }, []);
 
+  useEffect(() => {
+    setKittenMeowEnabled(pinkMode);
+  }, [pinkMode]);
+
   const setLeadType              = (v: LeadType)              => { setLeadTypeS(v);  persist(K.LEAD_TYPE, v); };
   const setPriestAbsolutionForm  = (v: PriestAbsolutionForm)  => { setPriestAbsS(v); persist(K.PRIEST_ABS, v); };
   const setLayAbsolution         = (v: LayAbsolution)         => { setLayAbsS(v);    persist(K.LAY_ABS, v); };
@@ -126,6 +136,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const setShorterForm           = (v: boolean)               => { setShorterS(v);       persist(K.SHORTER_FORM, String(v)); };
   const setShorterFormPsalms     = (v: boolean)               => { setShorterPsalmsS(v); persist(K.SHORTER_FORM_PSALMS, String(v)); };
   const setCatholicFeasts        = (v: boolean)               => { setCatholicFeastsS(v); persist(K.CATHOLIC_FEASTS, String(v)); };
+  const setPinkMode              = (v: boolean)               => { setPinkS(v); setKittenMeowEnabled(v); persist(K.PINK_MODE, String(v)); };
   const setDarkMode              = (v: boolean)               => { setDarkS(v);      persist(K.DARK_MODE, String(v)); };
   const setFontSize              = (v: FontSize)              => { setFontS(v);      persist(K.FONT_SIZE, v); };
   const setMpReminderEnabled     = (v: boolean)               => { setMpEnabledS(v); persist(K.MP_ENABLED, String(v)); };
@@ -146,6 +157,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       shorterForm, setShorterForm,
       shorterFormPsalms, setShorterFormPsalms,
       catholicFeasts, setCatholicFeasts,
+      pinkMode, setPinkMode,
       darkMode, setDarkMode,
       fontSize, setFontSize,
       mpReminderEnabled, setMpReminderEnabled,
@@ -170,13 +182,14 @@ export function useSettings(): SettingsContextValue {
 
 /** Returns dynamic colors and scaled font sizes for the current theme settings. */
 export function useTheme() {
-  const { darkMode, fontSize } = useSettings();
+  const { darkMode, fontSize, pinkMode } = useSettings();
   const scale = FontScales[fontSize];
-  const colors = darkMode ? DarkColors : Colors;
+  const colors = pinkMode ? PinkColors : darkMode ? DarkColors : Colors;
   return {
     colors,
     scale,
-    isDark: darkMode,
+    isDark: pinkMode ? false : darkMode,
+    pinkMode,
     sizes: {
       heading:    Math.round(Typography.sizes.heading    * scale),
       subheading: Math.round(Typography.sizes.subheading * scale),

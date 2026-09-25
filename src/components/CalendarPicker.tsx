@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Modal, View, Text, TouchableOpacity, Pressable, StyleSheet,
-} from 'react-native';
+import { Modal, View, Text, StyleSheet } from 'react-native';
+import { Pressable, TouchableOpacity } from './meowable';
 import { useTheme } from '../context/SettingsContext';
 import { Typography } from '../theme';
 import { isSameDay } from '../context/SelectedDateContext';
@@ -21,7 +20,7 @@ interface Props {
 }
 
 export function CalendarPicker({ visible, selectedDate, onSelectDate, onClose }: Props) {
-  const { colors, sizes } = useTheme();
+  const { colors, sizes, pinkMode } = useTheme();
   const today = new Date();
 
   const [viewMonth, setViewMonth] = useState(selectedDate.getMonth());
@@ -80,6 +79,7 @@ export function CalendarPicker({ visible, selectedDate, onSelectDate, onClose }:
     <Modal transparent visible={visible} animationType="fade" onRequestClose={onClose}>
       <Pressable style={st.overlay} onPress={onClose}>
         <Pressable
+          meow={false}
           style={[st.sheet, { backgroundColor: colors.parchment, borderColor: colors.rule }]}
           onPress={e => e.stopPropagation()}
         >
@@ -130,7 +130,7 @@ export function CalendarPicker({ visible, selectedDate, onSelectDate, onClose }:
                       <Text style={{
                         fontFamily: sel ? Typography.serifBold : Typography.serif,
                         fontSize: sizes.body,
-                        color: sel ? colors.parchment : feast ? '#CC0000' : colors.ink,
+                        color: sel ? colors.parchment : feast ? (pinkMode ? colors.rubric : '#CC0000') : colors.ink,
                       }}>
                         {day}
                       </Text>

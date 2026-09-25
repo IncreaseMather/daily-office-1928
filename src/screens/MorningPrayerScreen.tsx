@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
-import { ScrollView, View, Text, TouchableOpacity, Modal, Pressable, StyleSheet, Platform } from 'react-native';
+import { ScrollView, View, Text, Modal, StyleSheet, Platform } from 'react-native';
+import { Pressable, TouchableOpacity } from '../components/meowable';
 import { ScrollableScreen } from '../components/ScrollableScreen';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Typography } from '../theme';

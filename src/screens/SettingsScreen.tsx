@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Switch, TouchableOpacity, TextInput, Linking, Alert } from 'react-native';
+import { View, Text, Switch as BareSwitch, TextInput, Linking, Alert } from 'react-native';
+import { Switch, TouchableOpacity } from '../components/meowable';
 import { ScrollableScreen } from '../components/ScrollableScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Clipboard from 'expo-clipboard';
 import QRCode from 'react-native-qrcode-svg';
 import { Typography } from '../theme';
 import { useSettings, useTheme } from '../context/SettingsContext';
+import { playKitten } from '../audio/kittenMeow';
 import {
   requestNotificationPermissions,
   scheduleMpReminder,
@@ -105,9 +107,7 @@ function OptionPicker<T extends string>({
           style={{
             paddingVertical: 12, paddingHorizontal: 16, borderRadius: 6, borderWidth: 1, marginBottom: 8,
             borderColor: value === opt.value ? colors.ink : colors.rule,
-            backgroundColor: value === opt.value
-              ? (colors.parchment === '#1C1C1E' ? '#2C2C2E' : '#E3DDD1')
-              : colors.parchment,
+            backgroundColor: value === opt.value ? colors.highlight : colors.parchment,
           }}
           onPress={() => onSelect(opt.value)}
         >
@@ -137,9 +137,9 @@ function CompactDropdown<T extends string>({
   onSelect: (v: T) => void;
 }) {
   const [open, setOpen] = useState(false);
-  const { colors, sizes, isDark } = useTheme();
+  const { colors, sizes } = useTheme();
   const selected = options.find(o => o.value === value);
-  const selectedBg = isDark ? '#2C2C2E' : '#E3DDD1';
+  const selectedBg = colors.highlight;
 
   return (
     <View style={{ marginBottom: 4 }}>
@@ -348,6 +348,7 @@ export function SettingsScreen() {
     shorterForm, setShorterForm,
     shorterFormPsalms, setShorterFormPsalms,
     catholicFeasts, setCatholicFeasts,
+    pinkMode, setPinkMode,
     darkMode, setDarkMode,
     fontSize, setFontSize,
     litanyEnabled, setLitanyEnabled,
@@ -755,15 +756,15 @@ export function SettingsScreen() {
           </Text>
           <View style={{
             padding: 10,
-            backgroundColor: '#FFFFFF',
+            backgroundColor: colors.parchment,
             borderRadius: 6,
             marginBottom: 14,
           }}>
             <QRCode
               value={`bitcoin:${BTC_ADDRESS}`}
               size={160}
-              color="#000000"
-              backgroundColor="#FFFFFF"
+              color={colors.ink}
+              backgroundColor={colors.parchment}
             />
           </View>
           <TouchableOpacity
@@ -814,6 +815,17 @@ export function SettingsScreen() {
         }}>
           The lessons and readings in this app may be drawn from the following translations: the King James Version (public domain); the Revised Standard Version, copyright © National Council of Churches; the English Standard Version, copyright © Crossway; the New American Standard Bible, copyright © The Lockman Foundation; and the New King James Version, copyright © Thomas Nelson. These translations are used in small quantities for personal, devotional, and non-commercial purposes only. This app is free and will always remain free. No copyright infringement is intended. If you are a rights holder and have concerns, please contact us.
         </Text>
+      </View>
+      <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginBottom: 8, paddingBottom: 28 }}>
+        <BareSwitch
+          value={pinkMode}
+          onValueChange={(value) => {
+            setPinkMode(value);
+            playKitten(true);
+          }}
+          trackColor={{ false: colors.rule, true: colors.inkLight }}
+          thumbColor={colors.parchment}
+        />
       </View>
     </ScrollableScreen>
   );

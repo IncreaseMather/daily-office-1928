@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text } from 'react-native';
+import { TouchableOpacity } from './meowable';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Colors, Typography } from '../theme';
 

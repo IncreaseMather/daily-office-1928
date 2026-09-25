@@ -7,6 +7,7 @@ export const Colors = {
   tabActive: '#1C1C1A',
   tabInactive: '#9B9488',
   tabBar: '#EDE8DE',
+  highlight: '#E3DDD1',
 };
 
 export const DarkColors = {
@@ -18,6 +19,20 @@ export const DarkColors = {
   tabActive: '#F5F0E8',
   tabInactive: '#6E6B64',
   tabBar: '#2C2C2E',
+  highlight: '#2C2C2E',
+};
+
+/** Light fuchsia page, dark plum text, darker rose rubrics. */
+export const PinkColors = {
+  parchment: '#FF78D2',
+  ink: '#3A0828',
+  inkLight: '#5C1242',
+  rubric: '#8E1248',
+  rule: '#C2186A',
+  tabActive: '#3A0828',
+  tabInactive: '#7A2860',
+  tabBar: '#FF4EBE',
+  highlight: '#F03AAA',
 };
 
 export const Typography = {

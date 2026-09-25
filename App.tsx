@@ -16,9 +16,10 @@ import { MorningPrayerScreen } from './src/screens/MorningPrayerScreen';
 import { EveningPrayerScreen } from './src/screens/EveningPrayerScreen';
 import { SettingsScreen } from './src/screens/SettingsScreen';
 import { ErrorBoundary } from './src/components/ErrorBoundary';
-import { Colors, DarkColors, Typography } from './src/theme';
+import { Colors, DarkColors, PinkColors, Typography } from './src/theme';
 import { getInitialOffice } from './src/utils/dateHelpers';
 import { SettingsProvider, useTheme } from './src/context/SettingsContext';
+import { playKitten } from './src/audio/kittenMeow';
 import { SelectedDateProvider } from './src/context/SelectedDateContext';
 import { rescheduleActiveReminders } from './src/utils/notifications';
 
@@ -52,6 +53,20 @@ const darkNavTheme: Theme = {
     text:         DarkColors.ink,
     border:       DarkColors.rule,
     notification: DarkColors.rubric,
+  },
+};
+
+const pinkNavTheme: Theme = {
+  ...DefaultTheme,
+  dark: false,
+  colors: {
+    ...DefaultTheme.colors,
+    primary:      PinkColors.tabActive,
+    background:   PinkColors.parchment,
+    card:         PinkColors.tabBar,
+    text:         PinkColors.ink,
+    border:       PinkColors.rule,
+    notification: PinkColors.rubric,
   },
 };
 
@@ -99,6 +114,9 @@ function TabNavigator() {
     <Tab.Navigator
       id={undefined}
       initialRouteName={getInitialOffice()}
+      screenListeners={{
+        tabPress: () => { playKitten(); },
+      }}
       screenOptions={{
         // backgroundColor and borderColor intentionally omitted here —
         // they come from the NavigationContainer theme (card / border) above
@@ -248,9 +266,10 @@ export default function App() {
 /** Separated so TabNavigator and NavigationContainer can both call useTheme()
  *  (requires SettingsProvider to be mounted above in the tree). */
 function AppInner() {
-  const { isDark, colors } = useTheme();
+  const { isDark, colors, pinkMode } = useTheme();
+  const navTheme = pinkMode ? pinkNavTheme : isDark ? darkNavTheme : lightNavTheme;
   return (
-    <NavigationContainer theme={isDark ? darkNavTheme : lightNavTheme}>
+    <NavigationContainer theme={navTheme}>
       <StatusBar style={isDark ? 'light' : 'dark'} backgroundColor={colors.parchment} />
       <TabNavigator />
     </NavigationContainer>

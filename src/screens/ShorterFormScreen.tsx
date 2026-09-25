@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
+import { ScrollView, View, Text } from 'react-native';
+import { TouchableOpacity } from '../components/meowable';
 import { Typography } from '../theme';
 import { useSettings, useTheme } from '../context/SettingsContext';
 import { formatLiturgicalDate, formatShortDate } from '../utils/dateHelpers';
