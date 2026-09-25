@@ -4,12 +4,12 @@ import { createAudioPlayer, setAudioModeAsync, type AudioPlayer } from 'expo-aud
 /**
  * Files in the project folder "canticle audio", matched by filename.
  * Nunc Dimittis is spelled "Dimittus" in the filename.
- * Benedictus.mp3 is the Gospel canticle, not Benedictus es, Domine.
+ * "Benedictus es.mp3" is Benedictus es, Domine, not the Song of Zechariah.
  */
 const SOURCES: Record<string, number> = {
   venite: require('../../canticle audio/Venite.mp3'),
   'te-deum': require('../../canticle audio/Te Deum.mp3'),
-  benedictus: require('../../canticle audio/Benedictus.mp3'),
+  'benedictus-dominus': require('../../canticle audio/Benedictus es.mp3'),
   jubilate: require('../../canticle audio/Jubilate Deo.mp3'),
   magnificat: require('../../canticle audio/Magnificat.mp3'),
   'nunc-dimittis': require('../../canticle audio/Nunc Dimittus.mp3'),
